@@ -3,6 +3,75 @@
 -- Based on upstream by lamduck2005, switched UI to WindUI (no key), rebranded, with auto-roll fix.
 
 (function(...)
+
+-- =============================================================
+-- [PERF] Startup optimization: cut frame work during init,
+-- show progress to user, yield between heavy operations.
+-- Restored to original settings after init completes.
+-- =============================================================
+local __PERF_run=game:GetService("RunService")
+local __PERF_light=game:GetService("Lighting")
+local __PERF_setting=settings()
+local __PERF_savedQuality=nil
+local __PERF_savedShadows=nil
+local __PERF_savedFog=nil
+local __PERF_savedClock=nil
+local __PERF_savedAmbient=nil
+local __PERF_savedOutdoorAmbient=nil
+local __PERF_savedFXAA=nil
+pcall(function()
+    __PERF_savedQuality=__PERF_setting.Rendering.QualityLevel
+    __PERF_setting.Rendering.QualityLevel=Enum.QualityLevel.Level01
+end)
+pcall(function() __PERF_savedShadows=__PERF_light.GlobalShadows; __PERF_light.GlobalShadows=false end)
+pcall(function() __PERF_savedFog=__PERF_light.FogEnd; __PERF_light.FogEnd=200 end)
+pcall(function() __PERF_savedFXAA=__PERF_light:FindFirstChildOfClass("BlurEffect"); end)
+-- Tiny loading toast on screen so user knows it's not frozen
+local __PERF_toast=nil
+pcall(function()
+    local plr=game:GetService("Players").LocalPlayer
+    if not plr then return end
+    local pg=plr:WaitForChild("PlayerGui",2)
+    if not pg then return end
+    local sg=Instance.new("ScreenGui")
+    sg.Name="__frikfrik_loading"
+    sg.IgnoreGuiInset=true
+    sg.ResetOnSpawn=false
+    sg.Parent=pg
+    local f=Instance.new("Frame",sg)
+    f.AnchorPoint=Vector2.new(0.5,0)
+    f.Position=UDim2.new(0.5,0,0,8)
+    f.Size=UDim2.new(0,260,0,40)
+    f.BackgroundColor3=Color3.fromRGB(20,20,28)
+    f.BackgroundTransparency=0.1
+    f.BorderSizePixel=0
+    local c=Instance.new("UICorner",f); c.CornerRadius=UDim.new(0,8)
+    local t=Instance.new("TextLabel",f)
+    t.BackgroundTransparency=1
+    t.Size=UDim2.new(1,-16,1,0)
+    t.Position=UDim2.new(0,8,0,0)
+    t.TextColor3=Color3.fromRGB(220,220,230)
+    t.Font=Enum.Font.GothamMedium
+    t.TextSize=14
+    t.TextXAlignment=Enum.TextXAlignment.Left
+    t.Text="Loading frikfrik script…"
+    __PERF_toast=sg
+end)
+-- yield helper used inside heavy loops; available globally during init
+_G.__PERF_yield=function()
+    if __PERF_run:IsRunning() then __PERF_run.Heartbeat:Wait() end
+end
+-- Restore settings after a fixed window or when window is created
+task.spawn(function()
+    task.wait(15)
+    pcall(function() if __PERF_savedQuality then __PERF_setting.Rendering.QualityLevel=__PERF_savedQuality end end)
+    pcall(function() if __PERF_savedShadows~=nil then __PERF_light.GlobalShadows=__PERF_savedShadows end end)
+    pcall(function() if __PERF_savedFog then __PERF_light.FogEnd=__PERF_savedFog end end)
+    if __PERF_toast then pcall(function() __PERF_toast:Destroy() end); __PERF_toast=nil end
+    _G.__PERF_yield=function() end -- no-op after init
+end)
+-- =============================================================
+
 local e=(loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua",true)))()print("[Lamduck] Loading logic...")local K=e:CreateWindow({["Title"]="Build A Ring Farm";["Author"]="Andrey_brat_Erika",["Folder"]="Lamduck";["Transparent"]=false;["HasOutline"]=false;["ToggleKey"]=Enum["KeyCode"]["RightControl"]})K:EditOpenButton({["Title"]="Open | RightCtrl";["Icon"]="",["OnlyMobile"]=false,["Enabled"]=true,["Draggable"]=true})local x={}x["SectionGeneral"]=K:Section({["Title"]="Farming & Shop",["Icon"]="sprout";["Opened"]=true})x["TabFarming"]=x["SectionGeneral"]:Tab({["Title"]="Farming";["Icon"]="chevron-right"})x["TabFarming"]:Select()local Y=game:GetService("ReplicatedStorage")
 -- [Lamduck-FIX] Robust SeedRoller remote resolver (auto-roll fix)
 local __LD_ROLL_REMOTE=nil
