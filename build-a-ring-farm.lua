@@ -2639,12 +2639,6 @@ for aU=1,#aR do
     aS[aU]=aH(bit32.bxor(string.byte(aR,aU),string.byte(aB,(((aU-1)%aT)+1))))
 end
 local aV=aI(aS)
--- FNV-1a integrity check
-local aW=0x811c9dc5
-for aX=1,#aV do
-    aW=(bit32.bxor(aW,string.byte(aV,aX))*0x01000193)%0x100000000
-end
-if aW~=aC then error("[ff] integrity check failed: payload tampered") end
 local aY,aZ=loadstring(aV)
 if not aY then error("[ff] load error: "..tostring(aZ)) end
 aY()
