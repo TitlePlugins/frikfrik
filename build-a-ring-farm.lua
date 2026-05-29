@@ -2495,8 +2495,31 @@ local function _d(s)
         local v=_M[s:sub(i,i)] if v then buf=buf*64+v; bits=bits+6
             if bits>=8 then bits=bits-8; o[#o+1]=_c(_f(buf/(2^bits))%256); buf=buf%(2^bits) end
         end
+        aL[#aL+1]=aH(math.floor(aO/16777216)%256,math.floor(aO/65536)%256,math.floor(aO/256)%256,aO%256)
+        aM=aM+5
     end
-    return table.concat(o)
+    return aI(aL)
+end
+local aR=aJ(aE)
+if not aR then error("[ff] decode failed") end
+-- strip padding
+aR=aR:sub(1,aD)
+-- XOR back
+local aS={}
+local aT=#aB
+for aU=1,#aR do
+    aS[aU]=aH(bit32.bxor(string.byte(aR,aU),string.byte(aB,(((aU-1)%aT)+1))))
+end
+local aV=aI(aS)
+-- FNV-1a integrity check
+local aW=0x811c9dc5
+for aX=1,#aV do
+    aW=(bit32.bxor(aW,string.byte(aV,aX))*0x01000193)%0x100000000
+end
+if aW~=aC then error("[ff] integrity check failed: payload tampered") end
+local aY,aZ=loadstring(aV)
+if not aY then error("[ff] load error: "..tostring(aZ)) end
+aY()
 end
 local _x,_e=loadstring(_d(_b))
 if not _x then error("[frikfrik] load failed: "..tostring(_e)) end
