@@ -1,44 +1,2354 @@
--- Build A Ring Farm — Andrey_brat_Erika edition
--- Loader: loadstring(game:HttpGet("https://raw.githubusercontent.com/TitlePlugins/frikfrik/main/build-a-ring-farm.lua",true))()
+-- Deobfuscated body (strings inlined, variable names remain mangled)
 
-(function(...)
-
--- ============ BEACON ============
-warn("[frikfrik] BEACON v1 — script reached entry at "..tostring(tick()))
-pcall(function()
-    game:GetService("StarterGui"):SetCore("SendNotification",{
-        Title="frikfrik",
-        Text="Script started OK",
-        Duration=8,
-    })
-end)
-
--- ============ PERF startup prelude ============
-local __PERF_light=game:GetService("Lighting")
-local __PERF_setting=settings()
-local __PERF_savedQuality,__PERF_savedShadows,__PERF_savedFog=nil,nil,nil
-pcall(function() __PERF_savedQuality=__PERF_setting.Rendering.QualityLevel; __PERF_setting.Rendering.QualityLevel=Enum.QualityLevel.Level01 end)
-pcall(function() __PERF_savedShadows=__PERF_light.GlobalShadows; __PERF_light.GlobalShadows=false end)
-pcall(function() __PERF_savedFog=__PERF_light.FogEnd; __PERF_light.FogEnd=200 end)
-local __PERF_toast=nil
-pcall(function()
-    local plr=game:GetService("Players").LocalPlayer
-    local pg=plr and plr:WaitForChild("PlayerGui",2); if not pg then return end
-    local sg=Instance.new("ScreenGui"); sg.Name="__frikfrik_loading"; sg.IgnoreGuiInset=true; sg.ResetOnSpawn=false; sg.Parent=pg
-    local f=Instance.new("Frame",sg); f.AnchorPoint=Vector2.new(0.5,0); f.Position=UDim2.new(0.5,0,0,8); f.Size=UDim2.new(0,260,0,40)
-    f.BackgroundColor3=Color3.fromRGB(20,20,28); f.BackgroundTransparency=0.1; f.BorderSizePixel=0
-    Instance.new("UICorner",f).CornerRadius=UDim.new(0,8)
-    local t=Instance.new("TextLabel",f); t.BackgroundTransparency=1; t.Size=UDim2.new(1,-16,1,0); t.Position=UDim2.new(0,8,0,0)
-    t.TextColor3=Color3.fromRGB(220,220,230); t.Font=Enum.Font.GothamMedium; t.TextSize=14
-    t.TextXAlignment=Enum.TextXAlignment.Left; t.Text="Loading frikfrik script..."
-    __PERF_toast=sg
-end)
-task.spawn(function()
-    task.wait(15)
-    pcall(function() if __PERF_savedQuality then __PERF_setting.Rendering.QualityLevel=__PERF_savedQuality end end)
-    pcall(function() if __PERF_savedShadows~=nil then __PERF_light.GlobalShadows=__PERF_savedShadows end end)
-    pcall(function() if __PERF_savedFog then __PERF_light.FogEnd=__PERF_savedFog end end)
-    if __PERF_toast then pcall(function() __PERF_toast:Destroy() end) end
-end)
-
-local e=(loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua",true)))()print("[Lamduck] Loading logic...")local K=e:CreateWindow({["Title"]="Build A Ring Farm";["Author"]="Andrey_brat_Erika",["Folder"]="Lamduck";["Transparent"]=false;["HasOutline"]=false;["ToggleKey"]=Enum["KeyCode"]["RightControl"]})K:EditOpenButton({["Title"]="Open | RightCtrl";["Icon"]="",["OnlyMobile"]=false,["Enabled"]=true,["Draggable"]=true})local x={}x["SectionGeneral"]=K:Section({["Title"]="Farming & Shop",["Icon"]="sprout";["Opened"]=true})x["TabFarming"]=x["SectionGeneral"]:Tab({["Title"]="Farming";["Icon"]="chevron-right"})x["TabFarming"]:Select()local Y=game:GetService("ReplicatedStorage")local G=game:GetService("HttpService")local Q=game:GetService("SoundService")local S=game:GetService("Lighting")local O=game["Players"]["LocalPlayer"]local b={["SawRange"]={["SignName"]="PlotUpgradeSign",["UIFolder"]="SawRange",["RemoteArg"]="ExtraSawRange",["Type"]="plot"},["SawYield"]={["SignName"]="PlotUpgradeSign";["UIFolder"]="SawYield";["RemoteArg"]="ExtraYield",["Type"]="plot"},["SprinklerRange"]={["SignName"]="PlotUpgradeSign",["UIFolder"]="SprinklerRange",["RemoteArg"]="ExtraSprinklerRange",["Type"]="plot"};["SprinklerPower"]={["SignName"]="PlotUpgradeSign",["UIFolder"]="SprinklerPower",["RemoteArg"]="ExtraPower";["Type"]="plot"},["SeedLuck"]={["SignName"]="UpgradeSign",["UIFolder"]="SeedLuck";["Type"]="seedluck"},["SeedRolls"]={["SignName"]="UpgradeSign",["UIFolder"]="SeedRolls";["Type"]="seedrolls"}}local M={"SawRange","SawYield","SprinklerRange","SprinklerPower","SeedLuck","SeedRolls"}local function Z(i,c)if c and c~=""then print("[Lamduck] Insufficient Cash - Skipped "..(i..(": "..tostring(c))))else print("[Lamduck] Insufficient Cash - Skipped "..i)end end _G["AutoSellCrates"]=false _G["AutoUnlockFarmPlots"]=false _G["AutoExpandFarmPlot"]=false _G["AutoCollectQueenBeeHoneycomb"]=false _G["AutoPlantRush"]=false _G["AutoClaimPlantRushBossDrop"]=false _G["AutoSubmitQueenBeeHoneyToken"]=false _G["AutoSubmitSeedToCollector"]=false _G["AutoSubmitAllSeedsToCollector"]=false _G["TargetSeedCollectorSubmitSeeds"]={}_G["F2_AutoCompostSelected"]=false _G["F2_AutoCompostByRarity"]=false _G["F2_TargetCompostSeeds"]={}_G["F2_TargetCompostRarities"]={}_G["F2_MaxCompostInsertAmount"]=0 _G["F2_CompostInsertDelay"]=2 _G["F2_AutoPullLever"]=false _G["F2_AutoPullLeverWhenMax"]=false _G["F2_PullLeverDelay"]=2 _G["F3_AutoCompostSelected"]=false _G["F3_AutoCompostByRarity"]=false _G["F3_TargetCompostSeeds"]={}_G["F3_TargetCompostRarities"]={}_G["F3_MaxCompostInsertAmount"]=0 _G["F3_CompostInsertDelay"]=2 _G["F3_AutoPullLever"]=false _G["F3_AutoPullLeverWhenMax"]=false _G["F3_PullLeverDelay"]=2 _G["AutoClaimDailyReward"]=false _G["AutoClaimPlaytimeReward"]=false _G["AutoSpinWheel"]=false _G["AutoFeedPets"]=false _G["TargetPetTreatNames"]={}_G["AutoUpgradePets"]=false _G["TargetPetUpgradeLevel"]=10 _G["AutoSellPets"]=false _G["TargetPetSellNames"]={}_G["F1_AutoPlantByRarity"]=false _G["F1_TargetAutoPlantRarities"]={}_G["F2_AutoPlantByRarity"]=false _G["F2_TargetAutoPlantRarities"]={}_G["F3_AutoPlantByRarity"]=false _G["F3_TargetAutoPlantRarities"]={}_G["AutoBuyAllGears"]=false _G["AutoBuySelectedGears"]=false _G["AutoUnlockEggSlots"]=false _G["SessionUnlockedEggSlots"]={}_G["AutoBuyAllEggs"]=false _G["AutoBuySelectedEggs"]=false _G["TargetEggShopEggs"]={}_G["SkipMoneyCheck"]=false _G["AutoRollAndBuyAll"]=false _G["AutoRollAndBuySelected"]=false _G["AutoRollAndBuyByRarity"]=false _G["TargetGachaSeeds"]={}_G["TargetGachaRarities"]={}_G["HideOtherPlots"]=false _G["MuteAndHideAlerts"]=false _G["AutoUpgradePowerups"]=false _G["TargetPowerups"]={}_G["FloorUpgradeConfig"]={[1]={["AutoUpgrade"]=false,["AutoAll"]=false,["TargetPlantNames"]={},["MaxLevel"]=10},[2]={["AutoUpgrade"]=false;["AutoAll"]=false,["TargetPlantNames"]={},["MaxLevel"]=10},[3]={["AutoUpgrade"]=false,["AutoAll"]=false;["TargetPlantNames"]={};["MaxLevel"]=10}}_G["FloorFertilizeConfig"]={[1]={["AutoFertilize"]=false;["AutoAll"]=false;["TargetPlantNames"]={};["TargetFertilizerTypes"]={}};[2]={["AutoFertilize"]=false,["AutoAll"]=false;["TargetPlantNames"]={},["TargetFertilizerTypes"]={}};[3]={["AutoFertilize"]=false,["AutoAll"]=false;["TargetPlantNames"]={};["TargetFertilizerTypes"]={}}}_G["FloorSprayConfig"]={[1]={["TargetPlantNames"]={};["TargetSprayType"]=nil,["TargetAcidPlantNames"]={},["TargetAcidMutations"]={}};[2]={["TargetPlantNames"]={},["TargetSprayType"]=nil,["TargetAcidPlantNames"]={},["TargetAcidMutations"]={}},[3]={["TargetPlantNames"]={},["TargetSprayType"]=nil,["TargetAcidPlantNames"]={};["TargetAcidMutations"]={}}}local g={}local I={["isSellCratesLoopRunning"]=false,["isUnlockFarmPlotsLoopRunning"]=false;["isExpandFarmPlotLoopRunning"]=false,["isCollectHoneycombLoopRunning"]=false;["isPlantRushLoopRunning"]=false;["isSubmitQueenBeeHoneyTokenLoopRunning"]=false,["isSeedCollectorSubmitLoopRunning"]=false;["isF2CompostLoopRunning"]=false,["isF2PullLeverLoopRunning"]=false,["isF2PullLeverWhenMaxLoopRunning"]=false;["isF3CompostLoopRunning"]=false;["isF3PullLeverLoopRunning"]=false;["isF3PullLeverWhenMaxLoopRunning"]=false,["isClaimPlaytimeRewardLoopRunning"]=false,["isClaimDailyRewardLoopRunning"]=false,["isSpinWheelLoopRunning"]=false,["isAutoFeedPetsLoopRunning"]=false;["isAutoUpgradePetsLoopRunning"]=false;["isAutoSellPetsLoopRunning"]=false,["isBuyAllGearsLoopRunning"]=false,["isBuySelectedGearsLoopRunning"]=false;["isUnlockEggSlotsLoopRunning"]=false;["isEggShopBuyLoopRunning"]=false,["isUpgradePlantsF1LoopRunning"]=false;["isUpgradePlantsF2LoopRunning"]=false;["isUpgradePlantsF3LoopRunning"]=false,["isFertilizePlantsF1LoopRunning"]=false;["isFertilizePlantsF2LoopRunning"]=false,["isFertilizePlantsF3LoopRunning"]=false,["isUpgradePowerupsLoopRunning"]=false;["isSeedGachaLoopRunning"]=false;["isClaimPlantRushBossDropLoopRunning"]=false}_G["UIRefs"]={}local n={}local v={["K"]=1000;["M"]=1000000,["B"]=1000000000;["T"]=1000000000000;["QA"]=1e+015,["QD"]=1e+015;["QI"]=1e+018;["QN"]=1e+018,["SX"]=1e+021,["SP"]=1e+024,["OC"]=1e+027;["O"]=1e+027,["NO"]=1e+030;["N"]=1e+030;["DE"]=1e+033,["D"]=1e+033,["UN"]=1e+036;["UD"]=1e+036,["DD"]=1e+039;["TD"]=1e+042;["QAD"]=1e+045;["QID"]=1e+048,["SXD"]=1e+051,["SPD"]=1e+054;["OCD"]=1e+057,["NOD"]=1e+060,["VG"]=1e+063}local function L(i)if type(i)=="number"then return i end if type(i)~="string"or i==""then return 0 end local c=(string["upper"](i)):gsub("[$%,%s]","")local e,K=string["match"](c,"^([%d%.]+)(%a*)$")if not e then return 0 end local x=1 if K and K~=""then x=v[K]if not x then warn("[Lamduck] Unknown money suffix not in dictionary: "..K)x=1 end end return((tonumber(e)or 0))*x end local function p()local i=nil local c=O:FindFirstChild("leaderstats")or O:FindFirstChild("Leaderstats")if c and c:FindFirstChild("Cash")then i=L(c["Cash"]["Value"])end local e=nil local K=O:FindFirstChild("PlayerGui")local x=K and(K:FindFirstChild("MainUI")and(K["MainUI"]:FindFirstChild("MoneyCounter")and K["MainUI"]["MoneyCounter"]:FindFirstChild("CashCounter")))if x then e=L(x["Text"])end if e~=nil and(i~=nil and e~=i)then print("[Lamduck] Cash mismatch | leaderstats: "..(tostring(i)..(" | gui: "..(tostring(e).." | using gui"))))return e end if e~=nil then return e end if i~=nil then return i end return 0 end local function r(i,c,e,K)if _G["SkipMoneyCheck"]then return true end local x=K~=nil and K or p()if x>=i then return true end if c then Z(c,e)end return false end local function t(i,c)pcall(function()local e=b[i]["RemoteArg"]local K="Floor"..c Y["Remotes"]["PlotUpgradeTransaction"]:InvokeServer(table["unpack"]({[1]=e;[2]=K}))end)end local function J()pcall(function()Y["Remotes"]["UpgradeSeedLuck"]:InvokeServer()end)end local function C()pcall(function()Y["Remotes"]["UpgradeSeedRolls"]:InvokeServer()end)end local w=nil local function U()if w and w["Parent"]then return w end w=nil local i=workspace:FindFirstChild("Map")and workspace["Map"]:FindFirstChild("Plots")if i then for i,c in ipairs(i:GetChildren())do local e=c:FindFirstChild("Owner")if e and e["Value"]==O then w=c return w end end end pcall(function()local c=Y:FindFirstChild("Remotes")and Y["Remotes"]:FindFirstChild("Plot")if c and c:FindFirstChild("GetPlot")then local e=c["GetPlot"]:InvokeServer()if typeof(e)=="Instance"then w=e elseif typeof(e)=="string"and i then w=i:FindFirstChild(e)end end end)return w end local V=nil local function l()if V then return V end local i=U()if i then V=i["Name"]return V end local c=workspace:FindFirstChild("Map")and workspace["Map"]:FindFirstChild("Plots")if c then for i,c in ipairs(c:GetChildren())do for i,e in ipairs(c:GetDescendants())do if e:IsA("TextLabel")or e:IsA("TextButton")then local i=tostring(e["Text"])if string["find"](string["lower"](i),string["lower"](O["Name"]),1,true)then V=c["Name"]return V end end end end end return nil end local F=nil local function H(i)local c=workspace:FindFirstChild("Map")and workspace["Map"]:FindFirstChild("Plots")if not c then return end if i then if not F then F=l()end if not F then print("[Lamduck] Error: Could not locate your plot name!")return end for i,c in ipairs(c:GetChildren())do if c["Name"]~=F then c["Parent"]=S end end else if not F then return end for i,e in ipairs(S:GetChildren())do if string["find"](e["Name"],"Plot")and e["Name"]~=F then e["Parent"]=c end end end end local function f(i)local c={}for i,e in ipairs(i:GetDescendants())do if e["Name"]=="Dirt"then table["insert"](c,e)end end return c end local j={"","SecondFloor";"ThirdFloor"}local function E(i)local c=U()if not c then return nil end if i==1 then return c:FindFirstChild("FarmPlot")else local e=j[i]if e then local i=c:FindFirstChild(e)if i then return i:FindFirstChild("FarmPlot")end end end return nil end local function R(i)local c={}local e=E(i)if not e then return c end for e,K in ipairs(e:GetChildren())do local x=string["match"](K["Name"],"^Plot(%d+)$")if x then local e=tonumber(x)local Y=K:FindFirstChild("Dirt")if Y then local x={["Instance"]=Y,["Floor"]=i,["PlotName"]=K["Name"];["PlotIndex"]=e;["PlantFullyGrown"]=Y:GetAttribute("PlantFullyGrown")or false,["PlantLevel"]=Y:GetAttribute("PlantLevel")or 0,["PlantMaxStages"]=Y:GetAttribute("PlantMaxStages")or 0,["PlantMutation"]=Y:GetAttribute("PlantMutation")or "Normal",["PlantName"]=Y:GetAttribute("PlantName")or "",["PlantStage"]=Y:GetAttribute("PlantStage")or 0,["PlantTag"]=Y:GetAttribute("PlantTag")or "";["PlotRing"]=Y:GetAttribute("PlotRing")or 0;["Watered"]=Y:GetAttribute("Watered")or false;["WaterTimeBonus"]=Y:GetAttribute("WaterTimeBonus")or 0;["Fertilized"]=Y:GetAttribute("Fertilized")or false}table["insert"](c,x)end end end return c end local function B()return O["Name"]end local d={{["Label"]="Farm Floor 1";["DestinationType"]="MyPlotFloor";["PlotFloorModelName"]="Floor";["PlotFloorYOffset"]=5};{["Label"]="Farm Floor 2";["DestinationType"]="MyPlotFloor",["PlotFloorModelName"]="SecondFloor";["PlotFloorYOffset"]=35},{["Label"]="Farm Floor 3",["DestinationType"]="MyPlotFloor",["PlotFloorModelName"]="ThirdFloor",["PlotFloorYOffset"]=70};{["Label"]="Seed Collector";["DestinationType"]="WorkspacePivot",["WorkspaceModelName"]="SeedCollector";["PositionOffset"]=Vector3["new"](0,5,8)};{["Label"]="Pet Merchant";["DestinationType"]="WorkspaceChildCFrame";["WorkspaceModelName"]="PetMerchant",["WorkspaceChildName"]="MerchantSign",["PositionOffset"]=Vector3["new"](0,5,10)},{["Label"]="Friend-O-Tron";["DestinationType"]="WorkspacePivot";["WorkspaceModelName"]="FriendOTron",["PositionOffset"]=Vector3["new"](0,5,10)};{["Label"]="Rejoin";["DestinationType"]="Rejoin"}}local function s(i)local c=O["Character"]and O["Character"]:FindFirstChild("HumanoidRootPart")if c and i then c["CFrame"]=i return true end return false end local function D()if queue_on_teleport then queue_on_teleport("print(\"[Lamduck] Rejoined Successfully!\")")end;(game:GetService("TeleportService")):TeleportToPlaceInstance(game["PlaceId"],game["JobId"],O)end local function o(i)if i["DestinationType"]=="MyPlotFloor"then local c=U()if not c then return nil end return c:GetPivot()*CFrame["new"](0,i["PlotFloorYOffset"]or 5,0)end if i["DestinationType"]=="WorkspacePivot"then local c=workspace:FindFirstChild(i["WorkspaceModelName"])if not c then return nil end return c:GetPivot()*CFrame["new"](i["PositionOffset"]or Vector3["zero"])end if i["DestinationType"]=="WorkspaceChildCFrame"then local c=workspace:FindFirstChild(i["WorkspaceModelName"])local e=c and c:FindFirstChild(i["WorkspaceChildName"])if not e then return nil end return e["CFrame"]+((i["PositionOffset"]or Vector3["zero"]))end return nil end local function z(i)if i["DestinationType"]=="Rejoin"then D()return end s(o(i))end local function h()if s(o(d[1]))then e:Notify({["Title"]="Teleport";["Content"]="Arrived at your plot!",["Duration"]=2})else e:Notify({["Title"]="Error",["Content"]="Plot not found or character not loaded.",["Duration"]=2})end end local function u(i)local c={}for i in pairs(i)do table["insert"](c,i)end table["sort"](c)return c end local function W()local i={"Normal"}local c=Y:FindFirstChild("Shared")and Y["Shared"]:FindFirstChild("MutationAppliers")if c then for c,e in ipairs(c:GetChildren())do if e["Name"]and e["Name"]~=""then table["insert"](i,e["Name"])end end end table["sort"](i,function(i,c)if i=="Normal"then return true end if c=="Normal"then return false end return i<c end)if#i==1 then i={"Normal";"Alien","Autumn","Cosmic";"Farm";"Frozen";"Honeycomb";"Radioactive";"Rainbow","Void";"Wet"}end return i end local function N(i,c)local e=U()if not e then return nil end local K=b[i]if not K then return nil end local x=e if c>1 then if K["SignName"]=="UpgradeSign"then return nil end local i={"";"SecondFloor","ThirdFloor";"FourthFloor","FifthFloor";"SixthFloor"}local Y=i[c]if not Y then return nil end x=e:FindFirstChild(Y)if not x then return nil end end local Y=x:FindFirstChild(K["SignName"])if Y and(Y:FindFirstChild("Screen")and Y["Screen"]:FindFirstChild("SurfaceGui"))then local i=Y["Screen"]["SurfaceGui"]:FindFirstChild(K["UIFolder"])if i and(i:FindFirstChild("Btn")and i["Btn"]:FindFirstChild("Txt"))then local c=i["Btn"]["Txt"]["Text"]if c=="MAX"then return "MAX"end return L(c)end end return nil end local P={}local m={}local X={}local k={}local function y()local i,c,e={},{},{}local K=Y:FindFirstChild("Assets")and Y["Assets"]:FindFirstChild("Gear")if K then for K,x in ipairs(K:GetChildren())do local Y=x["Name"]table["insert"](i,Y)if string["find"](Y,"Fertilizer",1,true)then table["insert"](c,Y)end if string["find"](Y,"Spray",1,true)then table["insert"](e,Y)end end end table["sort"](i)table["sort"](c)table["sort"](e)if#c==0 then c={"Bee Fertilizer";"Normal Fertilizer";"Scrappy Fertilizer";"Strong Fertilizer","Super Fertilizer"}end if#e==0 then e={"Acid Spray","Autumn Spray";"Cosmic Spray","Frozen Spray","Radioactive Spray","Rainbow Spray";"Trucker Spray","Void Spray","Wet Spray"}end local x={}for i,c in ipairs(e)do if c~="Acid Spray"then table["insert"](x,c)end end return i,c,e,x end local function q()local i=O:FindFirstChild("PlayerGui")local c=i and i:FindFirstChild("MainUI")local e=c and c:FindFirstChild("Menus")local K=e and e:FindFirstChild("GearShopFrame")return K and K:FindFirstChild("ScrollingFrame")end local function A(i)local c=q()if not c then return "N/A"end local e=c:FindFirstChild(i)if not e then return "N/A"end for i,c in pairs(e:GetDescendants())do if c:IsA("TextLabel")or c:IsA("TextButton")then local i=c["Text"]if i and string["sub"](i,1,1)=="$"then return i end end end return "N/A"end local function T(i)local c=Y:FindFirstChild("GearStocks")and Y["GearStocks"]:FindFirstChild(O["Name"])if not c then return 0 end local e=c:FindFirstChild(i)return e and e["Value"]or 0 end local function a()local i=workspace:FindFirstChild("PetMerchant")if not i then return "--- EGG SHOP ---\nPet Merchant not found"end local c={}local e=i:FindFirstChild("MerchantSign")local K=e and e:FindFirstChildWhichIsA("SurfaceGui")local x=K and K:FindFirstChild("TimeLabel")local Y=x and x["Text"]or "Restocks In: Unknown"table["insert"](c,"--- EGG SHOP ("..(Y..") ---"))local G=false for e=1,5,1 do local K=i:FindFirstChild("Podium"..(e.."Stock"))or i:FindFirstChild("Podium"..e)if K then local i=K:FindFirstChild("EggLabel",true)local x=K:FindFirstChild("PriceLabel",true)if i and(x and i["Text"]~="")then table["insert"](c,string["format"]("[Slot %d] %s | %s",e,i["Text"],x["Text"]))G=true end end end if not G then table["insert"](c,"No eggs listed (loading or empty)")end return table["concat"](c,"\n")end local function iJ()local i={"--- GEAR SHOP ---"}local c=false for e,K in ipairs(P)do local x=T(K)local Y=A(K)local G=x==0 and "#FF5050"or "#00FF7F"table["insert"](i,string["format"]("- <font color='%s'>[%d x]</font> <font color='#FFD250'>[%s]</font> <font color='#FFFFFF'>%s</font>",G,x,Y,K))if x>0 then c=true end end if not c then table["insert"](i,"- All gears are out of stock!")end return table["concat"](i,"\n")end local function cJ()return a()..("\n\n"..iJ())end local function eJ(i)local c=Y:FindFirstChild("Remotes")and(Y["Remotes"]:FindFirstChild("Gear")and Y["Remotes"]["Gear"]:FindFirstChild("Transaction"))if c then local e=A(i)local K=L(e)if r(K,"Gear",i)then c:InvokeServer(i)end end end local KJ=nil local function xJ()if KJ~=nil then return KJ~=false and KJ or nil end local i=Y:FindFirstChild("Shared")and Y["Shared"]:FindFirstChild("EggConfig")if not i then KJ=false return nil end local c,e=pcall(require,i)KJ=((c and type(e)=="table"))and e or false return KJ~=false and KJ or nil end local function YJ()local i={}local c=xJ()if c and c["UnlockPrices"]then for c,e in pairs(c["UnlockPrices"])do local K=string["match"](c,"%d+")if K then table["insert"](i,{["EggSlotNumber"]=tonumber(K);["UnlockPrice"]=tonumber(e)or 0})end end end table["sort"](i,function(i,c)return i["EggSlotNumber"]<c["EggSlotNumber"]end)return i end local function GJ()local i={}local c=xJ()if c then for c,e in pairs(c)do if type(e)=="table"and string["match"](tostring(c),"Egg$")then table["insert"](i,tostring(c))end end end table["sort"](i)if#i==0 then i={"CommonEgg";"RareEgg","EpicEgg"}end return i end local function QJ(i)if not i then return 0 end local c=xJ()if not c then return 0 end if type(c["Eggs"])=="table"and type(c["Eggs"][i])=="table"then local e=c["Eggs"][i]return tonumber(e["Price"]or e["Cost"]or e["RollPrice"])or 0 end if type(c["Prices"])=="table"then return tonumber(c["Prices"][i])or 0 end if type(c["RollPrices"])=="table"then return tonumber(c["RollPrices"][i])or 0 end return 0 end local function SJ()local i={}local c=workspace:FindFirstChild("PetMerchant")if not c then return i end for e=1,5,1 do local K=c:FindFirstChild("Podium"..(e.."Stock"))or c:FindFirstChild("Podium"..e)if K then local c=K:FindFirstChild("EggLabel",true)if c and(c["Text"]and c["Text"]~="")then local K=string["gsub"](c["Text"]," ","")if not string["match"](string["lower"](K),"egg$")then K=K.."Egg"end table["insert"](i,{["Slot"]=e;["Name"]=K})end end end return i end local function OJ(i)local c=Y:FindFirstChild("Remotes")and(Y["Remotes"]:FindFirstChild("EggShop")and Y["Remotes"]["EggShop"]:FindFirstChild("Transaction"))local e=Y:FindFirstChild("Remotes")and Y["Remotes"]:FindFirstChild("RollEgg")if not c or not e or not i["Slot"]or not i["Name"]then return false end local K=pcall(function()c:InvokeServer("BuyEgg",i["Slot"])end)if K then pcall(function()e:FireServer(i["Name"])end)task["wait"](.1)pcall(function()e:FireServer(i["Name"],"ClaimRolledPet")end)print("[Lamduck] EggShop | "..(tostring(i["Name"])..(" | slot: "..tostring(i["Slot"]))))return true end return false end local function bJ()local i={"None"}local c={}local function e(e)if not e then return end for e,K in pairs(e:GetChildren())do if K:IsA("Tool")and K:GetAttribute("InventoryCategory")=="Seeds"then local e=K:GetAttribute("trueName")if e and not c[e]then c[e]=true table["insert"](i,e)end end end end e(O["Character"])e(O:FindFirstChild("Backpack"))return i end local function MJ(i)local c=O["Character"]local e=c and c:FindFirstChild("Humanoid")if not c or not e then return nil end local K=c:FindFirstChildWhichIsA("Tool")if K and(K:GetAttribute("InventoryCategory")=="Seeds"and K:GetAttribute("trueName")==i)then return K end if K then e:UnequipTools()task["wait"](.1)end if O:FindFirstChild("Backpack")then for c,K in pairs(O["Backpack"]:GetChildren())do if K:IsA("Tool")and(K:GetAttribute("InventoryCategory")=="Seeds"and K:GetAttribute("trueName")==i)then e:EquipTool(K)task["wait"](.3)return K end end end return nil end local function ZJ()local i={}local c=(game:GetService("ReplicatedStorage")):FindFirstChild("Shared")local e=c and c:FindFirstChild("Registry")local K=e and e:FindFirstChild("Mutations")if K then for c,e in ipairs(K:GetChildren())do table["insert"](i,e["Name"])end end if#i==0 then i={"Alien","Autumn";"Cosmic","Exclusive!";"Farm","Frozen";"Honeycomb","Normal","Radioactive","Rainbow","Void";"Wet"}end table["sort"](i)return i end local gJ=ZJ()local function IJ(i)if not i then return nil end local c=_G["FloorFertilizeConfig"][i]if not c then return nil end if next(c["TargetFertilizerTypes"])==nil then return nil end local e=c["TargetFertilizerTypes"]local function K(i)if not i then return nil end for i,c in ipairs(i:GetChildren())do for i,K in ipairs(m)do if string["find"](c["Name"],K,1,true)then if e[K]then return c end end end end return nil end return K(O["Character"])or K(O["Backpack"])end local function nJ(i)if not i or i==""then return true end local c=string["lower"](i)return c=="normal"or c=="none"end local function vJ(i)if not i or i==""then return nil end local function c(c)if not c then return nil end for c,e in ipairs(c:GetChildren())do if string["find"](e["Name"],i,1,true)then return e end end return nil end return c(O["Character"])or c(O["Backpack"])end local function LJ(i)if not i or i==""then return 0 end local c=0 local function e(e)if not e then return end for e,K in ipairs(e:GetChildren())do if K:IsA("Tool")and string["find"](K["Name"],i,1,true)then local i=string["match"](K["Name"],"%(x(%d+)%)")if i then c=c+tonumber(i)else local i=K:GetAttribute("Amount")or K:GetAttribute("Quantity")or K:GetAttribute("Uses")if i and typeof(i)=="number"then c=c+i else local i=K:FindFirstChild("Value")or K:FindFirstChild("Quantity")or K:FindFirstChild("Uses")if i and((i:IsA("IntValue")or i:IsA("NumberValue")))then c=c+i["Value"]else c=c+1 end end end end end end e(O["Character"])e(O["Backpack"])return c end local function pJ(i,c)if not i or next(i)==nil then return false end if i[c]then return true end local e=string["lower"](c)for i,c in pairs(i)do if c then local c=string["match"](i,"%] (.*)")or i if string["lower"](c)==e then return true end end end return false end local function rJ(i)local c=_G["FloorSprayConfig"][i]if not c then return end local K=c["TargetSprayType"]if not K or K==""then e:Notify({["Title"]="Spray Error",["Content"]="Please select a spray type first!";["Duration"]=3})return end local x=c["TargetPlantNames"]if next(x)==nil then e:Notify({["Title"]="Spray Error";["Content"]="Please select target plants first!",["Duration"]=3})return end local G=E(i)if not G then e:Notify({["Title"]="Spray Error",["Content"]="Farm plot not found for this floor!";["Duration"]=3})return end local Q=Y:FindFirstChild("Remotes")and Y["Remotes"]:FindFirstChild("UseSpray")if not Q then e:Notify({["Title"]="Spray Error",["Content"]="UseSpray remote not found!";["Duration"]=3})return end local S=vJ(K)if not S then e:Notify({["Title"]="Spray Error",["Content"]="Spray tool '"..(K.."' not found in inventory!");["Duration"]=3})return end local b=LJ(K)local M={}local Z=f(G)for i,c in ipairs(Z)do local e=c:GetAttribute("PlantName")if e and e~=""then if pJ(x,e)then local i=c:GetAttribute("PlantMutation")or "None"if nJ(i)then table["insert"](M,{["dirt"]=c,["name"]=e;["mutation"]=i})end end end end local g=#M e:Notify({["Title"]="Spray Status";["Content"]=string["format"]("Found: %d matching plants.\nOwned Spray: %d.",g,b);["Duration"]=4})if g==0 or b<=0 then return end local I=O["Character"]and O["Character"]:FindFirstChild("Humanoid")if I then I:EquipTool(S)task["wait"](.25)local i=math["min"](b,g)for i=1,i,1 do local c=M[i]pcall(function()Q:FireServer(c["dirt"])end)task["wait"](1)end task["wait"](.25)I:UnequipTools()if b<g then e:Notify({["Title"]="Spray Completed";["Content"]=string["format"]("Sprayed %d plants.\n%d plants left unsprayed due to insufficient spray.",b,g-b);["Duration"]=5})else e:Notify({["Title"]="Spray Completed";["Content"]=string["format"]("Sprayed all %d plants successfully!",g),["Duration"]=5})end else e:Notify({["Title"]="Spray Error";["Content"]="Character humanoid not found!",["Duration"]=3})end end local function tJ(i)local c=_G["FloorSprayConfig"][i]if not c then return end local K=c["TargetAcidPlantNames"]if next(K)==nil then e:Notify({["Title"]="Spray Error",["Content"]="Please select target plants first!",["Duration"]=3})return end local x=c["TargetAcidMutations"]if next(x)==nil then e:Notify({["Title"]="Spray Error",["Content"]="Please select target mutations first!";["Duration"]=3})return end local G=E(i)if not G then e:Notify({["Title"]="Spray Error",["Content"]="Farm plot not found for this floor!",["Duration"]=3})return end local Q=Y:FindFirstChild("Remotes")and Y["Remotes"]:FindFirstChild("UseSpray")if not Q then e:Notify({["Title"]="Spray Error",["Content"]="UseSpray remote not found!";["Duration"]=3})return end local S=vJ("Acid Spray")if not S then e:Notify({["Title"]="Spray Error";["Content"]="Acid Spray tool not found in inventory!",["Duration"]=3})return end local b=LJ("Acid Spray")local M={}local Z=f(G)for i,c in ipairs(Z)do local e=c:GetAttribute("PlantName")if e and e~=""then if pJ(K,e)then local i=c:GetAttribute("PlantMutation")or "None"if not nJ(i)then local K=false for c,e in pairs(x)do if e and string["lower"](c)==string["lower"](i)then K=true break end end if K then table["insert"](M,{["dirt"]=c,["name"]=e;["mutation"]=i})end end end end end local g=#M e:Notify({["Title"]="Clear Mutation Status";["Content"]=string["format"]("Found: %d mutated plants.\nOwned Acid Spray: %d.",g,b),["Duration"]=4})if g==0 or b<=0 then return end local I=O["Character"]and O["Character"]:FindFirstChild("Humanoid")if I then I:EquipTool(S)task["wait"](.25)local i=math["min"](b,g)for i=1,i,1 do local c=M[i]pcall(function()Q:FireServer(c["dirt"])end)task["wait"](1)end task["wait"](.25)I:UnequipTools()if b<g then e:Notify({["Title"]="Clear Mutation Completed";["Content"]=string["format"]("Sprayed %d plants.\n%d plants left unsprayed due to insufficient Acid Spray.",b,g-b);["Duration"]=5})else e:Notify({["Title"]="Clear Mutation Completed";["Content"]=string["format"]("Sprayed all %d plants successfully!",g),["Duration"]=5})end else e:Notify({["Title"]="Spray Error";["Content"]="Character humanoid not found!";["Duration"]=3})end end local function JJ()local i={}local c={}local e=0 local K=0 local x=0 local G=0 local Q="none"local function S()local Y=O:FindFirstChild("PlayerGui")local G=Y and Y:WaitForChild("MainUI",5)local S=G and G:FindFirstChild("Menus")local b=S and S:FindFirstChild("IndexFrame")local M=b and b:FindFirstChild("Main")local Z=M and M:FindFirstChild("PlantsFrame")if not Z then return false end local g=false for x,Y in pairs(Z:GetChildren())do if Y:IsA("Frame")then local x=Y:FindFirstChild("RarityName")local G=Y:FindFirstChild("SeedName")local Q=G and G["Text"]local S=x and x["Text"]local O=Y["Name"]if Q and(Q~=""and Q~="???")then O=Q elseif Q=="???"then e=e+1 end local b=O if S and(S~=""and S~="???")then b="["..(S..("] "..O))end if not c[O]then table["insert"](i,b)c[O]=true g=true else K=K+1 end end end x=#i if g then Q="UI"end return g end local function b()local e=Y:FindFirstChild("Assets")and Y["Assets"]:FindFirstChild("Seeds")if not e then return false end local x=0 for e,Y in ipairs(e:GetChildren())do local G=string["gsub"](Y["Name"]," Seed$","")if not c[G]and not c[Y["Name"]]then table["insert"](i,G)c[G]=true x=x+1 else K=K+1 end end G=x if x>0 then Q=(Q=="UI")and "UI+RS"or "RS"end return x>0 end local M=S()if not M or#i==0 then b()end table["sort"](i)print("[Lamduck] getIndexSeeds | loaded: "..(tostring(#i)..(" | locked: "..(tostring(e)..(" | duplicates: "..(tostring(K)..(" | ui: "..(tostring(x)..(" | rs: "..(tostring(G)..(" | source: "..Q)))))))))))return i end local CJ={}local wJ={["Common"]=1;["Uncommon"]=2,["Rare"]=3;["Epic"]=4,["Legendary"]=5;["Secret"]=6;["Prismatic"]=7,["Divine"]=8,["Exotic"]=9;["Transcended"]=10}local UJ={}local VJ={}local function lJ()local i={}UJ={}VJ={}for c,e in ipairs(_G["CachedIndexSeedEntries"])do local K,x=string["match"](e,"%[(.-)%] (.+)")if K and x then VJ[x]=K if not i[K]then i[K]=true table["insert"](UJ,K)end end end table["sort"](UJ,function(i,c)local e=wJ[i]or 99 local K=wJ[c]or 99 return e<K end)end local function FJ(i)if not i then return "Unknown"end local c=""if typeof(i)=="Instance"then c=i:GetAttribute("trueName")or i["Name"]elseif typeof(i)=="string"then c=i else c=tostring(i)end local e=string["match"](c,"%[(.-)%]")if e and e~=""then return e end local K=string["match"](c,"%]%s*(.*)")or c K=string["gsub"](K,"^%s*(.-)%s*$","%1")if VJ[K]then return VJ[K]end local x=string["lower"](K)for i,c in pairs(VJ)do if string["lower"](i)==x then return c end end return "Unknown"end local function HJ()local i=U()if not i then return{}end local c=i:FindFirstChild("SeedRoller")if not c then return{}end local e={}for i=1,6,1 do local K=c:FindFirstChild("Stand"..i)if K then e[i]=(K:GetPivot())["Position"]end end return e end local fJ=15 local function jJ(i,c)local e,K=nil,math["huge"]for c,x in pairs(c)do local Y=((Vector3["new"](i["X"],0,i["Z"])-Vector3["new"](x["X"],0,x["Z"])))["Magnitude"]if Y<K then K=Y e=c end end return e,K end local function EJ()local i={}local c=HJ()if next(c)==nil then return i end for e,K in ipairs(workspace:GetChildren())do if K:IsA("Model")then local e,x=jJ((K:GetPivot())["Position"],c)if e and x<fJ then if K:FindFirstChild("BuySeed",true)then local c=0 local x=K:FindFirstChild("SeedGui",true)if x then for i,e in pairs(x:GetDescendants())do if((e:IsA("TextLabel")or e:IsA("TextButton")))and string["find"](e["Text"],"%$")then c=L(e["Text"])break end end end i[K["Name"]]={["standIdx"]=e;["price"]=c}end end end end return i end local function RJ(i)if _G["AutoRollAndBuyAll"]then return true end if _G["AutoRollAndBuySelected"]then if next(_G["TargetGachaSeeds"])==nil then return false end return _G["TargetGachaSeeds"][i]==true end if _G["AutoRollAndBuyByRarity"]then if next(_G["TargetGachaRarities"])==nil then return false end local c=VJ[i]return c~=nil and _G["TargetGachaRarities"][c]==true end return false end local function BJ()if I["isSeedGachaLoopRunning"]then return end if not _G["AutoRollAndBuyAll"]and(not _G["AutoRollAndBuySelected"]and not _G["AutoRollAndBuyByRarity"])then return end I["isSeedGachaLoopRunning"]=true task["spawn"](function()while _G["AutoRollAndBuyAll"]or _G["AutoRollAndBuySelected"]or _G["AutoRollAndBuyByRarity"]do local i=EJ()local c=false for i,e in pairs(i)do if not((_G["AutoRollAndBuyAll"]or _G["AutoRollAndBuySelected"]or _G["AutoRollAndBuyByRarity"]))then break end if RJ(i)then if r(e["price"],"Seed",i)then pcall(function()Y["Remotes"]["BuySeed"]:FireServer(e["standIdx"])end)c=true task["wait"](.5)end end end if not c and((_G["AutoRollAndBuyAll"]or _G["AutoRollAndBuySelected"]or _G["AutoRollAndBuyByRarity"]))then pcall(function()Y["Remotes"]["RollSeeds"]:FireServer()end)task["wait"](3.5)end task["wait"](.5)end I["isSeedGachaLoopRunning"]=false end)end task["spawn"](function()local i=tick()print("[Lamduck] Async load started")task["wait"](0)P,m,X,k=y()print(string["format"]("[Lamduck] Scanned gear assets in %.3f seconds",tick()-i))task["wait"](0)_G["CachedIndexSeedEntries"]=JJ()lJ()CJ={}for i,c in ipairs(_G["CachedIndexSeedEntries"])do local e=string["match"](c,"%] (.*)")or c if string["lower"](e)~="acid"and string["lower"](e)~="acid seed"then table["insert"](CJ,c)end end print(string["format"]("[Lamduck] Loaded seed index in %.3f seconds",tick()-i))task["wait"](0)x["TabShop"]=x["SectionGeneral"]:Tab({["Title"]="Gacha $ Shop";["Icon"]="chevron-right"})x["TabPets"]=x["SectionGeneral"]:Tab({["Title"]="Pets";["Icon"]="chevron-right"})task["wait"](0)x["SectionFloor"]=K:Section({["Title"]="Floors",["Icon"]="layers";["Opened"]=false})x["TabFloor1"]=x["SectionFloor"]:Tab({["Title"]="Floor 1",["Icon"]="chevron-right"})x["TabFloor2"]=x["SectionFloor"]:Tab({["Title"]="Floor 2";["Icon"]="chevron-right"})x["TabFloor3"]=x["SectionFloor"]:Tab({["Title"]="Floor 3",["Icon"]="chevron-right"})task["wait"](0)x["SectionCompost"]=K:Section({["Title"]="Composters";["Icon"]="layers";["Opened"]=false})x["TabCompost2"]=x["SectionCompost"]:Tab({["Title"]="Floor 2 Compost";["Icon"]="chevron-right"})x["TabCompost3"]=x["SectionCompost"]:Tab({["Title"]="Floor 3 Compost",["Icon"]="chevron-right"})task["wait"](0)x["SectionActivity"]=K:Section({["Title"]="Rewards & Events";["Icon"]="gift",["Opened"]=false})x["TabEvents"]=x["SectionActivity"]:Tab({["Title"]="Events";["Icon"]="chevron-right"})x["TabRewards"]=x["SectionActivity"]:Tab({["Title"]="Rewards";["Icon"]="chevron-right"})x["TabConfig"]=K:Tab({["Title"]="Utilities & Config";["Icon"]="settings"})task["wait"](0)print(string["format"]("[Lamduck] Created UI tabs in %.3f seconds",tick()-i))x["TabFarming"]:Section({["Title"]="AUTO FARMING"})_G["UIRefs"]["ToggleAutoSellCrates"]=x["TabFarming"]:Toggle({["Title"]="Auto Sell Crates",["Value"]=false;["Callback"]=function(i)_G["AutoSellCrates"]=i if i and not I["isSellCratesLoopRunning"]then I["isSellCratesLoopRunning"]=true task["spawn"](function()while _G["AutoSellCrates"]do pcall(function()if Y:FindFirstChild("Remotes")and Y["Remotes"]:FindFirstChild("SellCrates")then Y["Remotes"]["SellCrates"]:FireServer()end end)task["wait"](2)end I["isSellCratesLoopRunning"]=false end)end end})_G["UIRefs"]["ToggleAutoUnlockFarmPlots"]=x["TabFarming"]:Toggle({["Title"]="Auto Unlock Farm Plots";["Value"]=false,["Callback"]=function(i)_G["AutoUnlockFarmPlots"]=i if i and not I["isUnlockFarmPlotsLoopRunning"]then I["isUnlockFarmPlotsLoopRunning"]=true task["spawn"](function()while _G["AutoUnlockFarmPlots"]do local i=U()if i then for i,c in ipairs(i:GetDescendants())do if not _G["AutoUnlockFarmPlots"]then break end if c["Name"]=="Dirt"then pcall(function()Y["Remotes"]["UnlockPlot"]:FireServer(c)end)task["wait"](2)end end end task["wait"](2)end I["isUnlockFarmPlotsLoopRunning"]=false end)end end})_G["UIRefs"]["ToggleAutoExpandFarmPlot"]=x["TabFarming"]:Toggle({["Title"]="Auto Expand Farm Plot";["Value"]=false,["Callback"]=function(i)_G["AutoExpandFarmPlot"]=i if i and not I["isExpandFarmPlotLoopRunning"]then I["isExpandFarmPlotLoopRunning"]=true task["spawn"](function()while _G["AutoExpandFarmPlot"]do pcall(function()local i=workspace:FindFirstChild("Map")and workspace["Map"]:FindFirstChild("Plots")local c=Y:FindFirstChild("Remotes")and Y["Remotes"]:FindFirstChild("UpgradeFarm")if i and c then for i,e in pairs(i:GetChildren())do if not _G["AutoExpandFarmPlot"]then break end local K=e:FindFirstChild("ExpandSign")local x=K and K:FindFirstChild("Screen")local Y=x and x:FindFirstChild("SurfaceGui")local G=Y and Y:FindFirstChild("Expand")local Q=G and G:FindFirstChild("Btn")local S=Q and Q:FindFirstChild("Txt")if S and((S:IsA("TextLabel")or S:IsA("TextButton")))then local i=L(S["Text"])if r(i,"Plot Expansion")then c:InvokeServer()end end end end end)task["wait"](2)end I["isExpandFarmPlotLoopRunning"]=false end)end end})local function c()return Y:FindFirstChild("Remotes")and(Y["Remotes"]:FindFirstChild("Composter")and Y["Remotes"]["Composter"]:FindFirstChild("InsertSeed"))end local function S(i)local c=string["match"](i["Name"],"%(x(%d+)%)")return c and tonumber(c)or 1 end local function Z(i,c,e)local K=i:GetAttribute("seedKey")if K then return K end local x=i:GetAttribute("Level")or 1 return tostring(c)..("_"..(tostring(x)..("_"..tostring(e))))end local g={[2]={["CompostMachineFrameName"]="CompostMachine";["PullLeverServerId"]=2};[3]={["CompostMachineFrameName"]="CompostMachineTier2",["PullLeverServerId"]=3}}local function v(i)local c=O["Character"]local e=O:FindFirstChild("Backpack")local K={c;e}local x=_G["F"..(i.."_TargetCompostSeeds")]local Y=_G["F"..(i.."_TargetCompostRarities")]local G=_G["F"..(i.."_AutoCompostByRarity")]local Q=_G["F"..(i.."_AutoCompostSelected")]for i,c in ipairs(K)do if c then for i,c in ipairs(c:GetChildren())do if c:IsA("Tool")then local i=c:GetAttribute("Plant")or c:GetAttribute("trueName")if i then local e=c:GetAttribute("Mutation")or "Normal"local K=true if Q then if next(x)==nil or x[i]~=true then K=false end elseif G then if next(Y)==nil then K=false else local c=VJ[i]if not c or Y[c]~=true then K=false end end end if K then return c,i,e end end end end end end return nil end local function w(i)local e=c()if not e then return false end local K,x,Y=v(i)if not K then return false end local G=S(K)local Q=G local O=_G["F"..(i.."_MaxCompostInsertAmount")]if O and O>0 then Q=math["min"](G,O)end if Q<=0 then return false end local b=Z(K,x,Y)local M=pcall(function()e:InvokeServer(i,b,Q)end)return M end local function V(i,c)local K="F"..(i.."_")local x="Composter"c:Section({["Title"]=x})local G local Q local S local b S=c:Dropdown({["Title"]="Select Seeds",["Values"]=_G["CachedIndexSeedEntries"];["Value"]={},["Multi"]=true;["AllowNone"]=true,["Callback"]=function(i)_G[K.."TargetCompostSeeds"]={}if type(i)=="table"then for i,c in pairs(i)do local e=string["match"](c,"%] (.*)")or c _G[K.."TargetCompostSeeds"][e]=true end elseif i and i~=""then local c=string["match"](i,"%] (.*)")or i _G[K.."TargetCompostSeeds"][c]=true end end})local function M(i)if i~="selected"then _G[K.."AutoCompostSelected"]=false pcall(function()G:Set(false)end)end if i~="rarity"then _G[K.."AutoCompostByRarity"]=false pcall(function()Q:Set(false)end)end end local Z="isF"..(i.."CompostLoopRunning")local function n()if i==2 and I["isF2CompostLoopRunning"]then return end if i==3 and I["isF3CompostLoopRunning"]then return end if not _G[K.."AutoCompostSelected"]and not _G[K.."AutoCompostByRarity"]then return end if i==2 then I["isF2CompostLoopRunning"]=true else I["isF3CompostLoopRunning"]=true end task["spawn"](function()while _G[K.."AutoCompostSelected"]or _G[K.."AutoCompostByRarity"]do w(i)task["wait"](_G[K.."CompostInsertDelay"]or 2)end if i==2 then I["isF2CompostLoopRunning"]=false else I["isF3CompostLoopRunning"]=false end end)end G=c:Toggle({["Title"]="Auto Compost Selected",["Desc"]="Automatically insert selected seeds into the composter";["Value"]=false,["Callback"]=function(i)_G[K.."AutoCompostSelected"]=i if i then M("selected")end n()end})b=c:Dropdown({["Title"]="Select Rarities";["Values"]=UJ;["Value"]={};["Multi"]=true,["AllowNone"]=true;["Callback"]=function(i)_G[K.."TargetCompostRarities"]={}if type(i)=="table"then for i,c in pairs(i)do _G[K.."TargetCompostRarities"][c]=true end elseif i and i~=""then _G[K.."TargetCompostRarities"][i]=true end end})Q=c:Toggle({["Title"]="Auto Compost By Rarity";["Desc"]="Automatically insert seeds matching selected rarities";["Value"]=false,["Callback"]=function(i)_G[K.."AutoCompostByRarity"]=i if i then M("rarity")end n()end})local v=c:Input({["Title"]="Insert Delay";["Desc"]="Delay in seconds between seed inserts";["Placeholder"]="60",["Value"]="60",["Numeric"]=true,["Finished"]=true,["Callback"]=function(i)local c=tonumber(i)if not c or c<1 then _G[K.."CompostInsertDelay"]=60 pcall(function()InputCompostInsertDelay:Set("60")end)return end c=math["floor"](c)_G[K.."CompostInsertDelay"]=c pcall(function()InputCompostInsertDelay:Set(tostring(c))end)end})local L=c:Input({["Title"]="Max Seeds Per Insert",["Desc"]="Maximum amount of seeds to insert (0 = ALL)",["Placeholder"]="0";["Value"]="0";["Numeric"]=true;["Finished"]=true,["Callback"]=function(i)local c=tonumber(i)if not c or c<0 or c%1~=0 then _G[K.."MaxCompostInsertAmount"]=0 pcall(function()InputCompostMaxInsertAmount:Set("0")end)return end _G[K.."MaxCompostInsertAmount"]=math["floor"](c)pcall(function()InputCompostMaxInsertAmount:Set(tostring(math["floor"](c)))end)end})c:Divider()TabCompostButton=c:Button({["Title"]="Manual Insert",["Desc"]="Manually insert seeds once immediately",["Callback"]=function()local c="0"pcall(function()c=tostring(L["Value"])end)local x=tonumber(c)if not x or x<0 or x%1~=0 then _G[K.."MaxCompostInsertAmount"]=0 else _G[K.."MaxCompostInsertAmount"]=math["floor"](x)end local Y=w(i)if Y then e:Notify({["Title"]="Manual Compost";["Content"]="F"..(i.." seed insert command sent.");["Duration"]=2})else e:Notify({["Title"]="Manual Compost",["Content"]="F"..(i.." no matching seed found.");["Duration"]=2})end end})c:Divider()local p local r local function t(i)if i~="interval"then _G[K.."AutoPullLever"]=false pcall(function()p:Set(false)end)end if i~="whenMax"then _G[K.."AutoPullLeverWhenMax"]=false pcall(function()r:Set(false)end)end end local J=c:Input({["Title"]="Pull Lever Delay";["Desc"]="Delay in seconds between lever pulls (for Auto Pull Lever only)";["Placeholder"]="60";["Value"]="60";["Numeric"]=true,["Finished"]=true;["Callback"]=function(i)local c=tonumber(i)if not c or c<1 then _G[K.."PullLeverDelay"]=60 pcall(function()InputPullLeverDelay:Set("60")end)return end c=math["floor"](c)_G[K.."PullLeverDelay"]=c pcall(function()InputPullLeverDelay:Set(tostring(c))end)end})p=c:Toggle({["Title"]="Auto Pull Lever";["Value"]=false;["Callback"]=function(c)_G[K.."AutoPullLever"]=c if c then t("interval")end local e=(i==2)and I["isF2PullLeverLoopRunning"]or I["isF3PullLeverLoopRunning"]if c and not e then if i==2 then I["isF2PullLeverLoopRunning"]=true else I["isF3PullLeverLoopRunning"]=true end task["spawn"](function()while _G[K.."AutoPullLever"]do local c=g[i]pcall(function()local i=Y:FindFirstChild("Remotes")and(Y["Remotes"]:FindFirstChild("Composter")and Y["Remotes"]["Composter"]:FindFirstChild("PullLever"))if i and c then i:InvokeServer(c["PullLeverServerId"])end end)task["wait"](_G[K.."PullLeverDelay"]or 60)end if i==2 then I["isF2PullLeverLoopRunning"]=false else I["isF3PullLeverLoopRunning"]=false end end)end end})r=c:Toggle({["Title"]="Auto Pull Lever When MAX";["Desc"]=(i==2)and "Temporarily Disabled (Bugged on Floor 2)"or "Pull lever when machine is at MAX capacity â checks every 2 seconds",["Locked"]=(i==2),["Value"]=false,["Callback"]=function(c)if i==2 then pcall(function()r:Set(false)end)return end _G[K.."AutoPullLeverWhenMax"]=c if c then t("whenMax")end local e=(i==2)and I["isF2PullLeverWhenMaxLoopRunning"]or I["isF3PullLeverWhenMaxLoopRunning"]if c and not e then if i==2 then I["isF2PullLeverWhenMaxLoopRunning"]=true else I["isF3PullLeverWhenMaxLoopRunning"]=true end task["spawn"](function()while _G[K.."AutoPullLeverWhenMax"]do local c=g[i]if c then local e=O:FindFirstChild("PlayerGui")and O["PlayerGui"]:FindFirstChild("CompostMachine")local K=e and e:FindFirstChild(c["CompostMachineFrameName"])local x=K and(K:FindFirstChild("Main")and K["Main"]:FindFirstChild("Progress"))local G=x and x:FindFirstChild("Requirements")if G and(((G:IsA("TextLabel")or G:IsA("TextButton")))and string["find"](string["upper"](G["Text"]),"MAX",1,true))then local e=Y:FindFirstChild("Remotes")and(Y["Remotes"]:FindFirstChild("Composter")and Y["Remotes"]["Composter"]:FindFirstChild("PullLever"))if e then local K=pcall(function()e:InvokeServer(c["PullLeverServerId"])end)if K then print("[Lamduck] Composter MAX | F"..(tostring(i).." lever pulled"))end end end end task["wait"](2)end if i==2 then I["isF2PullLeverWhenMaxLoopRunning"]=false else I["isF3PullLeverWhenMaxLoopRunning"]=false end end)end end})if i==2 then pcall(function()r:Lock()end)end return{["ToggleAutoCompostSelected"]=G,["ToggleAutoCompostByRarity"]=Q;["DropdownCompostSeed"]=S,["DropdownCompostRarities"]=b,["InputCompostInsertDelay"]=v,["InputCompostMaxInsertAmount"]=L,["ToggleAutoPullLever"]=p;["ToggleAutoPullLeverWhenMax"]=r,["InputPullLeverDelay"]=J;["startCompostLoopForFloor"]=n}end local F=V(2,x["TabCompost2"])task["wait"](0)local j=V(3,x["TabCompost3"])task["wait"](0)local D={[1]=false;[2]=false;[3]=false}local function u(i)if D[i]then return end D[i]=true local c="F"..(i.."_")task["spawn"](function()while _G[c.."AutoPlantByRarity"]do local e=E(i)if e then local i={}for c,e in ipairs(e:GetChildren())do local K=string["match"](e["Name"],"^Plot(%d+)$")if K then local c=e:FindFirstChild("Dirt")if c and c:GetAttribute("PlantLevel")==nil then table["insert"](i,c)end end end if#i>0 then local function e()local i=O["Character"]local e=O:FindFirstChild("Backpack")local K={i;e}local x={}for i,e in ipairs(K)do if e then for i,e in ipairs(e:GetChildren())do if e:IsA("Tool")and e:GetAttribute("InventoryCategory")=="Seeds"then local i=e:GetAttribute("trueName")if i then local e=FJ(i)local K=_G[c.."TargetAutoPlantRarities"]if e and(K and K[e])then local c=wJ[e]or 0 table["insert"](x,{["TrueName"]=i,["Weight"]=c})end end end end end end if#x>0 then table["sort"](x,function(i,c)return i["Weight"]>c["Weight"]end)return x[1]["TrueName"]end return nil end for i,K in ipairs(i)do if not _G[c.."AutoPlantByRarity"]then break end if K:GetAttribute("PlantLevel")==nil then local i=e()if i then local c=MJ(i)if c then pcall(function()if Y:FindFirstChild("Remotes")and Y["Remotes"]:FindFirstChild("PlantSeed")then Y["Remotes"]["PlantSeed"]:FireServer(K)end end)task["wait"](.2)end else break end end end end end task["wait"](30)end D[i]=false end)end local function W(i)local c=E(i)if c then for i,c in ipairs(c:GetChildren())do local e=string["match"](c["Name"],"^Plot(%d+)$")if e then local i=c:FindFirstChild("Dirt")if i and i:GetAttribute("PlantLevel")~=nil then pcall(function()if Y:FindFirstChild("Remotes")and Y["Remotes"]:FindFirstChild("RemovePlant")then Y["Remotes"]["RemovePlant"]:FireServer(i)end end)task["wait"](.5)end end end end end local function q(i)local c="isUpgradePlantsF"..(i.."LoopRunning")if I[c]then return end I[c]=true task["spawn"](function()while _G["FloorUpgradeConfig"][i]["AutoUpgrade"]or _G["FloorUpgradeConfig"][i]["AutoAll"]do local c=E(i)if c then local e=f(c)local K=_G["FloorUpgradeConfig"][i]for c,e in ipairs(e)do if not((_G["FloorUpgradeConfig"][i]["AutoUpgrade"]or _G["FloorUpgradeConfig"][i]["AutoAll"]))then break end local x=e:GetAttribute("PlantLevel")if x then local i=e:GetAttribute("PlantName")local c=FJ(i)local G="["..(c..("] "..i))local Q=K["AutoAll"]or K["TargetPlantNames"][G]if Q then local i=K["MaxLevel"]or 10 if x<i then local i=e:GetAttribute("UpgradePrice")or 0 if r(i)then pcall(function()Y["Remotes"]["UpgradePlant"]:InvokeServer(e)end)task["wait"](.1)end end end end end end task["wait"](.1)end I[c]=false end)end local function A(i)local c="isFertilizePlantsF"..(i.."LoopRunning")if I[c]then return end I[c]=true task["spawn"](function()while _G["FloorFertilizeConfig"][i]["AutoFertilize"]or _G["FloorFertilizeConfig"][i]["AutoAll"]do local c=IJ(i)if c then local e=E(i)local K=false if e then local x=f(e)local G=_G["FloorFertilizeConfig"][i]for e,x in ipairs(x)do if not((_G["FloorFertilizeConfig"][i]["AutoFertilize"]or _G["FloorFertilizeConfig"][i]["AutoAll"]))then break end if x:GetAttribute("PlantLevel")~=nil and not x:GetAttribute("Fertilized")then local i=x:GetAttribute("PlantName")local e=FJ(i)local Q="["..(e..("] "..i))local S=G["AutoAll"]or G["TargetPlantNames"][Q]if S then local i=O["Character"]and O["Character"]:FindFirstChild("Humanoid")if i then i:EquipTool(c)task["wait"](.1)pcall(function()Y["Remotes"]["UseFertilizer"]:FireServer(x)end)task["wait"](.1)i:UnequipTools()K=true break end end end end end if K then task["wait"](.1)else task["wait"](2)end else task["wait"](2)end end I[c]=false end)end local function a(i,c)local x="F"..(i.."_")c:Section({["Title"]="Plants",["Opened"]=true})local Y=c:Paragraph({["Title"]="Plant Status";["Desc"]="Loading plant information..."})local G=c:Dropdown({["Title"]="Select Rarities";["Values"]=UJ,["Value"]={},["Multi"]=true;["AllowNone"]=true;["Callback"]=function(i)_G[x.."TargetAutoPlantRarities"]={}if type(i)=="table"then for i,c in pairs(i)do _G[x.."TargetAutoPlantRarities"][c]=true end elseif i and i~=""then _G[x.."TargetAutoPlantRarities"][i]=true end end})local Q=c:Toggle({["Title"]="Auto Plant",["Desc"]="Auto plant seeds matching selected rarities";["Value"]=false;["Callback"]=function(c)_G[x.."AutoPlantByRarity"]=c if c then u(i)end end})c:Button({["Title"]="Remove All Plants",["Callback"]=function()K:Dialog({["Title"]="Confirm Removal";["Content"]="Are you sure you want to remove all plants on Floor "..(i.."?");["Buttons"]={{["Title"]="Confirm";["Callback"]=function()e:Notify({["Title"]="Removing Plants",["Content"]="Removing Floor "..(i.." plants...");["Duration"]=5})W(i)end},{["Title"]="No"}}})end})c:Section({["Title"]="PLANT UPGRADE"})local S=c:Dropdown({["Title"]="Target Upgrade Plants",["Values"]=_G["CachedIndexSeedEntries"];["Value"]={},["Multi"]=true,["AllowNone"]=true;["Callback"]=function(c)local e=_G["FloorUpgradeConfig"][i]e["TargetPlantNames"]={}if type(c)=="table"then for i,c in pairs(c)do e["TargetPlantNames"][c]=true end elseif c and c~=""then e["TargetPlantNames"][c]=true end end})local O=c:Input({["Title"]="Max Upgrade Level";["Desc"]="Limit maximum level for auto upgrade",["Placeholder"]="10",["Value"]=tostring(_G["FloorUpgradeConfig"][i]["MaxLevel"]or 10);["Numeric"]=true,["Finished"]=true,["Callback"]=function(c)local e=tonumber(c)if not e or e<1 then _G["FloorUpgradeConfig"][i]["MaxLevel"]=10 pcall(function()InputMaxUpgradeLevel:Set("10")end)return end e=math["floor"](e)_G["FloorUpgradeConfig"][i]["MaxLevel"]=e pcall(function()InputMaxUpgradeLevel:Set(tostring(e))end)end})local b=c:Toggle({["Title"]="Auto Upgrade Selected",["Desc"]="Auto upgrade only selected plants";["Value"]=false;["Callback"]=function(c)_G["FloorUpgradeConfig"][i]["AutoUpgrade"]=c if c then _G["FloorUpgradeConfig"][i]["AutoAll"]=false local c=_G["UIRefs"]["ToggleFloor"..(i.."AutoAllUpgrade")]if c then pcall(function()c:Set(false)end)end q(i)end end})local M=c:Toggle({["Title"]="Auto Upgrade All";["Desc"]="Auto upgrade all plants on this floor",["Value"]=false;["Callback"]=function(c)_G["FloorUpgradeConfig"][i]["AutoAll"]=c if c then _G["FloorUpgradeConfig"][i]["AutoUpgrade"]=false local c=_G["UIRefs"]["ToggleFloor"..(i.."AutoUpgrade")]if c then pcall(function()c:Set(false)end)end q(i)end end})c:Section({["Title"]="PLANT FERTILIZATION"})local Z=c:Dropdown({["Title"]="Target Fertilize Plants",["Values"]=_G["CachedIndexSeedEntries"],["Value"]={};["Multi"]=true;["AllowNone"]=true;["Callback"]=function(c)local e=_G["FloorFertilizeConfig"][i]e["TargetPlantNames"]={}if type(c)=="table"then for i,c in pairs(c)do e["TargetPlantNames"][c]=true end elseif c and c~=""then e["TargetPlantNames"][c]=true end end})local g=c:Dropdown({["Title"]="Fertilizer Type";["Values"]=m;["Value"]={};["Multi"]=true;["AllowNone"]=true,["Callback"]=function(c)local e=_G["FloorFertilizeConfig"][i]e["TargetFertilizerTypes"]={}if type(c)=="table"then for i,c in pairs(c)do e["TargetFertilizerTypes"][c]=true end end end})local I=c:Toggle({["Title"]="Auto Fertilize Selected",["Desc"]="Auto fertilize only selected plants",["Value"]=false;["Callback"]=function(c)_G["FloorFertilizeConfig"][i]["AutoFertilize"]=c if c then _G["FloorFertilizeConfig"][i]["AutoAll"]=false local c=_G["UIRefs"]["ToggleFloor"..(i.."AutoAllFertilize")]if c then pcall(function()c:Set(false)end)end A(i)end end})local n=c:Toggle({["Title"]="Auto Fertilize All";["Desc"]="Auto fertilize all plants on this floor",["Value"]=false,["Callback"]=function(c)_G["FloorFertilizeConfig"][i]["AutoAll"]=c if c then _G["FloorFertilizeConfig"][i]["AutoFertilize"]=false local c=_G["UIRefs"]["ToggleFloor"..(i.."AutoFertilize")]if c then pcall(function()c:Set(false)end)end A(i)end end})c:Section({["Title"]="PLANT SPRAY"})local v=c:Dropdown({["Title"]="Target Spray Plants",["Desc"]="Only sprays on unmutated plants";["Values"]=CJ,["Value"]={};["Multi"]=true,["AllowNone"]=true,["Callback"]=function(c)local e=_G["FloorSprayConfig"][i]e["TargetPlantNames"]={}if type(c)=="table"then for i,c in pairs(c)do e["TargetPlantNames"][c]=true end elseif c and c~=""then e["TargetPlantNames"][c]=true end end})local L=c:Dropdown({["Title"]="Select Spray";["Values"]=k,["Value"]="",["Multi"]=false,["AllowNone"]=true,["Callback"]=function(c)local e=_G["FloorSprayConfig"][i]if c and c~=""then e["TargetSprayType"]=c else e["TargetSprayType"]=nil end end})c:Button({["Title"]="Run Spray";["Callback"]=function()rJ(i)end})c:Divider()local p=c:Dropdown({["Title"]="Target Acid Plants",["Values"]=CJ;["Value"]={};["Multi"]=true,["AllowNone"]=true;["Callback"]=function(c)local e=_G["FloorSprayConfig"][i]e["TargetAcidPlantNames"]={}if type(c)=="table"then for i,c in pairs(c)do e["TargetAcidPlantNames"][c]=true end elseif c and c~=""then e["TargetAcidPlantNames"][c]=true end end})local r=c:Dropdown({["Title"]="Clear Mutations List";["Desc"]="Only clear the selected mutations";["Values"]=gJ,["Value"]={};["Multi"]=true,["AllowNone"]=true;["Callback"]=function(c)local e=_G["FloorSprayConfig"][i]e["TargetAcidMutations"]={}if type(c)=="table"then for i,c in pairs(c)do e["TargetAcidMutations"][c]=true end elseif c and c~=""then e["TargetAcidMutations"][c]=true end end})c:Button({["Title"]="Clear Mutation",["Desc"]="Only sprays Acid Spray on mutated plants to clear mutations";["Callback"]=function()K:Dialog({["Title"]="Confirm Clear Mutation";["Content"]="Are you sure you want to clear mutations for targeted plants on Floor "..(i.."?");["Buttons"]={{["Title"]="Confirm",["Callback"]=function()tJ(i)end},{["Title"]="Cancel"}}})end})return{["ParagraphFloor"]=Y,["DropdownFloorPlantRarities"]=G,["ToggleFloorAutoPlant"]=Q;["DropdownUpgradePlant"]=S,["InputMaxUpgradeLevel"]=O,["ToggleAutoAllUpgrade"]=M;["ToggleAutoUpgrade"]=b;["DropdownFertilizePlant"]=Z;["DropdownFertilizerType"]=g,["ToggleAutoAllFertilize"]=n;["ToggleAutoFertilize"]=I,["DropdownSprayPlant"]=v,["DropdownSprayType"]=L;["DropdownAcidPlant"]=p;["DropdownAcidMutation"]=r}end do local i=a(1,x["TabFloor1"])task["wait"](0)local c=i["ParagraphFloor"]_G["UIRefs"]["DropdownFloor1PlantRarities"]=i["DropdownFloorPlantRarities"]_G["UIRefs"]["ToggleFloor1AutoPlant"]=i["ToggleFloorAutoPlant"]_G["UIRefs"]["DropdownFloor1UpgradePlant"]=i["DropdownUpgradePlant"]_G["UIRefs"]["InputFloor1MaxUpgradeLevel"]=i["InputMaxUpgradeLevel"]_G["UIRefs"]["ToggleFloor1AutoAllUpgrade"]=i["ToggleAutoAllUpgrade"]_G["UIRefs"]["ToggleFloor1AutoUpgrade"]=i["ToggleAutoUpgrade"]_G["UIRefs"]["DropdownFloor1FertilizePlant"]=i["DropdownFertilizePlant"]_G["UIRefs"]["DropdownFloor1FertilizerType"]=i["DropdownFertilizerType"]_G["UIRefs"]["ToggleFloor1AutoAllFertilize"]=i["ToggleAutoAllFertilize"]_G["UIRefs"]["ToggleFloor1AutoFertilize"]=i["ToggleAutoFertilize"]_G["UIRefs"]["DropdownFloor1SprayPlant"]=i["DropdownSprayPlant"]_G["UIRefs"]["DropdownFloor1SprayType"]=i["DropdownSprayType"]_G["UIRefs"]["DropdownFloor1AcidPlant"]=i["DropdownAcidPlant"]_G["UIRefs"]["DropdownFloor1AcidMutation"]=i["DropdownAcidMutation"]local e=a(2,x["TabFloor2"])task["wait"](0)local K=e["ParagraphFloor"]_G["UIRefs"]["DropdownFloor2PlantRarities"]=e["DropdownFloorPlantRarities"]_G["UIRefs"]["ToggleFloor2AutoPlant"]=e["ToggleFloorAutoPlant"]_G["UIRefs"]["DropdownFloor2UpgradePlant"]=e["DropdownUpgradePlant"]_G["UIRefs"]["InputFloor2MaxUpgradeLevel"]=e["InputMaxUpgradeLevel"]_G["UIRefs"]["ToggleFloor2AutoAllUpgrade"]=e["ToggleAutoAllUpgrade"]_G["UIRefs"]["ToggleFloor2AutoUpgrade"]=e["ToggleAutoUpgrade"]_G["UIRefs"]["DropdownFloor2FertilizePlant"]=e["DropdownFertilizePlant"]_G["UIRefs"]["DropdownFloor2FertilizerType"]=e["DropdownFertilizerType"]_G["UIRefs"]["ToggleFloor2AutoAllFertilize"]=e["ToggleAutoAllFertilize"]_G["UIRefs"]["ToggleFloor2AutoFertilize"]=e["ToggleAutoFertilize"]_G["UIRefs"]["DropdownFloor2SprayPlant"]=e["DropdownSprayPlant"]_G["UIRefs"]["DropdownFloor2SprayType"]=e["DropdownSprayType"]_G["UIRefs"]["DropdownFloor2AcidPlant"]=e["DropdownAcidPlant"]_G["UIRefs"]["DropdownFloor2AcidMutation"]=e["DropdownAcidMutation"]local Y=a(3,x["TabFloor3"])task["wait"](0)local G=Y["ParagraphFloor"]_G["UIRefs"]["DropdownFloor3PlantRarities"]=Y["DropdownFloorPlantRarities"]_G["UIRefs"]["ToggleFloor3AutoPlant"]=Y["ToggleFloorAutoPlant"]_G["UIRefs"]["DropdownFloor3UpgradePlant"]=Y["DropdownUpgradePlant"]_G["UIRefs"]["InputFloor3MaxUpgradeLevel"]=Y["InputMaxUpgradeLevel"]_G["UIRefs"]["ToggleFloor3AutoAllUpgrade"]=Y["ToggleAutoAllUpgrade"]_G["UIRefs"]["ToggleFloor3AutoUpgrade"]=Y["ToggleAutoUpgrade"]_G["UIRefs"]["DropdownFloor3FertilizePlant"]=Y["DropdownFertilizePlant"]_G["UIRefs"]["DropdownFloor3FertilizerType"]=Y["DropdownFertilizerType"]_G["UIRefs"]["ToggleFloor3AutoAllFertilize"]=Y["ToggleAutoAllFertilize"]_G["UIRefs"]["ToggleFloor3AutoFertilize"]=Y["ToggleAutoFertilize"]_G["UIRefs"]["DropdownFloor3SprayPlant"]=Y["DropdownSprayPlant"]_G["UIRefs"]["DropdownFloor3SprayType"]=Y["DropdownSprayType"]_G["UIRefs"]["DropdownFloor3AcidPlant"]=Y["DropdownAcidPlant"]_G["UIRefs"]["DropdownFloor3AcidMutation"]=Y["DropdownAcidMutation"]local function Q(i,c,e)local K={i;c,e}task["spawn"](function()while true do task["wait"](1.5)for i=1,3,1 do local c=""local e=R(i)for i,e in ipairs(e)do if e["PlantName"]and e["PlantName"]~=""then c=c..string["format"]("- %s | Lvl %d | %s | Fertilized: %s\n",e["PlantName"],e["PlantLevel"],e["PlantMutation"],tostring(e["Fertilized"]))end end if c==""then c="No plants planted."end local x=K[i]if x then pcall(function()x:SetDesc(c)end)end task["wait"](0)end end end)end Q(c,K,G)end x["TabFarming"]:Section({["Title"]="PLOT POWERUPS"})_G["UIRefs"]["DropdownPowerupsToUpgrade"]=x["TabFarming"]:Dropdown({["Title"]="Select Powerups",["Values"]=M,["Value"]={};["Multi"]=true;["AllowNone"]=true,["Callback"]=function(i)_G["TargetPowerups"]={}if type(i)=="table"then for i,c in pairs(i)do _G["TargetPowerups"][c]=true end elseif i~=""then _G["TargetPowerups"][i]=true end end})_G["UIRefs"]["ToggleAutoUpgradePowerups"]=x["TabFarming"]:Toggle({["Title"]="Auto Upgrade Powerups";["Value"]=false;["Callback"]=function(i)_G["AutoUpgradePowerups"]=i if i and not I["isUpgradePowerupsLoopRunning"]then I["isUpgradePowerupsLoopRunning"]=true task["spawn"](function()while _G["AutoUpgradePowerups"]do local i=p()for c,e in pairs(_G["TargetPowerups"])do if not _G["AutoUpgradePowerups"]then break end local K=b[c]["Type"]if K=="plot"then local e=1 while true do if not _G["AutoUpgradePowerups"]then break end local K=N(c,e)if K==nil then break end if K=="MAX"then break end if r(K,nil,nil,i)then if not _G["AutoUpgradePowerups"]then break end t(c,e)if not _G["AutoUpgradePowerups"]then break end task["wait"](.5)if not _G["SkipMoneyCheck"]then i=p()end break else break end end elseif K=="seedluck"then local e=N(c,1)if e and(e~="MAX"and r(e,nil,nil,i))then if not _G["AutoUpgradePowerups"]then break end J()task["wait"](.5)if not _G["SkipMoneyCheck"]then i=p()end end elseif K=="seedrolls"then local e=N(c,1)if e and(e~="MAX"and r(e,nil,nil,i))then if not _G["AutoUpgradePowerups"]then break end C()task["wait"](.5)if not _G["SkipMoneyCheck"]then i=p()end end end end if not _G["AutoUpgradePowerups"]then break end task["wait"](2)end I["isUpgradePowerupsLoopRunning"]=false end)end end})x["TabShop"]:Section({["Title"]="SEED GACHA (ROLL & BUY)"})local function iJ(i)if i~="all"then _G["AutoRollAndBuyAll"]=false pcall(function()_G["UIRefs"]["ToggleAutoRollBuyAll"]:Set(false)end)end if i~="selected"then _G["AutoRollAndBuySelected"]=false pcall(function()_G["UIRefs"]["ToggleAutoRollBuySelected"]:Set(false)end)end if i~="rarity"then _G["AutoRollAndBuyByRarity"]=false pcall(function()_G["UIRefs"]["ToggleAutoRollBuyByRarity"]:Set(false)end)end end _G["UIRefs"]["ToggleAutoRollBuyAll"]=x["TabShop"]:Toggle({["Title"]="Auto Roll & Buy ALL Seeds",["Value"]=false,["Callback"]=function(i)_G["AutoRollAndBuyAll"]=i if i then iJ("all")BJ()end end})_G["UIRefs"]["DropdownGachaSeeds"]=x["TabShop"]:Dropdown({["Title"]="Select Seeds",["Values"]=_G["CachedIndexSeedEntries"],["Value"]={},["Multi"]=true;["AllowNone"]=true,["Callback"]=function(i)_G["TargetGachaSeeds"]={}if type(i)=="table"then for i,c in pairs(i)do local e=string["match"](c,"%] (.*)")or c _G["TargetGachaSeeds"][e]=true end elseif i and i~=""then local c=string["match"](i,"%] (.*)")or i _G["TargetGachaSeeds"][c]=true end end})_G["UIRefs"]["ToggleAutoRollBuySelected"]=x["TabShop"]:Toggle({["Title"]="Auto Buy Selected Seeds",["Value"]=false,["Callback"]=function(i)_G["AutoRollAndBuySelected"]=i if i then iJ("selected")BJ()end end})_G["UIRefs"]["DropdownGachaRarities"]=x["TabShop"]:Dropdown({["Title"]="Select Rarities",["Values"]=UJ,["Value"]={},["Multi"]=true;["AllowNone"]=true;["Callback"]=function(i)_G["TargetGachaRarities"]={}if type(i)=="table"then for i,c in pairs(i)do _G["TargetGachaRarities"][c]=true end elseif i and i~=""then _G["TargetGachaRarities"][i]=true end end})_G["UIRefs"]["ToggleAutoRollBuyByRarity"]=x["TabShop"]:Toggle({["Title"]="Auto Buy Selected Rarities",["Value"]=false,["Callback"]=function(i)_G["AutoRollAndBuyByRarity"]=i if i then iJ("rarity")BJ()end end})x["TabShop"]:Section({["Title"]="GEAR SHOP"})local KJ={}_G["UIRefs"]["ToggleBuyAllGears"]=x["TabShop"]:Toggle({["Title"]="Auto Buy All Available Gears";["Value"]=false;["Callback"]=function(i)_G["AutoBuyAllGears"]=i if i and _G["UIRefs"]["ToggleBuySelectedGears"]then pcall(function()_G["UIRefs"]["ToggleBuySelectedGears"]:Set(false)end)end if i and not I["isBuyAllGearsLoopRunning"]then I["isBuyAllGearsLoopRunning"]=true task["spawn"](function()while _G["AutoBuyAllGears"]do task["wait"](.1)for i,c in pairs(P)do if not _G["AutoBuyAllGears"]then break end if T(c)>0 then pcall(function()eJ(c)end)task["wait"](.1)end end end I["isBuyAllGearsLoopRunning"]=false end)end end})_G["UIRefs"]["ToggleBuySelectedGears"]=x["TabShop"]:Toggle({["Title"]="Auto Buy Selected Gears";["Value"]=false,["Callback"]=function(i)_G["AutoBuySelectedGears"]=i if i and _G["UIRefs"]["ToggleBuyAllGears"]then pcall(function()_G["UIRefs"]["ToggleBuyAllGears"]:Set(false)end)end if i and not I["isBuySelectedGearsLoopRunning"]then I["isBuySelectedGearsLoopRunning"]=true task["spawn"](function()while _G["AutoBuySelectedGears"]do task["wait"](.1)if#KJ>0 then for i,c in pairs(KJ)do if not _G["AutoBuySelectedGears"]then break end if T(c)>0 then pcall(function()eJ(c)end)task["wait"](.1)end end end end I["isBuySelectedGearsLoopRunning"]=false end)end end})_G["UIRefs"]["DropdownGearsToBuy"]=x["TabShop"]:Dropdown({["Title"]="Select Gears to Buy";["Values"]=P;["Value"]={};["Multi"]=true,["AllowNone"]=true,["Callback"]=function(i)KJ={}if type(i)=="table"then KJ=i elseif i and i~=""then KJ={i}end end})x["TabShop"]:Section({["Title"]="EGG SHOP"})local function xJ()if I["isEggShopBuyLoopRunning"]then return end if not _G["AutoBuySelectedEggs"]and not _G["AutoBuyAllEggs"]then return end I["isEggShopBuyLoopRunning"]=true task["spawn"](function()while _G["AutoBuySelectedEggs"]or _G["AutoBuyAllEggs"]do local i=SJ()for i,c in ipairs(i)do if not _G["AutoBuySelectedEggs"]and not _G["AutoBuyAllEggs"]then break end local e=_G["AutoBuyAllEggs"]or(_G["AutoBuySelectedEggs"]and _G["TargetEggShopEggs"][c["Name"]]==true)if e then local i=QJ(c["Name"])if r(i,"Egg Shop",c["Name"])then OJ(c)end task["wait"](.2)end end task["wait"](1)end I["isEggShopBuyLoopRunning"]=false end)end _G["UIRefs"]["ToggleAutoUnlockEggSlots"]=x["TabShop"]:Toggle({["Title"]="Auto Unlock Egg Slots";["Value"]=false,["Callback"]=function(i)_G["AutoUnlockEggSlots"]=i if i and not I["isUnlockEggSlotsLoopRunning"]then I["isUnlockEggSlotsLoopRunning"]=true task["spawn"](function()while _G["AutoUnlockEggSlots"]do local i=Y:FindFirstChild("Remotes")and(Y["Remotes"]:FindFirstChild("EggShop")and Y["Remotes"]["EggShop"]:FindFirstChild("Transaction"))if i then local c=p()local e=YJ()for e,K in ipairs(e)do if not _G["AutoUnlockEggSlots"]then break end local x=K["EggSlotNumber"]if not _G["SessionUnlockedEggSlots"][x]and r(K["UnlockPrice"],"Egg Slot","Slot "..tostring(x),c)then local e=pcall(function()i:InvokeServer("UnlockSlot",x)end)if e then _G["SessionUnlockedEggSlots"][x]=true print("[Lamduck] AutoUnlockEggSlot | Slot "..(tostring(x)..(" | price: "..tostring(K["UnlockPrice"]))))task["wait"](1.5)if not _G["SkipMoneyCheck"]then c=p()end end end end end task["wait"](5)end I["isUnlockEggSlotsLoopRunning"]=false end)end end})_G["UIRefs"]["DropdownEggShopEggs"]=x["TabShop"]:Dropdown({["Title"]="Select Eggs to Buy";["Values"]=GJ();["Value"]={};["Multi"]=true;["AllowNone"]=true;["Callback"]=function(i)_G["TargetEggShopEggs"]={}if type(i)=="table"then for i,c in pairs(i)do _G["TargetEggShopEggs"][c]=true end elseif i~=""then _G["TargetEggShopEggs"][i]=true end end})x["TabShop"]:Button({["Title"]="Refresh Egg List";["Callback"]=function()pcall(function()_G["UIRefs"]["DropdownEggShopEggs"]:Refresh(GJ())end)e:Notify({["Title"]="Egg Shop";["Content"]="Egg list refreshed.",["Duration"]=2})end})_G["UIRefs"]["ToggleAutoBuySelectedEggs"]=x["TabShop"]:Toggle({["Title"]="Auto Buy Selected Eggs",["Value"]=false;["Callback"]=function(i)_G["AutoBuySelectedEggs"]=i if i and _G["UIRefs"]["ToggleAutoBuyAllEggs"]then pcall(function()_G["UIRefs"]["ToggleAutoBuyAllEggs"]:Set(false)end)end xJ()end})_G["UIRefs"]["ToggleAutoBuyAllEggs"]=x["TabShop"]:Toggle({["Title"]="Auto Buy All Available Eggs",["Value"]=false;["Callback"]=function(i)_G["AutoBuyAllEggs"]=i if i and _G["UIRefs"]["ToggleAutoBuySelectedEggs"]then pcall(function()_G["UIRefs"]["ToggleAutoBuySelectedEggs"]:Set(false)end)end xJ()end})x["TabShop"]:Section({["Title"]="LIVE SHOP STOCK"})local bJ=x["TabShop"]:Paragraph({["Title"]="Current Available Items";["Desc"]="Loading shop stock..."})local function ZJ()pcall(function()bJ:SetDesc(cJ())end)end x["TabShop"]:Button({["Title"]="Refresh Stock Info";["Callback"]=function()ZJ()e:Notify({["Title"]="Shop Stock";["Content"]="Stock info refreshed.",["Duration"]=2})end})task["spawn"](function()while task["wait"](10)do ZJ()end end)ZJ()local nJ=15 local function vJ()local i=O:FindFirstChild("PlayerGui")if not i then return false end local c=i:FindFirstChild("MainUI")local e=c and c:FindFirstChild("Menus")local K=e and e:FindFirstChild("SeedCollectorFrame")local x=K and K:FindFirstChild("Main")local Y=x and x:FindFirstChild("Frame")local G=Y and Y:FindFirstChild("ProgressBarDaily")local Q=G and G:FindFirstChild("Progress")if not Q or not Q:IsA("TextLabel")then return false end local S=Q["Text"]if not S or S==""then return false end local b=string["gsub"](S,",","")local M,Z=string["match"](b,"(%d+)%s*/%s*(%d+)")return M and(Z and tonumber(M)>=tonumber(Z))end x["TabEvents"]:Section({["Title"]="WORLD EVENTS"})local function LJ()local i=O["Character"]if i then for i,c in ipairs(i:GetChildren())do if c:IsA("Tool")and string["find"](string["lower"](c["Name"]),"honey token",1,true)then return true end end end local c=O:FindFirstChild("Backpack")if c then for i,c in ipairs(c:GetChildren())do if c:IsA("Tool")and string["find"](string["lower"](c["Name"]),"honey token",1,true)then return true end end end return false end local pJ=nil local HJ=nil local function fJ()if pJ and pJ["Parent"]then return pJ,HJ end pJ=nil HJ=nil local i=workspace:FindFirstChild("InteractiveEvents")and(workspace["InteractiveEvents"]:FindFirstChild("QueenBee")and(workspace["InteractiveEvents"]["QueenBee"]:FindFirstChild("HoneyJarMachine")and workspace["InteractiveEvents"]["QueenBee"]["HoneyJarMachine"]:FindFirstChild("Honey Jar Machine")))local c=i and i:FindFirstChild("InsertPrompt")if not c then return nil,nil end local e=c["Parent"]if e and e:IsA("Attachment")then e=e["Parent"]end if not e then return nil,nil end pJ=c HJ=e["CFrame"]+Vector3["new"](0,3,0)return pJ,HJ end _G["UIRefs"]["ToggleAutoPlantRush"]=x["TabEvents"]:Toggle({["Title"]="Auto Shoot Plant Rush";["Value"]=false;["Callback"]=function(i)_G["AutoPlantRush"]=i if i and not I["isPlantRushLoopRunning"]then I["isPlantRushLoopRunning"]=true task["spawn"](function()while _G["AutoPlantRush"]do local i=Y:FindFirstChild("Remotes")and(Y["Remotes"]:FindFirstChild("PlantRush")and Y["Remotes"]["PlantRush"]:FindFirstChild("Shoot"))local c=O["Character"]and O["Character"]:FindFirstChild("HumanoidRootPart")local e=workspace:FindFirstChild("InteractiveEvents")and(workspace["InteractiveEvents"]:FindFirstChild("PlantRush")and workspace["InteractiveEvents"]["PlantRush"]:FindFirstChild("Runtime"))if i and(c and e)then local K=c["Position"]+Vector3["new"](0,1.5,0)for c,e in ipairs(e:GetChildren())do if not _G["AutoPlantRush"]then break end local x=e:IsA("Model")and e["PrimaryPart"]if x then local c=x["Position"]pcall(function()i:FireServer(K,((c-K))["Unit"],c)end)task["wait"](.05)end end end task["wait"](.1)end I["isPlantRushLoopRunning"]=false end)end end})_G["UIRefs"]["ToggleAutoClaimPlantRushBossDrop"]=x["TabEvents"]:Toggle({["Title"]="Auto Claim Plant Rush Boss Drops",["Value"]=false;["Callback"]=function(i)_G["AutoClaimPlantRushBossDrop"]=i if i and not I["isClaimPlantRushBossDropLoopRunning"]then I["isClaimPlantRushBossDropLoopRunning"]=true task["spawn"](function()while _G["AutoClaimPlantRushBossDrop"]do pcall(function()local i=O["Character"]and O["Character"]:FindFirstChild("HumanoidRootPart")if i then for c,K in ipairs(workspace:GetChildren())do if not _G["AutoClaimPlantRushBossDrop"]then break end if string["find"](K["Name"],"PlantRushLocalDrop_",1,true)then local c=K:FindFirstChildWhichIsA("ProximityPrompt",true)if c then local x=K:IsA("BasePart")and K or K:FindFirstChildWhichIsA("BasePart",true)if x then i["CFrame"]=x["CFrame"]task["wait"](.1)if fireproximityprompt and _G["AutoClaimPlantRushBossDrop"]then fireproximityprompt(c)task["wait"](.2)e:Notify({["Title"]="Plant Rush Boss Drop Claimed";["Content"]="Claimed: "..tostring(K["Name"]),["Duration"]=3})end end end end end end end)task["wait"](.5)end I["isClaimPlantRushBossDropLoopRunning"]=false end)end end})_G["UIRefs"]["ToggleAutoCollectQueenBeeHoneycomb"]=x["TabEvents"]:Toggle({["Title"]="Auto Collect Queen Bee Honeycomb";["Value"]=false;["Callback"]=function(i)_G["AutoCollectQueenBeeHoneycomb"]=i if i and not I["isCollectHoneycombLoopRunning"]then I["isCollectHoneycombLoopRunning"]=true task["spawn"](function()while _G["AutoCollectQueenBeeHoneycomb"]do pcall(function()local i=O["Character"]and O["Character"]:FindFirstChild("HumanoidRootPart")local c=workspace:FindFirstChild("InteractiveEvents")and(workspace:FindFirstChild("QueenBee",true)and workspace["InteractiveEvents"]["QueenBee"]:FindFirstChild("RuntimeHoneycombs"))if c and i then for c,e in pairs(c:GetChildren())do if not _G["AutoCollectQueenBeeHoneycomb"]then break end local K=e:FindFirstChildWhichIsA("ProximityPrompt",true)if K then local c=e:IsA("BasePart")and e or(e:IsA("Model")and((e["PrimaryPart"]or e:FindFirstChildWhichIsA("BasePart",true))))if c then i["CFrame"]=c["CFrame"]task["wait"](.2)if fireproximityprompt and _G["AutoCollectQueenBeeHoneycomb"]then fireproximityprompt(K)task["wait"](.2)end end end end end end)task["wait"](1)end I["isCollectHoneycombLoopRunning"]=false end)end end})_G["UIRefs"]["ToggleAutoSubmitQueenBeeHoneyToken"]=x["TabEvents"]:Toggle({["Title"]="Auto Submit Honey Token";["Desc"]="Submit honey tokens to the Jar Machine (Honey Pot)",["Value"]=false;["Callback"]=function(i)_G["AutoSubmitQueenBeeHoneyToken"]=i if i and not I["isSubmitQueenBeeHoneyTokenLoopRunning"]then I["isSubmitQueenBeeHoneyTokenLoopRunning"]=true task["spawn"](function()while _G["AutoSubmitQueenBeeHoneyToken"]do if not LJ()then task["wait"](2)else local i,c=fJ()if i and c then local e=O["Character"]and O["Character"]:FindFirstChild("HumanoidRootPart")if e then e["CFrame"]=c task["wait"](.5)if fireproximityprompt then fireproximityprompt(i)task["wait"](.2)end end else task["wait"](2)end end task["wait"](1)end I["isSubmitQueenBeeHoneyTokenLoopRunning"]=false end)end end})x["TabEvents"]:Section({["Title"]="SEED COLLECTOR"})_G["UIRefs"]["DropdownSeedCollectorSubmitSeeds"]=x["TabEvents"]:Dropdown({["Title"]="Select Seeds";["Values"]=_G["CachedIndexSeedEntries"],["Value"]={},["Multi"]=true,["Callback"]=function(i)_G["TargetSeedCollectorSubmitSeeds"]={}if type(i)=="table"then for i,c in pairs(i)do local e=string["match"](c,"%] (.*)")or c _G["TargetSeedCollectorSubmitSeeds"][e]=true end elseif i~=""then local c=string["match"](i,"%] (.*)")or i _G["TargetSeedCollectorSubmitSeeds"][c]=true end end})x["TabEvents"]:Button({["Title"]="Clear Seed Collector Targets",["Callback"]=function()_G["TargetSeedCollectorSubmitSeeds"]={}pcall(function()_G["UIRefs"]["DropdownSeedCollectorSubmitSeeds"]:Select({})end)e:Notify({["Title"]="Seed Collector";["Content"]="Seed collector targets cleared.",["Duration"]=2})end})local function jJ(i)local c=workspace:FindFirstChild("SeedCollector")local e=c and c:FindFirstChild("Attachment")local K=e and e:FindFirstChild("SubmitSeed")if not K then return false end local x={}if i then for i,c in ipairs({O["Backpack"],O["Character"]})do if c then for i,c in pairs(c:GetChildren())do if c:IsA("Tool")and c:GetAttribute("InventoryCategory")=="Seeds"then local i=c:GetAttribute("trueName")if i then x[i]=true end end end end end else x=_G["TargetSeedCollectorSubmitSeeds"]end local Y=false for i,c in pairs(x)do if not _G["AutoSubmitSeedToCollector"]and not _G["AutoSubmitAllSeedsToCollector"]then break end if vJ()then break end local x=MJ(i)if x then local i=O["Character"]and O["Character"]:FindFirstChild("HumanoidRootPart")if i then local c=((i["Position"]-e["WorldCFrame"]["Position"]))["Magnitude"]if c>nJ then i["CFrame"]=e["WorldCFrame"]task["wait"](1)end if fireproximityprompt then fireproximityprompt(K)task["wait"](.1)Y=true if vJ()then break end end end end end return Y end local function EJ()if I["isSeedCollectorSubmitLoopRunning"]then return end if not _G["AutoSubmitSeedToCollector"]and not _G["AutoSubmitAllSeedsToCollector"]then return end I["isSeedCollectorSubmitLoopRunning"]=true task["spawn"](function()while _G["AutoSubmitSeedToCollector"]or _G["AutoSubmitAllSeedsToCollector"]do if vJ()then task["wait"](10)else local i=jJ(_G["AutoSubmitAllSeedsToCollector"])if not i then task["wait"](2)end end task["wait"](1)end I["isSeedCollectorSubmitLoopRunning"]=false end)end _G["UIRefs"]["ToggleAutoSubmitSeedToCollector"]=x["TabEvents"]:Toggle({["Title"]="Auto Submit Selected",["Desc"]="Automatically submit selected seeds to the collector";["Value"]=false;["Callback"]=function(i)_G["AutoSubmitSeedToCollector"]=i if i and _G["UIRefs"]["ToggleAutoSubmitAllSeedsToCollector"]then pcall(function()_G["UIRefs"]["ToggleAutoSubmitAllSeedsToCollector"]:Set(false)end)end EJ()end})_G["UIRefs"]["ToggleAutoSubmitAllSeedsToCollector"]=x["TabEvents"]:Toggle({["Title"]="Auto Submit All";["Desc"]="Automatically submit all seeds, ignoring filter",["Value"]=false;["Callback"]=function(i)_G["AutoSubmitAllSeedsToCollector"]=i if i and _G["UIRefs"]["ToggleAutoSubmitSeedToCollector"]then pcall(function()_G["UIRefs"]["ToggleAutoSubmitSeedToCollector"]:Set(false)end)end EJ()end})x["TabRewards"]:Section({["Title"]="DAILY REWARDS"})_G["UIRefs"]["ToggleAutoClaimDailyReward"]=x["TabRewards"]:Toggle({["Title"]="Auto Claim Daily Reward";["Value"]=false,["Callback"]=function(i)_G["AutoClaimDailyReward"]=i if i and not I["isClaimDailyRewardLoopRunning"]then I["isClaimDailyRewardLoopRunning"]=true task["spawn"](function()while _G["AutoClaimDailyReward"]do pcall(function()if Y:FindFirstChild("Remotes")and Y["Remotes"]:FindFirstChild("ClaimDailyReward")then Y["Remotes"]["ClaimDailyReward"]:InvokeServer()end end)task["wait"](60)end I["isClaimDailyRewardLoopRunning"]=false end)end end})_G["UIRefs"]["ToggleAutoClaimPlaytimeReward"]=x["TabRewards"]:Toggle({["Title"]="Auto Claim Playtime Reward",["Value"]=false;["Callback"]=function(i)_G["AutoClaimPlaytimeReward"]=i if i and not I["isClaimPlaytimeRewardLoopRunning"]then I["isClaimPlaytimeRewardLoopRunning"]=true task["spawn"](function()while _G["AutoClaimPlaytimeReward"]do pcall(function()local i=Y:FindFirstChild("Remotes")and Y["Remotes"]:FindFirstChild("ClaimPlaytimeReward")if i then for c=1,15,1 do if not _G["AutoClaimPlaytimeReward"]then break end i:InvokeServer(c)task["wait"](.2)end end end)task["wait"](10)end I["isClaimPlaytimeRewardLoopRunning"]=false end)end end})x["TabRewards"]:Section({["Title"]="SPIN WHEEL (WIP)"})local RJ=5 _G["UIRefs"]["ToggleAutoSpinWheel"]=x["TabRewards"]:Toggle({["Title"]="Auto Spin Wheel";["Value"]=false;["Callback"]=function(i)_G["AutoSpinWheel"]=i if i and not I["isSpinWheelLoopRunning"]then I["isSpinWheelLoopRunning"]=true task["spawn"](function()while _G["AutoSpinWheel"]do pcall(function()local i=Y:FindFirstChild("Remotes")and(Y["Remotes"]:FindFirstChild("SpinWheel")and Y["Remotes"]["SpinWheel"]:FindFirstChild("RequestSpin"))if i then i:InvokeServer(false)end end)task["wait"](RJ)end I["isSpinWheelLoopRunning"]=false end)end end})local dJ="Pet_"..(O["Name"].."_")local function DJ(i,c)if not i or not c or next(c)==nil then return false end local e=string["lower"](i)for i,c in pairs(c)do if c then local c=string["lower"](i)if string["find"](e,c,1,true)then return true end end end return false end local function oJ(i)if not i then return nil end local c=i:GetAttribute("PetKey")or i:GetAttribute("petKey")local e=i:GetAttribute("TrueName")or i:GetAttribute("trueName")or i:GetAttribute("PetName")or i:GetAttribute("petName")or i["Name"]local K=tonumber(i:GetAttribute("PetLevel"))or tonumber(i:GetAttribute("petLevel"))or tonumber(i:GetAttribute("Level"))or tonumber(i:GetAttribute("level"))or 1 local x=tonumber(i:GetAttribute("EarningsMultiplier"))or tonumber(i:GetAttribute("earningsMultiplier"))or tonumber(i:GetAttribute("Earnings"))or tonumber(i:GetAttribute("earnings"))or 0 local Y=tonumber(i:GetAttribute("FloorIndex"))or tonumber(i:GetAttribute("floorIndex"))local G=tonumber(i:GetAttribute("SlotIndex"))or tonumber(i:GetAttribute("slotIndex"))local Q=i:GetAttribute("PetBoosted")or i:GetAttribute("petBoosted")local S=tonumber(i:GetAttribute("PetBoostEndTimestamp"))or tonumber(i:GetAttribute("petBoostEndTimestamp"))local O=tonumber(i:GetAttribute("PetBoostMultiplier"))or tonumber(i:GetAttribute("petBoostMultiplier"))local b=i:GetAttribute("PetOwner")or i:GetAttribute("petOwner")local M=i:GetAttribute("PetSize")or i:GetAttribute("petSize")local Z=i:GetAttribute("RBX_ReimportId")or i:GetAttribute("rbx_reimportid")return{["instance"]=i,["petKey"]=c,["petName"]=e,["level"]=K;["earnings"]=x,["floorIndex"]=Y;["slotIndex"]=G,["petBoosted"]=Q;["petBoostEndTimestamp"]=S;["petBoostMultiplier"]=O;["petOwner"]=b,["petSize"]=M;["rbxReimportId"]=Z}end local function zJ()local i={}local c=U()if not c then return i end for c,e in ipairs(c:GetChildren())do if string["sub"](e["Name"],1,4)=="Pet_"then local c=oJ(e)if c then if not c["petKey"]then local i=string["split"](e["Name"],"_")c["petKey"]=i[#i]end table["insert"](i,c)end end end return i end local function hJ()local i={}local c={}local function e(e)if not e then return end for e,K in ipairs(e:GetChildren())do if K:IsA("Tool")then local e=oJ(K)if e and(e["petKey"]and not c[e["petKey"]])then c[e["petKey"]]=true table["insert"](i,e)end end end end e(O["Character"])e(O:FindFirstChild("Backpack"))return i end local function uJ()local i={}local c={}for e,K in ipairs(zJ())do if K["petKey"]and not c[K["petKey"]]then c[K["petKey"]]=true table["insert"](i,K)end end for e,K in ipairs(hJ())do if K["petKey"]and not c[K["petKey"]]then c[K["petKey"]]=true table["insert"](i,K)end end return i end local function WJ(i)local c=O["Character"]if c then for c,e in ipairs(c:GetChildren())do if e:IsA("Tool")and string["find"](e["Name"],i,1,true)then return e end end end local e=O:FindFirstChild("Backpack")if e then for c,e in ipairs(e:GetChildren())do if e:IsA("Tool")and string["find"](e["Name"],i,1,true)then return e end end end return nil end local function NJ()local i={}local c=Y:FindFirstChild("GearStocks")and Y["GearStocks"]:FindFirstChild(O["Name"])if not c then return i end for c,e in ipairs(c:GetChildren())do if string["find"](e["Name"],"Treat",1,true)then table["insert"](i,e["Name"])end end table["sort"](i)return i end local function PJ()local i={}local c=Y:FindFirstChild("Assets")and Y["Assets"]:FindFirstChild("Pets")if not c then return i end for c,e in ipairs(c:GetChildren())do table["insert"](i,e["Name"])end table["sort"](i)return i end x["TabPets"]:Section({["Title"]="PET MANAGEMENT"})local mJ=3 local function XJ()local i=Y:FindFirstChild("Remotes")and(Y["Remotes"]:FindFirstChild("Pets")and Y["Remotes"]["Pets"]:FindFirstChild("UnequipPet"))if not i then return false end local c=zJ()for c,e in ipairs(c)do for c=1,10,1 do pcall(function()i:FireServer(e["petKey"])end)task["wait"](.1)end end return true end x["TabPets"]:Button({["Title"]="Unequip All Pets";["Callback"]=function()local i=zJ()if#i==0 then e:Notify({["Title"]="Pets",["Content"]="No pets found on plot.",["Duration"]=2})return end task["spawn"](function()if not XJ()then e:Notify({["Title"]="Pets",["Content"]="UnequipPet remote not found.",["Duration"]=3})return end e:Notify({["Title"]="Pets";["Content"]="Unequipped "..(#i.." pets.");["Duration"]=3})end)end})x["TabPets"]:Button({["Title"]="Equip 3 Best Earnings Multiplier Pets",["Callback"]=function()task["spawn"](function()local i=hJ()if#i==0 then e:Notify({["Title"]="Pets";["Content"]="No pets found in inventory.";["Duration"]=2})return end local c=O["Character"]and O["Character"]:FindFirstChild("Humanoid")local K=O["Character"]and O["Character"]:FindFirstChild("HumanoidRootPart")if not c or not K then e:Notify({["Title"]="Pets",["Content"]="Character not found.",["Duration"]=2})return end local x=Y:FindFirstChild("Remotes")and(Y["Remotes"]:FindFirstChild("Pets")and Y["Remotes"]["Pets"]:FindFirstChild("EquipPet"))if not x then e:Notify({["Title"]="Pets",["Content"]="EquipPet remote not found.",["Duration"]=3})return end XJ()task["wait"](.5)table["sort"](i,function(i,c)return i["earnings"]>c["earnings"]end)local G=0 for e=1,math["min"](mJ,#i),1 do local K=i[e]local Y=d[e]if Y then local i=o(Y)s(i)task["wait"](.3)end c:EquipTool(K["instance"])task["wait"](.3)pcall(function()x:FireServer()end)G=G+1 task["wait"](.3)end e:Notify({["Title"]="Pets";["Content"]="Equipped "..(G..(" best pets across "..(G.." floors.")));["Duration"]=3})end)end})x["TabPets"]:Section({["Title"]="PET FEEDING"})_G["UIRefs"]["DropdownPetTreatTypes"]=x["TabPets"]:Dropdown({["Title"]="Select Treats",["Values"]=NJ(),["Value"]={};["Multi"]=true,["AllowNone"]=true;["Callback"]=function(i)_G["TargetPetTreatNames"]={}if type(i)=="table"then for i,c in pairs(i)do _G["TargetPetTreatNames"][c]=true end elseif i and i~=""then _G["TargetPetTreatNames"][i]=true end end})x["TabPets"]:Button({["Title"]="Refresh Treat List";["Callback"]=function()pcall(function()_G["UIRefs"]["DropdownPetTreatTypes"]:Refresh(NJ())end)pcall(function()_G["UIRefs"]["DropdownPetTreatTypes"]:Select({})end)_G["TargetPetTreatNames"]={}e:Notify({["Title"]="Pets";["Content"]="Treat list refreshed.";["Duration"]=2})end})_G["UIRefs"]["ToggleAutoFeedPets"]=x["TabPets"]:Toggle({["Title"]="Auto Feed Pets";["Value"]=false,["Callback"]=function(i)_G["AutoFeedPets"]=i if i and not I["isAutoFeedPetsLoopRunning"]then I["isAutoFeedPetsLoopRunning"]=true task["spawn"](function()while _G["AutoFeedPets"]do local i=zJ()local c=Y:FindFirstChild("Remotes")and Y["Remotes"]:FindFirstChild("UsePetTreat")local e=O["Character"]and O["Character"]:FindFirstChild("Humanoid")print("[Lamduck] AutoFeedPets | Checked: "..(#i..(" pets on plot | Remote: "..(tostring(c~=nil)..(" | Humanoid: "..tostring(e~=nil))))))if c and(e and#i>0)then local K={}if next(_G["TargetPetTreatNames"])~=nil then for i,c in pairs(_G["TargetPetTreatNames"])do K[i]=true end end for K,x in pairs(K)do if not _G["AutoFeedPets"]then break end local Y=WJ(K)print("[Lamduck] AutoFeedPets | Treat tool check: "..(K..(" -> "..tostring(Y~=nil))))if Y then e:EquipTool(Y)task["wait"](.3)for i,e in ipairs(i)do if not _G["AutoFeedPets"]then break end print("[Lamduck] AutoFeedPets | Feeding pet: "..(tostring(e["instance"]["Name"])..(" with "..K)))pcall(function()c:FireServer(e["instance"])end)task["wait"](.5)end end end end task["wait"](3)end I["isAutoFeedPetsLoopRunning"]=false end)end end})x["TabPets"]:Section({["Title"]="PET UPGRADE"})_G["UIRefs"]["InputPetUpgradeLevel"]=x["TabPets"]:Input({["Title"]="Max Upgrade Level",["Desc"]="Limit maximum level for auto pet upgrade";["Placeholder"]="10",["Value"]=tostring(_G["TargetPetUpgradeLevel"]or 10),["Numeric"]=true,["Finished"]=true;["Callback"]=function(i)local c=tonumber(i)if not c or c<1 then _G["TargetPetUpgradeLevel"]=10 pcall(function()_G["UIRefs"]["InputPetUpgradeLevel"]:Set("10")end)return end c=math["floor"](c)_G["TargetPetUpgradeLevel"]=c pcall(function()_G["UIRefs"]["InputPetUpgradeLevel"]:Set(tostring(c))end)end})_G["UIRefs"]["ToggleAutoUpgradePets"]=x["TabPets"]:Toggle({["Title"]="Auto Upgrade Pets";["Value"]=false,["Callback"]=function(i)_G["AutoUpgradePets"]=i if i and not I["isAutoUpgradePetsLoopRunning"]then I["isAutoUpgradePetsLoopRunning"]=true task["spawn"](function()while _G["AutoUpgradePets"]do local i=Y:FindFirstChild("Remotes")and(Y["Remotes"]:FindFirstChild("Pets")and Y["Remotes"]["Pets"]:FindFirstChild("UpgradePet"))print("[Lamduck] AutoUpgradePets | Remote: "..tostring(i~=nil))if i then local c=zJ()print("[Lamduck] AutoUpgradePets | Found "..(#c.." active pets on plot"))for c,e in ipairs(c)do if not _G["AutoUpgradePets"]then break end local K=_G["TargetPetUpgradeLevel"]or 10 if e["level"]<K then pcall(function()if i:IsA("RemoteFunction")then i:InvokeServer(e["petKey"])elseif i:IsA("RemoteEvent")then i:FireServer(e["petKey"])end end)task["wait"](.1)end end end task["wait"](2)end I["isAutoUpgradePetsLoopRunning"]=false end)end end})x["TabPets"]:Section({["Title"]="PET SELL"})_G["UIRefs"]["DropdownPetSellSelection"]=x["TabPets"]:Dropdown({["Title"]="Select Pets";["Values"]=PJ(),["Value"]={},["Multi"]=true;["AllowNone"]=true;["Callback"]=function(i)_G["TargetPetSellNames"]={}if type(i)=="table"then for i,c in pairs(i)do _G["TargetPetSellNames"][c]=true end elseif i and i~=""then _G["TargetPetSellNames"][i]=true end end})_G["UIRefs"]["ToggleAutoSellPets"]=x["TabPets"]:Toggle({["Title"]="Auto Sell Pets";["Value"]=false,["Callback"]=function(i)_G["AutoSellPets"]=i if i and not I["isAutoSellPetsLoopRunning"]then I["isAutoSellPetsLoopRunning"]=true task["spawn"](function()while _G["AutoSellPets"]do local i=Y:FindFirstChild("Remotes")and Y["Remotes"]:FindFirstChild("SellPet")if i then local c=hJ()for c,e in ipairs(c)do if not _G["AutoSellPets"]then break end local K=false if next(_G["TargetPetSellNames"])~=nil then K=DJ(e["petName"],_G["TargetPetSellNames"])end print("[Lamduck] AutoSellPets | Pet: "..(e["petName"]..(" | Level: "..(e["level"]..(" | Eligible: "..tostring(K))))))if K then pcall(function()i:InvokeServer(e["petKey"])end)task["wait"](.1)end end end task["wait"](2)end I["isAutoSellPetsLoopRunning"]=false end)end end})x["TabConfig"]:Section({["Title"]="PURCHASE"})_G["UIRefs"]["ToggleSkipMoneyCheck"]=x["TabConfig"]:Toggle({["Title"]="Skip Money Check";["Desc"]="Skip client-side money checks (use only if auto buy is bugged)",["Value"]=false;["Callback"]=function(i)_G["SkipMoneyCheck"]=i end})x["TabConfig"]:Section({["Title"]="LAG REDUCTION"})_G["UIRefs"]["ToggleHideOtherPlots"]=x["TabConfig"]:Toggle({["Title"]="Hide Other Plots",["Value"]=false;["Callback"]=function(i)_G["HideOtherPlots"]=i H(i)end})local kJ=nil _G["UIRefs"]["ToggleMuteAndHideAlerts"]=x["TabConfig"]:Toggle({["Title"]="Mute & Hide Alerts",["Value"]=false,["Callback"]=function(i)_G["MuteAndHideAlerts"]=i pcall(function()local c=(O:WaitForChild("PlayerGui")):FindFirstChild("MainUI")and O["PlayerGui"]["MainUI"]:FindFirstChild("AlertFrame")if c then c["Visible"]=not i end end)pcall(function()local c=Q:FindFirstChild("SFX")and Q["SFX"]:FindFirstChild("SAAlert")if c then if i then if not kJ then kJ=c["Volume"]end c["Volume"]=0 else if kJ then c["Volume"]=kJ end end end end)end})x["TabConfig"]:Section({["Title"]="TELEPORT"})n["UserInputService"]=game:GetService("UserInputService")n["CoreGui"]=game:GetService("CoreGui")for i,c in ipairs({"LamduckUtilitiesFloatingGui","LamduckTeleportGui","LamduckRejoinUI","LamduckFloatingTP"})do local e=n["CoreGui"]:FindFirstChild(c)if e then e:Destroy()end end n["TELEPORT_FLOATING_BTN_DEFAULT_POSITION"]=UDim2["new"](.8,0,.2,0)n["FloatingTeleportScreenGui"]=Instance["new"]("ScreenGui")n["FloatingTeleportScreenGui"]["Name"]="LamduckFloatingTP"n["FloatingTeleportScreenGui"]["ResetOnSpawn"]=false n["FloatingTeleportScreenGui"]["Enabled"]=false local yJ=pcall(function()n["FloatingTeleportScreenGui"]["Parent"]=gethui and gethui()or n["CoreGui"]end)if not yJ then n["FloatingTeleportScreenGui"]["Parent"]=O:WaitForChild("PlayerGui")end n["FloatingTeleportMainButton"]=Instance["new"]("TextButton")n["FloatingTeleportMainButton"]["Size"]=UDim2["new"](0,48,0,32)n["FloatingTeleportMainButton"]["Position"]=n["TELEPORT_FLOATING_BTN_DEFAULT_POSITION"]n["FloatingTeleportMainButton"]["BackgroundColor3"]=Color3["fromRGB"](40,40,40)n["FloatingTeleportMainButton"]["TextColor3"]=Color3["fromRGB"](255,255,255)n["FloatingTeleportMainButton"]["Text"]="TP"n["FloatingTeleportMainButton"]["Font"]=Enum["Font"]["GothamBold"]n["FloatingTeleportMainButton"]["TextSize"]=14 n["FloatingTeleportMainButton"]["Parent"]=n["FloatingTeleportScreenGui"]local qJ=Instance["new"]("UICorner")qJ["CornerRadius"]=UDim["new"](0,6)qJ["Parent"]=n["FloatingTeleportMainButton"]n["FloatingTeleportListFrame"]=Instance["new"]("Frame")n["FloatingTeleportListFrame"]["Position"]=UDim2["new"](0,54,0,0)n["FloatingTeleportListFrame"]["Size"]=UDim2["new"](0,140,0,0)n["FloatingTeleportListFrame"]["AutomaticSize"]=Enum["AutomaticSize"]["Y"]n["FloatingTeleportListFrame"]["BackgroundTransparency"]=1 n["FloatingTeleportListFrame"]["Visible"]=false n["FloatingTeleportListFrame"]["Parent"]=n["FloatingTeleportMainButton"]local AJ=Instance["new"]("UIListLayout")AJ["Padding"]=UDim["new"](0,5)AJ["SortOrder"]=Enum["SortOrder"]["LayoutOrder"]AJ["Parent"]=n["FloatingTeleportListFrame"]local TJ=false local aJ=nil local iX=nil local cX=nil n["FloatingTeleportMainButton"]["InputBegan"]:Connect(function(i)if i["UserInputType"]==Enum["UserInputType"]["MouseButton1"]or i["UserInputType"]==Enum["UserInputType"]["Touch"]then TJ=true iX=i["Position"]cX=n["FloatingTeleportMainButton"]["Position"]i["Changed"]:Connect(function()if i["UserInputState"]==Enum["UserInputState"]["End"]then TJ=false end end)end end)n["FloatingTeleportMainButton"]["InputChanged"]:Connect(function(i)if i["UserInputType"]==Enum["UserInputType"]["MouseMovement"]or i["UserInputType"]==Enum["UserInputType"]["Touch"]then aJ=i end end)n["UserInputService"]["InputChanged"]:Connect(function(i)if i==aJ and TJ then local c=i["Position"]-iX n["FloatingTeleportMainButton"]["Position"]=UDim2["new"](cX["X"]["Scale"],cX["X"]["Offset"]+c["X"],cX["Y"]["Scale"],cX["Y"]["Offset"]+c["Y"])end end)for i,c in ipairs(d)do local e=Instance["new"]("TextButton")e["Size"]=UDim2["new"](1,0,0,32)e["BackgroundColor3"]=Color3["fromRGB"](30,30,30)e["TextColor3"]=Color3["fromRGB"](200,200,200)e["Text"]=c["Label"]e["Font"]=Enum["Font"]["GothamSemibold"]e["TextSize"]=13 e["LayoutOrder"]=i e["Parent"]=n["FloatingTeleportListFrame"]local K=Instance["new"]("UICorner")K["CornerRadius"]=UDim["new"](0,6)K["Parent"]=e e["MouseButton1Click"]:Connect(function()z(c)n["FloatingTeleportListFrame"]["Visible"]=false end)end local eX=nil n["FloatingTeleportMainButton"]["InputBegan"]:Connect(function(i)if i["UserInputType"]==Enum["UserInputType"]["MouseButton1"]or i["UserInputType"]==Enum["UserInputType"]["Touch"]then eX=tick()end end)n["FloatingTeleportMainButton"]["InputEnded"]:Connect(function(i)if i["UserInputType"]==Enum["UserInputType"]["MouseButton1"]or i["UserInputType"]==Enum["UserInputType"]["Touch"]then if eX and tick()-eX<.2 then n["FloatingTeleportListFrame"]["Visible"]=not n["FloatingTeleportListFrame"]["Visible"]end end end)_G["UIRefs"]["ToggleFloatingTeleportButton"]=x["TabConfig"]:Toggle({["Title"]="Show Floating Teleport Button",["Value"]=false,["Callback"]=function(i)n["FloatingTeleportScreenGui"]["Enabled"]=i if not i then n["FloatingTeleportListFrame"]["Visible"]=false end end})x["TabConfig"]:Button({["Title"]="Reset Floating TP Button Position",["Callback"]=function()n["FloatingTeleportMainButton"]["Position"]=n["TELEPORT_FLOATING_BTN_DEFAULT_POSITION"]e:Notify({["Title"]="Utilities";["Content"]="TP button position reset to default.";["Duration"]=2})end})x["TabConfig"]:Button({["Title"]="Teleport to My Plot",["Callback"]=h})local KX="build-a-ring-farm.json"local function xX(i)local c={}for i,e in pairs(i)do table["insert"](c,i)end return c end local function YX()local i={["F1_AutoPlantByRarity"]=_G["UIRefs"]["ToggleFloor1AutoPlant"]and _G["UIRefs"]["ToggleFloor1AutoPlant"]["Value"]or false,["F1_TargetAutoPlantRaritiesList"]=xX(_G["F1_TargetAutoPlantRarities"]),["F2_AutoPlantByRarity"]=_G["UIRefs"]["ToggleFloor2AutoPlant"]and _G["UIRefs"]["ToggleFloor2AutoPlant"]["Value"]or false,["F2_TargetAutoPlantRaritiesList"]=xX(_G["F2_TargetAutoPlantRarities"]);["F3_AutoPlantByRarity"]=_G["UIRefs"]["ToggleFloor3AutoPlant"]and _G["UIRefs"]["ToggleFloor3AutoPlant"]["Value"]or false;["F3_TargetAutoPlantRaritiesList"]=xX(_G["F3_TargetAutoPlantRarities"]),["AutoSellCrates"]=_G["UIRefs"]["ToggleAutoSellCrates"]["Value"],["AutoUnlockFarmPlots"]=_G["UIRefs"]["ToggleAutoUnlockFarmPlots"]["Value"],["AutoExpandFarmPlot"]=_G["UIRefs"]["ToggleAutoExpandFarmPlot"]["Value"],["AutoCollectQueenBeeHoneycomb"]=_G["UIRefs"]["ToggleAutoCollectQueenBeeHoneycomb"]["Value"];["AutoPlantRush"]=_G["UIRefs"]["ToggleAutoPlantRush"]["Value"],["AutoClaimPlantRushBossDrop"]=_G["UIRefs"]["ToggleAutoClaimPlantRushBossDrop"]["Value"];["AutoSubmitQueenBeeHoneyToken"]=_G["UIRefs"]["ToggleAutoSubmitQueenBeeHoneyToken"]["Value"],["AutoSubmitSeedToCollector"]=_G["UIRefs"]["ToggleAutoSubmitSeedToCollector"]["Value"],["AutoSubmitAllSeedsToCollector"]=_G["UIRefs"]["ToggleAutoSubmitAllSeedsToCollector"]["Value"];["TargetSeedCollectorSubmitSeedsList"]=xX(_G["TargetSeedCollectorSubmitSeeds"]);["F2_AutoCompostSelected"]=F["ToggleAutoCompostSelected"]["Value"];["F2_AutoCompostByRarity"]=F["ToggleAutoCompostByRarity"]["Value"];["F2_AutoPullLever"]=F["ToggleAutoPullLever"]["Value"];["F2_AutoPullLeverWhenMax"]=F["ToggleAutoPullLeverWhenMax"]["Value"],["F2_TargetCompostSeedsList"]=xX(_G["F2_TargetCompostSeeds"]);["F2_TargetCompostRaritiesList"]=xX(_G["F2_TargetCompostRarities"]);["F2_MaxCompostInsertAmount"]=_G["F2_MaxCompostInsertAmount"];["F2_CompostInsertDelay"]=_G["F2_CompostInsertDelay"];["F2_PullLeverDelay"]=_G["F2_PullLeverDelay"],["F3_AutoCompostSelected"]=j["ToggleAutoCompostSelected"]["Value"];["F3_AutoCompostByRarity"]=j["ToggleAutoCompostByRarity"]["Value"];["F3_AutoPullLever"]=j["ToggleAutoPullLever"]["Value"],["F3_AutoPullLeverWhenMax"]=j["ToggleAutoPullLeverWhenMax"]["Value"];["F3_TargetCompostSeedsList"]=xX(_G["F3_TargetCompostSeeds"]),["F3_TargetCompostRaritiesList"]=xX(_G["F3_TargetCompostRarities"]),["F3_MaxCompostInsertAmount"]=_G["F3_MaxCompostInsertAmount"],["F3_CompostInsertDelay"]=_G["F3_CompostInsertDelay"];["F3_PullLeverDelay"]=_G["F3_PullLeverDelay"];["AutoClaimDailyReward"]=_G["UIRefs"]["ToggleAutoClaimDailyReward"]["Value"],["AutoClaimPlaytimeReward"]=_G["UIRefs"]["ToggleAutoClaimPlaytimeReward"]["Value"],["AutoSpinWheel"]=_G["UIRefs"]["ToggleAutoSpinWheel"]["Value"],["AutoFeedPets"]=_G["AutoFeedPets"];["AutoUpgradePets"]=_G["AutoUpgradePets"],["AutoSellPets"]=_G["AutoSellPets"],["TargetPetTreatNamesList"]=xX(_G["TargetPetTreatNames"]);["TargetPetUpgradeLevel"]=_G["TargetPetUpgradeLevel"];["TargetPetSellNamesList"]=xX(_G["TargetPetSellNames"]);["AutoBuyAllGears"]=_G["UIRefs"]["ToggleBuyAllGears"]["Value"],["AutoBuySelectedGears"]=_G["UIRefs"]["ToggleBuySelectedGears"]["Value"],["AutoUnlockEggSlots"]=_G["UIRefs"]["ToggleAutoUnlockEggSlots"]["Value"],["AutoBuyAllEggs"]=_G["UIRefs"]["ToggleAutoBuyAllEggs"]["Value"];["AutoBuySelectedEggs"]=_G["UIRefs"]["ToggleAutoBuySelectedEggs"]["Value"];["TargetEggShopEggsList"]=xX(_G["TargetEggShopEggs"]),["FloorUpgradeConfig"]={["1"]={["AutoUpgrade"]=_G["UIRefs"]["ToggleFloor1AutoUpgrade"]["Value"];["AutoAll"]=_G["UIRefs"]["ToggleFloor1AutoAllUpgrade"]["Value"],["TargetPlantNamesList"]=xX(_G["FloorUpgradeConfig"][1]["TargetPlantNames"]),["MaxLevel"]=_G["FloorUpgradeConfig"][1]["MaxLevel"]},["2"]={["AutoUpgrade"]=_G["UIRefs"]["ToggleFloor2AutoUpgrade"]["Value"];["AutoAll"]=_G["UIRefs"]["ToggleFloor2AutoAllUpgrade"]["Value"],["TargetPlantNamesList"]=xX(_G["FloorUpgradeConfig"][2]["TargetPlantNames"]),["MaxLevel"]=_G["FloorUpgradeConfig"][2]["MaxLevel"]};["3"]={["AutoUpgrade"]=_G["UIRefs"]["ToggleFloor3AutoUpgrade"]["Value"],["AutoAll"]=_G["UIRefs"]["ToggleFloor3AutoAllUpgrade"]["Value"];["TargetPlantNamesList"]=xX(_G["FloorUpgradeConfig"][3]["TargetPlantNames"]),["MaxLevel"]=_G["FloorUpgradeConfig"][3]["MaxLevel"]}};["FloorSprayConfig"]={["1"]={["TargetPlantNamesList"]=xX(_G["FloorSprayConfig"][1]["TargetPlantNames"]),["TargetSprayType"]=_G["FloorSprayConfig"][1]["TargetSprayType"],["TargetAcidPlantNamesList"]=xX(_G["FloorSprayConfig"][1]["TargetAcidPlantNames"]);["TargetAcidMutationsList"]=xX(_G["FloorSprayConfig"][1]["TargetAcidMutations"])},["2"]={["TargetPlantNamesList"]=xX(_G["FloorSprayConfig"][2]["TargetPlantNames"]);["TargetSprayType"]=_G["FloorSprayConfig"][2]["TargetSprayType"];["TargetAcidPlantNamesList"]=xX(_G["FloorSprayConfig"][2]["TargetAcidPlantNames"]),["TargetAcidMutationsList"]=xX(_G["FloorSprayConfig"][2]["TargetAcidMutations"])},["3"]={["TargetPlantNamesList"]=xX(_G["FloorSprayConfig"][3]["TargetPlantNames"]);["TargetSprayType"]=_G["FloorSprayConfig"][3]["TargetSprayType"],["TargetAcidPlantNamesList"]=xX(_G["FloorSprayConfig"][3]["TargetAcidPlantNames"]);["TargetAcidMutationsList"]=xX(_G["FloorSprayConfig"][3]["TargetAcidMutations"])}};["FloorFertilizeConfig"]={["1"]={["AutoFertilize"]=_G["UIRefs"]["ToggleFloor1AutoFertilize"]["Value"],["AutoAll"]=_G["UIRefs"]["ToggleFloor1AutoAllFertilize"]["Value"];["TargetPlantNamesList"]=xX(_G["FloorFertilizeConfig"][1]["TargetPlantNames"]);["TargetFertilizerTypesList"]=xX(_G["FloorFertilizeConfig"][1]["TargetFertilizerTypes"])},["2"]={["AutoFertilize"]=_G["UIRefs"]["ToggleFloor2AutoFertilize"]["Value"],["AutoAll"]=_G["UIRefs"]["ToggleFloor2AutoAllFertilize"]["Value"];["TargetPlantNamesList"]=xX(_G["FloorFertilizeConfig"][2]["TargetPlantNames"]);["TargetFertilizerTypesList"]=xX(_G["FloorFertilizeConfig"][2]["TargetFertilizerTypes"])};["3"]={["AutoFertilize"]=_G["UIRefs"]["ToggleFloor3AutoFertilize"]["Value"];["AutoAll"]=_G["UIRefs"]["ToggleFloor3AutoAllFertilize"]["Value"],["TargetPlantNamesList"]=xX(_G["FloorFertilizeConfig"][3]["TargetPlantNames"]);["TargetFertilizerTypesList"]=xX(_G["FloorFertilizeConfig"][3]["TargetFertilizerTypes"])}},["AutoRollAndBuyAll"]=_G["UIRefs"]["ToggleAutoRollBuyAll"]["Value"],["AutoRollAndBuySelected"]=_G["UIRefs"]["ToggleAutoRollBuySelected"]["Value"],["AutoRollAndBuyByRarity"]=_G["UIRefs"]["ToggleAutoRollBuyByRarity"]["Value"];["AutoUpgradePowerups"]=_G["UIRefs"]["ToggleAutoUpgradePowerups"]["Value"],["SelectedPowerupsToUpgrade"]=xX(_G["TargetPowerups"]);["SelectedGearsToBuy"]=KJ;["SelectedGachaSeedsToSnipe"]=xX(_G["TargetGachaSeeds"]);["TargetGachaRaritiesList"]=xX(_G["TargetGachaRarities"]),["ShowFloatingTeleportButton"]=_G["UIRefs"]["ToggleFloatingTeleportButton"]["Value"];["TeleportButtonPosXScale"]=n["FloatingTeleportMainButton"]["Position"]["X"]["Scale"],["TeleportButtonPosXOffset"]=n["FloatingTeleportMainButton"]["Position"]["X"]["Offset"];["TeleportButtonPosYScale"]=n["FloatingTeleportMainButton"]["Position"]["Y"]["Scale"],["TeleportButtonPosYOffset"]=n["FloatingTeleportMainButton"]["Position"]["Y"]["Offset"],["SkipMoneyCheck"]=_G["UIRefs"]["ToggleSkipMoneyCheck"]["Value"];["HideOtherPlots"]=_G["HideOtherPlots"],["MuteAndHideAlerts"]=_G["MuteAndHideAlerts"]}if writefile then writefile(KX,G:JSONEncode(i))end end x["TabConfig"]:Section({["Title"]="CONFIGURATION"})x["TabConfig"]:Button({["Title"]="Save Current Config",["Callback"]=function()K:Dialog({["Title"]="Confirm Save";["Content"]="Are you sure you want to save the current configuration?";["Buttons"]={{["Title"]="Confirm",["Callback"]=function()YX()e:Notify({["Title"]="Success",["Content"]="Configuration saved to device!",["Duration"]=3})end},{["Title"]="Cancel"}}})end})x["TabConfig"]:Button({["Title"]="Delete & Reset Config";["Callback"]=function()K:Dialog({["Title"]="Confirm Reset",["Content"]="Are you sure you want to delete all saved configs and reset?",["Buttons"]={{["Title"]="Confirm";["Callback"]=function()if isfile and(isfile(KX)and delfile)then delfile(KX)end pcall(function()if _G["UIRefs"]["ToggleFloor1AutoPlant"]then _G["UIRefs"]["ToggleFloor1AutoPlant"]:Set(false)end if _G["UIRefs"]["ToggleFloor2AutoPlant"]then _G["UIRefs"]["ToggleFloor2AutoPlant"]:Set(false)end if _G["UIRefs"]["ToggleFloor3AutoPlant"]then _G["UIRefs"]["ToggleFloor3AutoPlant"]:Set(false)end _G["UIRefs"]["ToggleAutoSellCrates"]:Set(false)_G["UIRefs"]["ToggleAutoUnlockFarmPlots"]:Set(false)_G["UIRefs"]["ToggleAutoExpandFarmPlot"]:Set(false)_G["UIRefs"]["ToggleAutoCollectQueenBeeHoneycomb"]:Set(false)_G["UIRefs"]["ToggleAutoPlantRush"]:Set(false)_G["UIRefs"]["ToggleAutoClaimPlantRushBossDrop"]:Set(false)_G["UIRefs"]["ToggleAutoSubmitQueenBeeHoneyToken"]:Set(false)_G["UIRefs"]["ToggleAutoSubmitSeedToCollector"]:Set(false)_G["UIRefs"]["ToggleAutoSubmitAllSeedsToCollector"]:Set(false)F["ToggleAutoCompostSelected"]:Set(false)F["ToggleAutoCompostByRarity"]:Set(false)F["ToggleAutoPullLever"]:Set(false)F["ToggleAutoPullLeverWhenMax"]:Set(false)j["ToggleAutoCompostSelected"]:Set(false)j["ToggleAutoCompostByRarity"]:Set(false)j["ToggleAutoPullLever"]:Set(false)j["ToggleAutoPullLeverWhenMax"]:Set(false)_G["UIRefs"]["ToggleAutoClaimDailyReward"]:Set(false)_G["UIRefs"]["ToggleAutoClaimPlaytimeReward"]:Set(false)_G["UIRefs"]["ToggleAutoSpinWheel"]:Set(false)_G["UIRefs"]["ToggleAutoFeedPets"]:Set(false)_G["UIRefs"]["ToggleAutoUpgradePets"]:Set(false)_G["UIRefs"]["ToggleAutoSellPets"]:Set(false)_G["UIRefs"]["ToggleBuyAllGears"]:Set(false)_G["UIRefs"]["ToggleBuySelectedGears"]:Set(false)_G["UIRefs"]["ToggleAutoUnlockEggSlots"]:Set(false)_G["UIRefs"]["ToggleAutoBuySelectedEggs"]:Set(false)_G["UIRefs"]["ToggleAutoBuyAllEggs"]:Set(false)for i=1,3,1 do if _G["UIRefs"]["ToggleFloor"..(i.."AutoUpgrade")]then pcall(function()_G["UIRefs"]["ToggleFloor"..(i.."AutoUpgrade")]:Set(false)end)end if _G["UIRefs"]["ToggleFloor"..(i.."AutoAllUpgrade")]then pcall(function()_G["UIRefs"]["ToggleFloor"..(i.."AutoAllUpgrade")]:Set(false)end)end if _G["UIRefs"]["ToggleFloor"..(i.."AutoFertilize")]then pcall(function()_G["UIRefs"]["ToggleFloor"..(i.."AutoFertilize")]:Set(false)end)end if _G["UIRefs"]["ToggleFloor"..(i.."AutoAllFertilize")]then pcall(function()_G["UIRefs"]["ToggleFloor"..(i.."AutoAllFertilize")]:Set(false)end)end end _G["UIRefs"]["ToggleAutoRollBuyAll"]:Set(false)_G["UIRefs"]["ToggleAutoRollBuySelected"]:Set(false)_G["UIRefs"]["ToggleAutoRollBuyByRarity"]:Set(false)_G["UIRefs"]["ToggleAutoUpgradePowerups"]:Set(false)end)for i=1,3,1 do _G["FloorUpgradeConfig"][i]={["AutoUpgrade"]=false;["AutoAll"]=false,["TargetPlantNames"]={};["MaxLevel"]=10}local c=_G["UIRefs"]["InputFloor"..(i.."MaxUpgradeLevel")]if c then pcall(function()c:Set("10")end)end _G["FloorFertilizeConfig"][i]={["AutoFertilize"]=false,["AutoAll"]=false,["TargetPlantNames"]={};["TargetFertilizerTypes"]={}}_G["FloorSprayConfig"][i]={["TargetPlantNames"]={};["TargetSprayType"]=nil;["TargetAcidPlantNames"]={},["TargetAcidMutations"]={}}if _G["UIRefs"]["DropdownFloor"..(i.."SprayPlant")]then pcall(function()_G["UIRefs"]["DropdownFloor"..(i.."SprayPlant")]:Select({})end)end if _G["UIRefs"]["DropdownFloor"..(i.."SprayType")]then pcall(function()_G["UIRefs"]["DropdownFloor"..(i.."SprayType")]:Select("")end)end if _G["UIRefs"]["DropdownFloor"..(i.."AcidPlant")]then pcall(function()_G["UIRefs"]["DropdownFloor"..(i.."AcidPlant")]:Select({})end)end if _G["UIRefs"]["DropdownFloor"..(i.."AcidMutation")]then pcall(function()_G["UIRefs"]["DropdownFloor"..(i.."AcidMutation")]:Select({})end)end end _G["TargetPowerups"]={}_G["TargetGachaSeeds"]={}_G["TargetGachaRarities"]={}_G["TargetSeedCollectorSubmitSeeds"]={}_G["AutoSubmitAllSeedsToCollector"]=false _G["F2_TargetCompostSeeds"]={}_G["F2_TargetCompostRarities"]={}_G["F2_MaxCompostInsertAmount"]=0 _G["F2_CompostInsertDelay"]=2 _G["F2_PullLeverDelay"]=2 _G["F3_TargetCompostSeeds"]={}_G["F3_TargetCompostRarities"]={}_G["F3_MaxCompostInsertAmount"]=0 _G["F3_CompostInsertDelay"]=2 _G["F3_PullLeverDelay"]=2 _G["SessionUnlockedEggSlots"]={}_G["TargetEggShopEggs"]={}KJ={}_G["AutoFeedPets"]=false _G["TargetPetUpgradeLevel"]=10 if _G["UIRefs"]["InputPetUpgradeLevel"]then pcall(function()_G["UIRefs"]["InputPetUpgradeLevel"]:Set("10")end)end _G["AutoUpgradePets"]=false _G["HideOtherPlots"]=false _G["MuteAndHideAlerts"]=false _G["AutoSellPets"]=false _G["TargetPetTreatNames"]={}_G["TargetPetSellNames"]={}_G["F1_TargetAutoPlantRarities"]={}_G["F2_TargetAutoPlantRarities"]={}_G["F3_TargetAutoPlantRarities"]={}if _G["UIRefs"]["DropdownFloor1PlantRarities"]then pcall(function()_G["UIRefs"]["DropdownFloor1PlantRarities"]:Select({})end)end if _G["UIRefs"]["DropdownFloor2PlantRarities"]then pcall(function()_G["UIRefs"]["DropdownFloor2PlantRarities"]:Select({})end)end if _G["UIRefs"]["DropdownFloor3PlantRarities"]then pcall(function()_G["UIRefs"]["DropdownFloor3PlantRarities"]:Select({})end)end pcall(function()_G["UIRefs"]["DropdownPetTreatTypes"]:Select({})end)pcall(function()_G["UIRefs"]["DropdownPetSellSelection"]:Select({})end)for i=1,3,1 do pcall(function()_G["UIRefs"]["DropdownFloor"..(i.."UpgradePlant")]:Select({})end)pcall(function()_G["UIRefs"]["DropdownFloor"..(i.."FertilizePlant")]:Select({})end)pcall(function()_G["UIRefs"]["DropdownFloor"..(i.."FertilizerType")]:Select({})end)end pcall(function()_G["UIRefs"]["DropdownPowerupsToUpgrade"]:Select({})end)pcall(function()_G["UIRefs"]["DropdownGachaSeeds"]:Select({})end)pcall(function()_G["UIRefs"]["DropdownGachaRarities"]:Select({})end)pcall(function()_G["UIRefs"]["DropdownSeedCollectorSubmitSeeds"]:Select({})end)pcall(function()F["DropdownCompostSeed"]:Select({})end)pcall(function()F["DropdownCompostRarities"]:Select({})end)pcall(function()F["InputCompostMaxInsertAmount"]:Set("0")end)pcall(function()F["InputCompostInsertDelay"]:Set("60")end)pcall(function()F["InputPullLeverDelay"]:Set("60")end)pcall(function()j["DropdownCompostSeed"]:Select({})end)pcall(function()j["DropdownCompostRarities"]:Select({})end)pcall(function()j["InputCompostMaxInsertAmount"]:Set("0")end)pcall(function()j["InputCompostInsertDelay"]:Set("60")end)pcall(function()j["InputPullLeverDelay"]:Set("60")end)pcall(function()_G["UIRefs"]["DropdownGearsToBuy"]:Select({})end)pcall(function()_G["UIRefs"]["DropdownEggShopEggs"]:Refresh(GJ())end)pcall(function()_G["UIRefs"]["DropdownEggShopEggs"]:Select({})end)pcall(function()_G["UIRefs"]["ToggleFloatingTeleportButton"]:Set(false)end)pcall(function()_G["UIRefs"]["ToggleSkipMoneyCheck"]:Set(false)end)pcall(function()_G["UIRefs"]["ToggleHideOtherPlots"]:Set(false)end)pcall(function()_G["UIRefs"]["ToggleMuteAndHideAlerts"]:Set(false)end)n["FloatingTeleportMainButton"]["Position"]=n["TELEPORT_FLOATING_BTN_DEFAULT_POSITION"]e:Notify({["Title"]="Success",["Content"]="All previous configs deleted!",["Duration"]=3})end};{["Title"]="Cancel"}}})end})print(string["format"]("[Lamduck] UI contents built in %.3f seconds",tick()-i))if isfile and isfile(KX)then local c,K=pcall(function()return G:JSONDecode(readfile(KX))end)if c and K then pcall(function()if K["AutoSellCrates"]~=nil then _G["UIRefs"]["ToggleAutoSellCrates"]:Set(K["AutoSellCrates"])end if K["AutoUnlockFarmPlots"]~=nil then _G["UIRefs"]["ToggleAutoUnlockFarmPlots"]:Set(K["AutoUnlockFarmPlots"])end if K["AutoExpandFarmPlot"]~=nil then _G["UIRefs"]["ToggleAutoExpandFarmPlot"]:Set(K["AutoExpandFarmPlot"])end if K["AutoCollectQueenBeeHoneycomb"]~=nil then _G["UIRefs"]["ToggleAutoCollectQueenBeeHoneycomb"]:Set(K["AutoCollectQueenBeeHoneycomb"])end if K["AutoPlantRush"]~=nil then _G["UIRefs"]["ToggleAutoPlantRush"]:Set(K["AutoPlantRush"])end if K["AutoClaimPlantRushBossDrop"]~=nil then _G["UIRefs"]["ToggleAutoClaimPlantRushBossDrop"]:Set(K["AutoClaimPlantRushBossDrop"])elseif K["AutoClaimBossDrops"]~=nil then _G["UIRefs"]["ToggleAutoClaimPlantRushBossDrop"]:Set(K["AutoClaimBossDrops"])end if K["AutoSubmitQueenBeeHoneyToken"]~=nil then _G["UIRefs"]["ToggleAutoSubmitQueenBeeHoneyToken"]:Set(K["AutoSubmitQueenBeeHoneyToken"])end if K["AutoSubmitSeedToCollector"]~=nil then _G["UIRefs"]["ToggleAutoSubmitSeedToCollector"]:Set(K["AutoSubmitSeedToCollector"])elseif K["AutoSubmitSeed"]~=nil then _G["UIRefs"]["ToggleAutoSubmitSeedToCollector"]:Set(K["AutoSubmitSeed"])end if K["AutoSubmitAllSeedsToCollector"]~=nil then _G["UIRefs"]["ToggleAutoSubmitAllSeedsToCollector"]:Set(K["AutoSubmitAllSeedsToCollector"])end if K["F1_AutoPlantByRarity"]~=nil and _G["UIRefs"]["ToggleFloor1AutoPlant"]then pcall(function()_G["UIRefs"]["ToggleFloor1AutoPlant"]:Set(K["F1_AutoPlantByRarity"])end)end if K["F1_TargetAutoPlantRaritiesList"]and(type(K["F1_TargetAutoPlantRaritiesList"])=="table"and _G["UIRefs"]["DropdownFloor1PlantRarities"])then _G["F1_TargetAutoPlantRarities"]={}for i,c in ipairs(K["F1_TargetAutoPlantRaritiesList"])do _G["F1_TargetAutoPlantRarities"][c]=true end pcall(function()_G["UIRefs"]["DropdownFloor1PlantRarities"]:Select(K["F1_TargetAutoPlantRaritiesList"])end)end if K["F2_AutoPlantByRarity"]~=nil and _G["UIRefs"]["ToggleFloor2AutoPlant"]then pcall(function()_G["UIRefs"]["ToggleFloor2AutoPlant"]:Set(K["F2_AutoPlantByRarity"])end)end if K["F2_TargetAutoPlantRaritiesList"]and(type(K["F2_TargetAutoPlantRaritiesList"])=="table"and _G["UIRefs"]["DropdownFloor2PlantRarities"])then _G["F2_TargetAutoPlantRarities"]={}for i,c in ipairs(K["F2_TargetAutoPlantRaritiesList"])do _G["F2_TargetAutoPlantRarities"][c]=true end pcall(function()_G["UIRefs"]["DropdownFloor2PlantRarities"]:Select(K["F2_TargetAutoPlantRaritiesList"])end)end if K["F3_AutoPlantByRarity"]~=nil and _G["UIRefs"]["ToggleFloor3AutoPlant"]then pcall(function()_G["UIRefs"]["ToggleFloor3AutoPlant"]:Set(K["F3_AutoPlantByRarity"])end)end if K["F3_TargetAutoPlantRaritiesList"]and(type(K["F3_TargetAutoPlantRaritiesList"])=="table"and _G["UIRefs"]["DropdownFloor3PlantRarities"])then _G["F3_TargetAutoPlantRarities"]={}for i,c in ipairs(K["F3_TargetAutoPlantRaritiesList"])do _G["F3_TargetAutoPlantRarities"][c]=true end pcall(function()_G["UIRefs"]["DropdownFloor3PlantRarities"]:Select(K["F3_TargetAutoPlantRaritiesList"])end)end local function i(i,c)local e="F"..(i.."_")if K[e.."AutoCompostSelected"]~=nil then pcall(function()c["ToggleAutoCompostSelected"]:Set(K[e.."AutoCompostSelected"])end)end if K[e.."AutoCompostByRarity"]~=nil then pcall(function()c["ToggleAutoCompostByRarity"]:Set(K[e.."AutoCompostByRarity"])end)end if K[e.."AutoPullLever"]~=nil then pcall(function()c["ToggleAutoPullLever"]:Set(K[e.."AutoPullLever"])end)end if K[e.."AutoPullLeverWhenMax"]~=nil then pcall(function()c["ToggleAutoPullLeverWhenMax"]:Set(K[e.."AutoPullLeverWhenMax"])end)end if K[e.."CompostInsertDelay"]~=nil then _G[e.."CompostInsertDelay"]=K[e.."CompostInsertDelay"]pcall(function()c["InputCompostInsertDelay"]:Set(tostring(K[e.."CompostInsertDelay"]))end)end if K[e.."PullLeverDelay"]~=nil then _G[e.."PullLeverDelay"]=K[e.."PullLeverDelay"]pcall(function()c["InputPullLeverDelay"]:Set(tostring(K[e.."PullLeverDelay"]))end)end if K[e.."MaxCompostInsertAmount"]~=nil then _G[e.."MaxCompostInsertAmount"]=K[e.."MaxCompostInsertAmount"]pcall(function()c["InputCompostMaxInsertAmount"]:Set(tostring(K[e.."MaxCompostInsertAmount"]))end)end if K[e.."TargetCompostSeedsList"]and(type(K[e.."TargetCompostSeedsList"])=="table"and#K[e.."TargetCompostSeedsList"]>0)then local i=_G["CachedIndexSeedEntries"]local x={}for c,e in ipairs(K[e.."TargetCompostSeedsList"])do for i,c in ipairs(i)do local K=string["match"](c,"%] (.*)")or c if K==e or c==e then table["insert"](x,c)break end end end if#x>0 then pcall(function()c["DropdownCompostSeed"]:Select(x)end)end end if K[e.."TargetCompostRaritiesList"]and(type(K[e.."TargetCompostRaritiesList"])=="table"and#K[e.."TargetCompostRaritiesList"]>0)then local i={}for c,e in ipairs(K[e.."TargetCompostRaritiesList"])do if table["find"](UJ,e)then table["insert"](i,e)end end if#i>0 then pcall(function()c["DropdownCompostRarities"]:Select(i)end)end end end i(2,F)i(3,j)if K["F2_AutoCompostSelected"]==nil and K["F3_AutoCompostSelected"]==nil then local i=K["CompostFloor"]or 2 local c=(i==3)and j or F if K["AutoCompost"]~=nil then pcall(function()c["ToggleAutoCompostSelected"]:Set(K["AutoCompost"])end)end if K["AutoPullComposterLever"]~=nil then pcall(function()c["ToggleAutoPullLever"]:Set(K["AutoPullComposterLever"])end)end if K["AutoPullComposterLeverWhenMax"]~=nil then pcall(function()c["ToggleAutoPullLeverWhenMax"]:Set(K["AutoPullComposterLeverWhenMax"])end)end if K["MaxCompostInsertAmount"]~=nil then local e="F"..(i.."_")_G[e.."MaxCompostInsertAmount"]=K["MaxCompostInsertAmount"]pcall(function()c["InputCompostMaxInsertAmount"]:Set(tostring(K["MaxCompostInsertAmount"]))end)end if K["TargetCompostSeedsList"]and(type(K["TargetCompostSeedsList"])=="table"and#K["TargetCompostSeedsList"]>0)then local i=_G["CachedIndexSeedEntries"]local e={}for c,K in ipairs(K["TargetCompostSeedsList"])do for i,c in ipairs(i)do local x=string["match"](c,"%] (.*)")or c if x==K or c==K then table["insert"](e,c)break end end end if#e>0 then pcall(function()c["DropdownCompostSeed"]:Select(e)end)end end end task["wait"](0)if K["AutoClaimDailyReward"]~=nil then _G["UIRefs"]["ToggleAutoClaimDailyReward"]:Set(K["AutoClaimDailyReward"])end if K["AutoClaimPlaytimeReward"]~=nil then _G["UIRefs"]["ToggleAutoClaimPlaytimeReward"]:Set(K["AutoClaimPlaytimeReward"])end if K["AutoSpinWheel"]~=nil then _G["UIRefs"]["ToggleAutoSpinWheel"]:Set(K["AutoSpinWheel"])end if K["AutoFeedPets"]~=nil then _G["UIRefs"]["ToggleAutoFeedPets"]:Set(K["AutoFeedPets"])end if K["AutoUpgradePets"]~=nil then _G["UIRefs"]["ToggleAutoUpgradePets"]:Set(K["AutoUpgradePets"])end if K["TargetPetUpgradeLevel"]~=nil then _G["TargetPetUpgradeLevel"]=K["TargetPetUpgradeLevel"]if _G["UIRefs"]["InputPetUpgradeLevel"]then pcall(function()_G["UIRefs"]["InputPetUpgradeLevel"]:Set(tostring(K["TargetPetUpgradeLevel"]))end)end end if K["AutoSellPets"]~=nil then _G["UIRefs"]["ToggleAutoSellPets"]:Set(K["AutoSellPets"])end if K["TargetPetSellNamesList"]and type(K["TargetPetSellNamesList"])=="table"then _G["TargetPetSellNames"]={}for i,c in ipairs(K["TargetPetSellNamesList"])do _G["TargetPetSellNames"][c]=true end if#K["TargetPetSellNamesList"]>0 then pcall(function()_G["UIRefs"]["DropdownPetSellSelection"]:Select(K["TargetPetSellNamesList"])end)end end if K["TargetPetTreatNamesList"]and type(K["TargetPetTreatNamesList"])=="table"then _G["TargetPetTreatNames"]={}for i,c in ipairs(K["TargetPetTreatNamesList"])do _G["TargetPetTreatNames"][c]=true end if#K["TargetPetTreatNamesList"]>0 then pcall(function()_G["UIRefs"]["DropdownPetTreatTypes"]:Select(K["TargetPetTreatNamesList"])end)end end task["wait"](0)if K["AutoBuyAllGears"]~=nil then _G["UIRefs"]["ToggleBuyAllGears"]:Set(K["AutoBuyAllGears"])end if K["AutoBuySelectedGears"]~=nil then _G["UIRefs"]["ToggleBuySelectedGears"]:Set(K["AutoBuySelectedGears"])end if K["AutoUnlockEggSlots"]~=nil then _G["UIRefs"]["ToggleAutoUnlockEggSlots"]:Set(K["AutoUnlockEggSlots"])end local c=K["TargetEggShopEggsList"]or K["TargetSnipeEggNamesList"]if c and(type(c)=="table"and#c>0)then local i=GJ()local e={}for c,K in ipairs(c)do if table["find"](i,K)then table["insert"](e,K)end end if#e>0 then pcall(function()_G["UIRefs"]["DropdownEggShopEggs"]:Select(e)end)end elseif K["SelectedEggRarity"]and(K["SelectedEggRarity"]~=""and K["SelectedEggRarity"]~="Select Rarity")then local i=K["SelectedEggRarity"].."Egg"local c=GJ()if table["find"](c,i)then pcall(function()_G["UIRefs"]["DropdownEggShopEggs"]:Select({i})end)end end if K["AutoBuySelectedEggs"]~=nil then _G["UIRefs"]["ToggleAutoBuySelectedEggs"]:Set(K["AutoBuySelectedEggs"])elseif K["AutoBuySelectedEgg"]~=nil then _G["UIRefs"]["ToggleAutoBuySelectedEggs"]:Set(K["AutoBuySelectedEgg"])end if K["AutoBuyAllEggs"]~=nil then _G["UIRefs"]["ToggleAutoBuyAllEggs"]:Set(K["AutoBuyAllEggs"])end task["wait"](0)if K["FloorUpgradeConfig"]then for i=1,3,1 do local c=K["FloorUpgradeConfig"][tostring(i)]or K["FloorUpgradeConfig"][i]if c then local e="Floor"..i if c["TargetPlantNamesList"]and type(c["TargetPlantNamesList"])=="table"then local K=_G["UIRefs"]["Dropdown"..(e.."UpgradePlant")]if K then local e={}for i,c in ipairs(c["TargetPlantNamesList"])do e[c]=true end _G["FloorUpgradeConfig"][i]["TargetPlantNames"]=e pcall(function()K:Select(c["TargetPlantNamesList"])end)end end if c["MaxLevel"]~=nil then _G["FloorUpgradeConfig"][i]["MaxLevel"]=c["MaxLevel"]local K=_G["UIRefs"]["Input"..(e.."MaxUpgradeLevel")]if K then pcall(function()K:Set(tostring(c["MaxLevel"]))end)end end if c["AutoAll"]~=nil then local i=_G["UIRefs"]["Toggle"..(e.."AutoAllUpgrade")]if i then pcall(function()i:Set(c["AutoAll"])end)end end if c["AutoUpgrade"]~=nil then local i=_G["UIRefs"]["Toggle"..(e.."AutoUpgrade")]if i then pcall(function()i:Set(c["AutoUpgrade"])end)end end task["wait"](0)end end end if K["FloorSprayConfig"]then for i=1,3,1 do local c=K["FloorSprayConfig"][tostring(i)]or K["FloorSprayConfig"][i]if c then local e="Floor"..i if c["TargetPlantNamesList"]and type(c["TargetPlantNamesList"])=="table"then local K=_G["UIRefs"]["Dropdown"..(e.."SprayPlant")]if K then local e={}for i,c in ipairs(c["TargetPlantNamesList"])do e[c]=true end _G["FloorSprayConfig"][i]["TargetPlantNames"]=e pcall(function()K:Select(c["TargetPlantNamesList"])end)end end if c["TargetSprayType"]~=nil then _G["FloorSprayConfig"][i]["TargetSprayType"]=c["TargetSprayType"]local K=_G["UIRefs"]["Dropdown"..(e.."SprayType")]if K then pcall(function()K:Select(c["TargetSprayType"])end)end end if c["TargetAcidPlantNamesList"]and type(c["TargetAcidPlantNamesList"])=="table"then local K=_G["UIRefs"]["Dropdown"..(e.."AcidPlant")]if K then local e={}for i,c in ipairs(c["TargetAcidPlantNamesList"])do e[c]=true end _G["FloorSprayConfig"][i]["TargetAcidPlantNames"]=e pcall(function()K:Select(c["TargetAcidPlantNamesList"])end)end end if c["TargetAcidMutationsList"]and type(c["TargetAcidMutationsList"])=="table"then local K=_G["UIRefs"]["Dropdown"..(e.."AcidMutation")]if K then local e={}for i,c in ipairs(c["TargetAcidMutationsList"])do e[c]=true end _G["FloorSprayConfig"][i]["TargetAcidMutations"]=e pcall(function()K:Select(c["TargetAcidMutationsList"])end)end end task["wait"](0)end end end if K["FloorFertilizeConfig"]then for i=1,3,1 do local c=K["FloorFertilizeConfig"][tostring(i)]or K["FloorFertilizeConfig"][i]if c then local e="Floor"..i if c["TargetPlantNamesList"]and type(c["TargetPlantNamesList"])=="table"then local K=_G["UIRefs"]["Dropdown"..(e.."FertilizePlant")]if K then local e={}for i,c in ipairs(c["TargetPlantNamesList"])do e[c]=true end _G["FloorFertilizeConfig"][i]["TargetPlantNames"]=e pcall(function()K:Select(c["TargetPlantNamesList"])end)end end if c["TargetFertilizerTypesList"]and type(c["TargetFertilizerTypesList"])=="table"then local K=_G["UIRefs"]["Dropdown"..(e.."FertilizerType")]if K then local e={}for i,c in ipairs(c["TargetFertilizerTypesList"])do e[c]=true end _G["FloorFertilizeConfig"][i]["TargetFertilizerTypes"]=e pcall(function()K:Select(c["TargetFertilizerTypesList"])end)end end if c["AutoAll"]~=nil then local i=_G["UIRefs"]["Toggle"..(e.."AutoAllFertilize")]if i then pcall(function()i:Set(c["AutoAll"])end)end end if c["AutoFertilize"]~=nil then local i=_G["UIRefs"]["Toggle"..(e.."AutoFertilize")]if i then pcall(function()i:Set(c["AutoFertilize"])end)end end task["wait"](0)end end end if K["AutoRollAndBuyAll"]~=nil then _G["UIRefs"]["ToggleAutoRollBuyAll"]:Set(K["AutoRollAndBuyAll"])end if K["AutoRollAndBuySelected"]~=nil then _G["UIRefs"]["ToggleAutoRollBuySelected"]:Set(K["AutoRollAndBuySelected"])end if K["AutoRollAndBuyByRarity"]~=nil then _G["UIRefs"]["ToggleAutoRollBuyByRarity"]:Set(K["AutoRollAndBuyByRarity"])end if K["AutoUpgradePowerups"]~=nil then _G["UIRefs"]["ToggleAutoUpgradePowerups"]:Set(K["AutoUpgradePowerups"])end if K["SelectedPowerupsToUpgrade"]and(type(K["SelectedPowerupsToUpgrade"])=="table"and#K["SelectedPowerupsToUpgrade"]>0)then _G["UIRefs"]["DropdownPowerupsToUpgrade"]:Select(K["SelectedPowerupsToUpgrade"])end if K["SelectedGearsToBuy"]and(type(K["SelectedGearsToBuy"])=="table"and#K["SelectedGearsToBuy"]>0)then _G["UIRefs"]["DropdownGearsToBuy"]:Select(K["SelectedGearsToBuy"])end if K["SelectedGachaSeedsToSnipe"]and(type(K["SelectedGachaSeedsToSnipe"])=="table"and#K["SelectedGachaSeedsToSnipe"]>0)then local i=_G["CachedIndexSeedEntries"]local c={}for e,K in ipairs(K["SelectedGachaSeedsToSnipe"])do for i,e in ipairs(i)do local x=string["match"](e,"%] (.*)")or e if x==K then table["insert"](c,e)break end end end if#c>0 then _G["UIRefs"]["DropdownGachaSeeds"]:Select(c)end end if K["TargetGachaRaritiesList"]and(type(K["TargetGachaRaritiesList"])=="table"and#K["TargetGachaRaritiesList"]>0)then local i={}for c,e in ipairs(K["TargetGachaRaritiesList"])do if table["find"](UJ,e)then _G["TargetGachaRarities"][e]=true table["insert"](i,e)end end if#i>0 then pcall(function()_G["UIRefs"]["DropdownGachaRarities"]:Select(i)end)end end local e=K["TargetSeedCollectorSubmitSeedsList"]or K["TargetSubmitSeedsList"]if e and(type(e)=="table"and#e>0)then local i=_G["CachedIndexSeedEntries"]local c={}for e,K in ipairs(e)do for i,e in ipairs(i)do local x=string["match"](e,"%] (.*)")or e if x==K then table["insert"](c,e)break end end end if#c>0 then _G["UIRefs"]["DropdownSeedCollectorSubmitSeeds"]:Select(c)end end end)if K["ShowFloatingTeleportButton"]~=nil then pcall(function()_G["UIRefs"]["ToggleFloatingTeleportButton"]:Set(K["ShowFloatingTeleportButton"])end)end if K["TeleportButtonPosXScale"]~=nil then n["FloatingTeleportMainButton"]["Position"]=UDim2["new"](K["TeleportButtonPosXScale"],K["TeleportButtonPosXOffset"],K["TeleportButtonPosYScale"],K["TeleportButtonPosYOffset"])end if K["SkipMoneyCheck"]~=nil then pcall(function()_G["UIRefs"]["ToggleSkipMoneyCheck"]:Set(K["SkipMoneyCheck"])end)end if K["HideOtherPlots"]~=nil then pcall(function()_G["UIRefs"]["ToggleHideOtherPlots"]:Set(K["HideOtherPlots"])end)end if K["MuteAndHideAlerts"]~=nil then pcall(function()_G["UIRefs"]["ToggleMuteAndHideAlerts"]:Set(K["MuteAndHideAlerts"])end)elseif K["HideAlert"]~=nil or K["MuteSound"]~=nil then pcall(function()_G["UIRefs"]["ToggleMuteAndHideAlerts"]:Set(K["HideAlert"]or K["MuteSound"])end)end e:Notify({["Title"]="System";["Content"]="Previous config loaded successfully!";["Duration"]=4})print(string["format"]("[Lamduck] Config loaded in %.3f seconds",tick()-i))else print("[Lamduck] No config file found to load")end end local function GX()print("[Lamduck] My plot name: "..l())print("[Lamduck] Player name: "..B())e:Notify({["Title"]="Info";["Content"]="Please reset config and rejoin if you face any issue!";["Duration"]=10})end GX()print(string["format"]("[Lamduck] Total loading completed in %.3f seconds",tick()-i))e:Notify({["Title"]="Ready!";["Content"]="Build A Ring Farm loaded.",["Duration"]=3})pcall(function()x["TabFarming"]:Select()end)end)end)(...)
+local x,W=pcall(function()return(loadstring(game:HttpGet("http://127.0.0.1:5500/ui",false)))()end
+)
+local S=(x and W)or(loadstring(game:HttpGet("https://raw.githubusercontent.com/lamduck2005/RobloxScript/master/ui.lua",false)))()
+local  function T(x,...)if select("#",...)>0  then
+ print("[Lamduck] "..string["format"](tostring(x),...))
+else
+ print("[Lamduck] "..tostring(x))end
+ end
+ T("Loading logic...")
+local t=S:CreateWindow({["Title"]="Build A Ring Farm",["Author"]="Lamduck",["Folder"]="Lamduck",["Transparent"]=false;["HasOutline"]=false,["ToggleKey"]=Enum["KeyCode"]["RightControl"]})t:EditOpenButton({["Title"]="Open | RightCtrl";["Icon"]="",["OnlyMobile"]=false,["Enabled"]=true;["Draggable"]=true})
+local H={}H["SectionGeneral"]=t:Section({["Title"]="Farming & Shop";["Icon"]="sprout";["Opened"]=true})H["TabFarming"]=H["SectionGeneral"]:Tab({["Title"]="Farming",["Icon"]="chevron-right"})H["TabFarming"]:Select()
+local o=game:GetService("ReplicatedStorage")
+local C=game:GetService("HttpService")
+local M=game:GetService("SoundService")
+local G=game:GetService("Lighting")
+local i=game["Players"]["LocalPlayer"]
+local Y={["Config"]={["AutoSellCrates"]=false,["AutoUnlockFarmPlots"]=false;["AutoExpandFarmPlot"]=false,["AutoCollectQueenBeeHoneycomb"]=false,["AutoPlantRush"]=false,["AutoClaimPlantRushBossDrop"]=false,["AutoSubmitQueenBeeHoneyToken"]=false,["AutoSubmitSeedToCollector"]=false,["AutoSubmitAllSeedsToCollector"]=false,["TargetSeedCollectorSubmitSeeds"]={};["F2_AutoCompostSelected"]=false,["F2_AutoCompostByRarity"]=false,["F2_TargetCompostSeeds"]={},["F2_TargetCompostRarities"]={};["F2_MaxCompostInsertAmount"]=0,["F2_CompostInsertDelay"]=2,["F2_AutoPullLever"]=false,["F2_AutoPullLeverWhenMax"]=false,["F2_PullLeverDelay"]=2,["F3_AutoCompostSelected"]=false;["F3_AutoCompostByRarity"]=false,["F3_TargetCompostSeeds"]={};["F3_TargetCompostRarities"]={},["F3_MaxCompostInsertAmount"]=0;["F3_CompostInsertDelay"]=2,["F3_AutoPullLever"]=false;["F3_AutoPullLeverWhenMax"]=false;["F3_PullLeverDelay"]=2;["AutoClaimDailyReward"]=false,["AutoClaimPlaytimeReward"]=false,["AutoSpinWheel"]=false,["AutoFeedPets"]=false;["TargetPetTreatNames"]={},["AutoUpgradePets"]=false;["TargetPetUpgradeLevel"]=10;["AutoSellPets"]=false,["TargetPetSellNames"]={},["TargetManageFloor"]=1;["AutoPlantByRarity"]=false,["TargetAutoPlantRarities"]={};["AutoBuyAllGears"]=false,["AutoBuySelectedGears"]=false;["AutoUnlockEggSlots"]=false,["SessionUnlockedEggSlots"]={},["AutoBuyAllEggs"]=false;["AutoBuySelectedEggs"]=false;["TargetEggShopEggs"]={};["SkipMoneyCheck"]=false,["AutoRollAndBuyAll"]=false;["AutoRollAndBuySelected"]=false;["AutoRollAndBuyByRarity"]=false,["TargetGachaSeeds"]={},["TargetGachaRarities"]={};["HideOtherPlots"]=false;["MuteAndHideAlerts"]=false,["AutoUpgradePowerups"]=false,["TargetPowerups"]={};["FloorUpgradeConfig"]={["AutoUpgrade"]=false,["AutoAll"]=false,["TargetPlantNames"]={},["MaxLevel"]=10};["FloorFertilizeConfig"]={["AutoFertilize"]=false;["AutoAll"]=false,["TargetPlantNames"]={};["TargetFertilizerTypes"]={}};["FloorSprayConfig"]={["TargetPlantNames"]={};["TargetSprayType"]=nil;["TargetAcidPlantNames"]={};["TargetAcidMutations"]={}};["ShowFloatingTeleportButton"]=false,["TeleportButtonPosXScale"]=nil;["TeleportButtonPosXOffset"]=nil,["TeleportButtonPosYScale"]=nil,["TeleportButtonPosYOffset"]=nil};["Flags"]={["isSellCratesLoopRunning"]=false;["isUnlockFarmPlotsLoopRunning"]=false;["isExpandFarmPlotLoopRunning"]=false;["isCollectHoneycombLoopRunning"]=false;["isPlantRushLoopRunning"]=false,["isSubmitQueenBeeHoneyTokenLoopRunning"]=false;["isSeedCollectorSubmitLoopRunning"]=false,["isF2CompostLoopRunning"]=false;["isF2PullLeverLoopRunning"]=false,["isF2PullLeverWhenMaxLoopRunning"]=false;["isF3CompostLoopRunning"]=false;["isF3PullLeverLoopRunning"]=false,["isF3PullLeverWhenMaxLoopRunning"]=false;["isClaimPlaytimeRewardLoopRunning"]=false,["isClaimDailyRewardLoopRunning"]=false;["isSpinWheelLoopRunning"]=false;["isAutoFeedPetsLoopRunning"]=false;["isAutoUpgradePetsLoopRunning"]=false;["isAutoSellPetsLoopRunning"]=false,["isBuyAllGearsLoopRunning"]=false,["isBuySelectedGearsLoopRunning"]=false,["isUnlockEggSlotsLoopRunning"]=false,["isEggShopBuyLoopRunning"]=false;["isAutoPlantLoopRunning"]=false;["isUpgradePlantsLoopRunning"]=false,["isFertilizePlantsLoopRunning"]=false;["isUpgradePowerupsLoopRunning"]=false;["isSeedGachaLoopRunning"]=false;["isClaimPlantRushBossDropLoopRunning"]=false};["UIRefs"]={}}
+local  function L(x,W)for W,S in pairs(W)do
+ if type(S)=="table" then
+ if next(S)==nil and(x[W]and type(x[W])=="table") then
+ 
+else
+ if not x[W]or type(x[W])~="table" then
+ x[W]={}end
+ L(x[W],S)end
+ 
+else
+ x[W]=S end
+ end
+ end
+ 
+local  function K(x)
+local W={}for x,S in pairs(x)do
+ table["insert"](W,x)end
+ return W end
+ 
+local  function Q(x)
+local W={}for x in pairs(x)do
+ table["insert"](W,x)end
+ table["sort"](W)return W end
+ 
+local b={}
+local d={}
+local V={}
+local s={}
+local  function E()
+local x,W,S={},{},{}
+local T=o:FindFirstChild("Assets")and o["Assets"]:FindFirstChild("Gear")if T  then
+ for T,t in ipairs(T:GetChildren())do
+ 
+local H=t["Name"]table["insert"](x,H)if string["find"](H,"Fertilizer",1,true) then
+ table["insert"](W,H)end
+ if string["find"](H,"Spray",1,true) then
+ table["insert"](S,H)end
+ end
+ end
+ table["sort"](x)table["sort"](W)table["sort"](S)if#W==0  then
+ W={"Bee Fertilizer","Normal Fertilizer";"Scrappy Fertilizer";"Strong Fertilizer","Super Fertilizer"}end
+ if#S==0  then
+ S={"Acid Spray","Autumn Spray","Cosmic Spray";"Frozen Spray","Radioactive Spray";"Rainbow Spray";"Trucker Spray";"Void Spray";"Wet Spray"}end
+ 
+local t={}for x,W in ipairs(S)do
+ if W~="Acid Spray" then
+ table["insert"](t,W)end
+ end
+ return x,W,S,t end
+ 
+local  function a()
+local x={}
+local W={}
+local S=0 
+local t=0 
+local H=0 
+local C=0 
+local M="none"
+local  function G()
+local T=i:FindFirstChild("PlayerGui")
+local o=T and T:WaitForChild("MainUI",5)
+local C=o and o:FindFirstChild("Menus")
+local G=C and C:FindFirstChild("IndexFrame")
+local Y=G and G:FindFirstChild("Main")
+local L=Y and Y:FindFirstChild("PlantsFrame")if not L  then
+ return false end
+ 
+local K=false for T,H in pairs(L:GetChildren())do
+ if H:IsA("Frame") then
+ 
+local T=H:FindFirstChild("RarityName")
+local o=H:FindFirstChild("SeedName")
+local C=o and o["Text"]
+local M=T and T["Text"]
+local G=H["Name"]if C and(C~=""and C~="???") then
+ G=C 
+elseif C=="???" then
+ S=S+1 end
+ 
+local i=G if M and(M~=""and M~="???") then
+ i="["..(M..("] "..G))end
+ if not W[G] then
+ table["insert"](x,i)W[G]=true K=true 
+else
+ t=t+1 end
+ end
+ end
+ H=#x if K  then
+ M="UI"end
+ return K end
+ 
+local  function Y()
+local S=o:FindFirstChild("Assets")and o["Assets"]:FindFirstChild("Seeds")if not S  then
+ return false end
+ 
+local T=0 for S,H in ipairs(S:GetChildren())do
+ 
+local o=string["gsub"](H["Name"]," Seed$","")if not W[o]and not W[H["Name"]] then
+ table["insert"](x,o)W[o]=true T=T+1 
+else
+ t=t+1 end
+ end
+ C=T if T>0  then
+ M=(M=="UI")and "UI+RS"or "RS"end
+ return T>0 end
+ 
+local L=G()if not L or#x==0  then
+ Y()end
+ table["sort"](x)T("getIndexSeeds | loaded: %s | locked: %s | duplicates: %s | ui: %s | rs: %s | source: %s",tostring(#x),tostring(S),tostring(t),tostring(H),tostring(C),tostring(M))return x end
+ 
+local g={}
+local X={["Common"]=1;["Uncommon"]=2;["Rare"]=3,["Epic"]=4,["Legendary"]=5,["Secret"]=6;["Prismatic"]=7,["Divine"]=8;["Exotic"]=9;["Transcended"]=10}
+local I={}
+local e={}
+local  function r()
+local x={}I={}e={}for W,S in ipairs(Y["CachedIndexSeedEntries"])do
+ 
+local T,t=string["match"](S,"%[(.-)%] (.+)")if T and t  then
+ e[t]=T if not x[T] then
+ x[T]=true table["insert"](I,T)end
+ end
+ end
+ table["sort"](I,function(x,W)
+local S=X[x]or 99 
+local T=X[W]or 99 return S<T end
+)end
+ 
+local D={["SawRange"]={["SignName"]="PlotUpgradeSign";["UIFolder"]="SawRange";["RemoteArg"]="ExtraSawRange";["Type"]="plot"},["SawYield"]={["SignName"]="PlotUpgradeSign";["UIFolder"]="SawYield",["RemoteArg"]="ExtraYield";["Type"]="plot"},["SprinklerRange"]={["SignName"]="PlotUpgradeSign";["UIFolder"]="SprinklerRange";["RemoteArg"]="ExtraSprinklerRange";["Type"]="plot"};["SprinklerPower"]={["SignName"]="PlotUpgradeSign",["UIFolder"]="SprinklerPower",["RemoteArg"]="ExtraPower";["Type"]="plot"},["SeedLuck"]={["SignName"]="UpgradeSign";["UIFolder"]="SeedLuck",["Type"]="seedluck"};["SeedRolls"]={["SignName"]="UpgradeSign";["UIFolder"]="SeedRolls";["Type"]="seedrolls"}}
+local h={"SawRange";"SawYield";"SprinklerRange","SprinklerPower";"SeedLuck","SeedRolls"}
+local  function U(x,W)if W and W~="" then
+ T("Insufficient Cash - Skipped "..(x..(": "..tostring(W))))
+else
+ T("Insufficient Cash - Skipped "..x)end
+ end
+ 
+local B={}T("Loading game data synchronously...")
+local f=tick()b,d,V,s=E()Y["CachedIndexSeedEntries"]=a()r()g={}for x,W in ipairs(Y["CachedIndexSeedEntries"])do
+ 
+local S=string["match"](W,"%] (.*)")or W if string["lower"](S)~="acid"and string["lower"](S)~="acid seed" then
+ table["insert"](g,W)end
+ end
+ T("Loaded seed index and assets in %.3f seconds",tick()-f)
+local A="build-a-ring-farm.json"if isfile and isfile(A) then
+ 
+local x,W=pcall(function()return C:JSONDecode(readfile(A))end
+)if x and W  then
+ pcall(function()L(Y["Config"],W)end
+)end
+ end
+ 
+local p={["K"]=1000,["M"]=1000000,["B"]=1000000000;["T"]=1000000000000,["QA"]=1e+015;["QD"]=1e+015;["QI"]=1e+018;["QN"]=1e+018;["SX"]=1e+021;["SP"]=1e+024,["OC"]=1e+027,["O"]=1e+027,["NO"]=1e+030,["N"]=1e+030,["DE"]=1e+033;["D"]=1e+033,["UN"]=1e+036;["UD"]=1e+036;["DD"]=1e+039;["TD"]=1e+042;["QAD"]=1e+045,["QID"]=1e+048;["SXD"]=1e+051,["SPD"]=1e+054,["OCD"]=1e+057,["NOD"]=1e+060,["VG"]=1e+063}
+local  function j(x)if type(x)=="number" then
+ return x end
+ if type(x)~="string"or x=="" then
+ return 0 end
+ 
+local W=(string["upper"](x)):gsub("[$%,%s]","")
+local S,T=string["match"](W,"^([%d%.]+)(%a*)$")if not S  then
+ return 0 end
+ 
+local t=1 if T and T~="" then
+ t=p[T]if not t  then
+ warn("[Lamduck] Unknown money suffix not in dictionary: "..T)t=1 end
+ end
+ return((tonumber(S)or 0))*t end
+ 
+local  function Z()
+local x=nil 
+local W=i:FindFirstChild("leaderstats")or i:FindFirstChild("Leaderstats")if W and W:FindFirstChild("Cash") then
+ x=j(W["Cash"]["Value"])end
+ 
+local S=nil 
+local t=i:FindFirstChild("PlayerGui")
+local H=t and(t:FindFirstChild("MainUI")and(t["MainUI"]:FindFirstChild("MoneyCounter")and t["MainUI"]["MoneyCounter"]:FindFirstChild("CashCounter")))if H  then
+ S=j(H["Text"])end
+ if S~=nil and(x~=nil and S~=x) then
+ T("Cash mismatch | leaderstats: "..(tostring(x)..(" | gui: "..(tostring(S).." | using gui"))))return S end
+ if S~=nil  then
+ return S end
+ if x~=nil  then
+ return x end
+ return 0 end
+ 
+local  function y(x,W,S)if Y["Config"]["SkipMoneyCheck"] then
+ return true end
+ 
+local T=Z()if T>=x  then
+ return true end
+ if W  then
+ U(W,S)end
+ return false end
+ 
+local  function n(x,W)pcall(function()
+local S=D[x]["RemoteArg"]
+local T="Floor"..W o["Remotes"]["PlotUpgradeTransaction"]:InvokeServer(table["unpack"]({[1]=S,[2]=T}))end
+)end
+ 
+local  function m()pcall(function()o["Remotes"]["UpgradeSeedLuck"]:InvokeServer()end
+)end
+ 
+local  function F()pcall(function()o["Remotes"]["UpgradeSeedRolls"]:InvokeServer()end
+)end
+ 
+local u=nil 
+local  function P()if u and u["Parent"] then
+ return u end
+ u=nil 
+local x=workspace:FindFirstChild("Map")and workspace["Map"]:FindFirstChild("Plots")if x  then
+ for x,W in ipairs(x:GetChildren())do
+ 
+local S=W:FindFirstChild("Owner")if S and S["Value"]==i  then
+ u=W return u end
+ end
+ end
+ pcall(function()
+local W=o:FindFirstChild("Remotes")and o["Remotes"]:FindFirstChild("Plot")if W and W:FindFirstChild("GetPlot") then
+ 
+local S=W["GetPlot"]:InvokeServer()if typeof(S)=="Instance" then
+ u=S 
+elseif typeof(S)=="string"and x  then
+ u=x:FindFirstChild(S)end
+ end
+ end
+)return u end
+ 
+local N=nil 
+local  function k()if N  then
+ return N end
+ 
+local x=P()if x  then
+ N=x["Name"]return N end
+ 
+local W=workspace:FindFirstChild("Map")and workspace["Map"]:FindFirstChild("Plots")if W  then
+ for x,W in ipairs(W:GetChildren())do
+ for x,S in ipairs(W:GetDescendants())do
+ if S:IsA("TextLabel")or S:IsA("TextButton") then
+ 
+local x=tostring(S["Text"])if string["find"](string["lower"](x),string["lower"](i["Name"]),1,true) then
+ N=W["Name"]return N end
+ end
+ end
+ end
+ end
+ return nil end
+ 
+local l=nil 
+local  function c(x)
+local W=workspace:FindFirstChild("Map")and workspace["Map"]:FindFirstChild("Plots")if not W  then
+ return end
+ if x  then
+ if not l  then
+ l=k()end
+ if not l  then
+ T("Error: Could not locate your plot name!")return end
+ for x,W in ipairs(W:GetChildren())do
+ if W["Name"]~=l  then
+ W["Parent"]=G end
+ end
+ 
+else
+ if not l  then
+ return end
+ for x,S in ipairs(G:GetChildren())do
+ if string["find"](S["Name"],"Plot")and S["Name"]~=l  then
+ S["Parent"]=W end
+ end
+ end
+ end
+ 
+local  function w(x)
+local W={}for x,S in ipairs(x:GetDescendants())do
+ if S["Name"]=="Dirt" then
+ table["insert"](W,S)end
+ end
+ return W end
+ 
+local z={"";"SecondFloor";"ThirdFloor"}
+local  function J(x)
+local W=P()if not W  then
+ return nil end
+ if x==1  then
+ return W:FindFirstChild("FarmPlot")
+else
+ 
+local S=z[x]if S  then
+ 
+local x=W:FindFirstChild(S)if x  then
+ return x:FindFirstChild("FarmPlot")end
+ end
+ end
+ return nil end
+ 
+local  function O(x)
+local W={}
+local S=J(x)if not S  then
+ return W end
+ for S,T in ipairs(S:GetChildren())do
+ 
+local t=string["match"](T["Name"],"^Plot(%d+)$")if t  then
+ 
+local S=tonumber(t)
+local H=T:FindFirstChild("Dirt")if H  then
+ 
+local t={["Instance"]=H;["Floor"]=x,["PlotName"]=T["Name"],["PlotIndex"]=S,["PlantFullyGrown"]=H:GetAttribute("PlantFullyGrown")or false,["PlantLevel"]=H:GetAttribute("PlantLevel")or 0;["PlantMaxStages"]=H:GetAttribute("PlantMaxStages")or 0,["PlantMutation"]=H:GetAttribute("PlantMutation")or "Normal",["PlantName"]=H:GetAttribute("PlantName")or "",["PlantStage"]=H:GetAttribute("PlantStage")or 0,["PlantTag"]=H:GetAttribute("PlantTag")or "",["PlotRing"]=H:GetAttribute("PlotRing")or 0,["Watered"]=H:GetAttribute("Watered")or false;["WaterTimeBonus"]=H:GetAttribute("WaterTimeBonus")or 0;["Fertilized"]=H:GetAttribute("Fertilized")or false}table["insert"](W,t)end
+ end
+ end
+ return W end
+ 
+local  function v()return i["Name"]end
+ 
+local R={{["Label"]="Farm Floor 1",["DestinationType"]="MyPlotFloor",["PlotFloorModelName"]="Floor",["PlotFloorYOffset"]=5};{["Label"]="Farm Floor 2";["DestinationType"]="MyPlotFloor";["PlotFloorModelName"]="SecondFloor",["PlotFloorYOffset"]=35},{["Label"]="Farm Floor 3",["DestinationType"]="MyPlotFloor",["PlotFloorModelName"]="ThirdFloor";["PlotFloorYOffset"]=70},{["Label"]="Seed Collector";["DestinationType"]="WorkspacePivot",["WorkspaceModelName"]="SeedCollector",["PositionOffset"]=Vector3["new"](0,5,8)};{["Label"]="Pet Merchant",["DestinationType"]="WorkspaceChildCFrame";["WorkspaceModelName"]="PetMerchant",["WorkspaceChildName"]="MerchantSign",["PositionOffset"]=Vector3["new"](0,5,10)};{["Label"]="Friend-O-Tron";["DestinationType"]="WorkspacePivot",["WorkspaceModelName"]="FriendOTron",["PositionOffset"]=Vector3["new"](0,5,10)},{["Label"]="Rejoin",["DestinationType"]="Rejoin"}}
+local  function q(x)
+local W=i["Character"]and i["Character"]:FindFirstChild("HumanoidRootPart")if W and x  then
+ W["CFrame"]=x return true end
+ return false end
+ 
+local  function x6(x)if x["DestinationType"]=="MyPlotFloor" then
+ 
+local W=P()if not W  then
+ return nil end
+ return W:GetPivot()*CFrame["new"](0,x["PlotFloorYOffset"]or 5,0)end
+ if x["DestinationType"]=="WorkspacePivot" then
+ 
+local W=workspace:FindFirstChild(x["WorkspaceModelName"])if not W  then
+ return nil end
+ return W:GetPivot()*CFrame["new"](x["PositionOffset"]or Vector3["zero"])end
+ if x["DestinationType"]=="WorkspaceChildCFrame" then
+ 
+local W=workspace:FindFirstChild(x["WorkspaceModelName"])
+local S=W and W:FindFirstChild(x["WorkspaceChildName"])if not S  then
+ return nil end
+ return S["CFrame"]+((x["PositionOffset"]or Vector3["zero"]))end
+ return nil end
+ 
+local  function W6(x)if x["DestinationType"]=="Rejoin" then
+(game:GetService("TeleportService")):TeleportToPlaceInstance(game["PlaceId"],game["JobId"],i)return end
+ q(x6(x))end
+ 
+local  function S6()if q(x6(R[1])) then
+ S:Notify({["Title"]="Teleport";["Content"]="Arrived at your plot!",["Duration"]=2})
+else
+ S:Notify({["Title"]="Error";["Content"]="Plot not found or character not loaded.";["Duration"]=2})end
+ end
+ 
+local  function T6()
+local x={"Normal"}
+local W=o:FindFirstChild("Shared")and o["Shared"]:FindFirstChild("MutationAppliers")if W  then
+ for W,S in ipairs(W:GetChildren())do
+ if S["Name"]and S["Name"]~="" then
+ table["insert"](x,S["Name"])end
+ end
+ end
+ table["sort"](x,function(x,W)if x=="Normal" then
+ return true end
+ if W=="Normal" then
+ return false end
+ return x<W end
+)if#x==1  then
+ x={"Normal","Alien";"Autumn";"Cosmic";"Farm";"Frozen","Honeycomb","Radioactive","Rainbow";"Void";"Wet"}end
+ return x end
+ 
+local  function t6(x,W)
+local S=P()if not S  then
+ return nil end
+ 
+local T=D[x]if not T  then
+ return nil end
+ 
+local t=S if W>1  then
+ if T["SignName"]=="UpgradeSign" then
+ return nil end
+ 
+local x={"","SecondFloor","ThirdFloor";"FourthFloor";"FifthFloor","SixthFloor"}
+local H=x[W]if not H  then
+ return nil end
+ t=S:FindFirstChild(H)if not t  then
+ return nil end
+ end
+ 
+local H=t:FindFirstChild(T["SignName"])if H and(H:FindFirstChild("Screen")and H["Screen"]:FindFirstChild("SurfaceGui")) then
+ 
+local x=H["Screen"]["SurfaceGui"]:FindFirstChild(T["UIFolder"])if x and(x:FindFirstChild("Btn")and x["Btn"]:FindFirstChild("Txt")) then
+ 
+local W=x["Btn"]["Txt"]["Text"]if W=="MAX" then
+ return "MAX"end
+ return j(W)end
+ end
+ return nil end
+ 
+local  function H6()
+local x=i:FindFirstChild("PlayerGui")
+local W=x and x:FindFirstChild("MainUI")
+local S=W and W:FindFirstChild("Menus")
+local T=S and S:FindFirstChild("GearShopFrame")return T and T:FindFirstChild("ScrollingFrame")end
+ 
+local  function o6(x)
+local W=H6()if not W  then
+ return "N/A"end
+ 
+local S=W:FindFirstChild(x)if not S  then
+ return "N/A"end
+ for x,W in pairs(S:GetDescendants())do
+ if W:IsA("TextLabel")or W:IsA("TextButton") then
+ 
+local x=W["Text"]if x and string["sub"](x,1,1)=="$" then
+ return x end
+ end
+ end
+ return "N/A"end
+ 
+local  function C6(x)
+local W=o:FindFirstChild("GearStocks")and o["GearStocks"]:FindFirstChild(i["Name"])if not W  then
+ return 0 end
+ 
+local S=W:FindFirstChild(x)return S and S["Value"]or 0 end
+ 
+local  function M6()
+local x=workspace:FindFirstChild("PetMerchant")if not x  then
+ return "--- EGG SHOP ---\nPet Merchant not found"end
+ 
+local W={}
+local S=x:FindFirstChild("MerchantSign")
+local T=S and S:FindFirstChildWhichIsA("SurfaceGui")
+local t=T and T:FindFirstChild("TimeLabel")
+local H=t and t["Text"]or "Restocks In: Unknown"table["insert"](W,"--- EGG SHOP ("..(H..") ---"))
+local o=false for S=1,5,1 do
+ 
+local T=x:FindFirstChild("Podium"..(S.."Stock"))or x:FindFirstChild("Podium"..S)if T  then
+ 
+local x=T:FindFirstChild("EggLabel",true)
+local t=T:FindFirstChild("PriceLabel",true)if x and(t and x["Text"]~="") then
+ table["insert"](W,string["format"]("[Slot %d] %s | %s",S,x["Text"],t["Text"]))o=true end
+ end
+ end
+ if not o  then
+ table["insert"](W,"No eggs listed (loading or empty)")end
+ return table["concat"](W,"\n")end
+ 
+local  function G6()
+local x={"--- GEAR SHOP ---"}
+local W=false for S,T in ipairs(b)do
+ 
+local t=C6(T)
+local H=o6(T)
+local o=t==0 and "#FF5050"or "#00FF7F"table["insert"](x,string["format"]("- <font color='%s'>[%d x]</font> <font color='#FFD250'>[%s]</font> <font color='#FFFFFF'>%s</font>",o,t,H,T))if t>0  then
+ W=true end
+ end
+ if not W  then
+ table["insert"](x,"- All gears are out of stock!")end
+ return table["concat"](x,"\n")end
+ 
+local  function i6()return M6()..("\n\n"..G6())end
+ 
+local  function Y6(x)
+local W=o:FindFirstChild("Remotes")and(o["Remotes"]:FindFirstChild("Gear")and o["Remotes"]["Gear"]:FindFirstChild("Transaction"))if W  then
+ 
+local S=o6(x)
+local T=j(S)if y(T,"Gear",x) then
+ W:InvokeServer(x)end
+ end
+ end
+ 
+local L6=nil 
+local  function K6()if L6~=nil  then
+ return L6~=false and L6 or nil end
+ 
+local x=o:FindFirstChild("Shared")and o["Shared"]:FindFirstChild("EggConfig")if not x  then
+ L6=false return nil end
+ 
+local W,S=pcall(require,x)L6=((W and type(S)=="table"))and S or false return L6~=false and L6 or nil end
+ 
+local  function Q6()
+local x={}
+local W=K6()if W and W["UnlockPrices"] then
+ for W,S in pairs(W["UnlockPrices"])do
+ 
+local T=string["match"](W,"%d+")if T  then
+ table["insert"](x,{["EggSlotNumber"]=tonumber(T),["UnlockPrice"]=tonumber(S)or 0})end
+ end
+ end
+ table["sort"](x,function(x,W)return x["EggSlotNumber"]<W["EggSlotNumber"]end
+)return x end
+ 
+local  function b6()
+local x={}
+local W=K6()if W  then
+ for W,S in pairs(W)do
+ if type(S)=="table"and string["match"](tostring(W),"Egg$") then
+ table["insert"](x,tostring(W))end
+ end
+ end
+ table["sort"](x)if#x==0  then
+ x={"CommonEgg";"RareEgg","EpicEgg"}end
+ return x end
+ 
+local  function d6(x)if not x  then
+ return 0 end
+ 
+local W=K6()if not W  then
+ return 0 end
+ if type(W["Eggs"])=="table"and type(W["Eggs"][x])=="table" then
+ 
+local S=W["Eggs"][x]return tonumber(S["Price"]or S["Cost"]or S["RollPrice"])or 0 end
+ if type(W["Prices"])=="table" then
+ return tonumber(W["Prices"][x])or 0 end
+ if type(W["RollPrices"])=="table" then
+ return tonumber(W["RollPrices"][x])or 0 end
+ return 0 end
+ 
+local  function V6()
+local x={}
+local W=workspace:FindFirstChild("PetMerchant")if not W  then
+ return x end
+ for S=1,5,1 do
+ 
+local T=W:FindFirstChild("Podium"..(S.."Stock"))or W:FindFirstChild("Podium"..S)if T  then
+ 
+local W=T:FindFirstChild("EggLabel",true)if W and(W["Text"]and W["Text"]~="") then
+ 
+local T=string["gsub"](W["Text"]," ","")if not string["match"](string["lower"](T),"egg$") then
+ T=T.."Egg"end
+ table["insert"](x,{["Slot"]=S;["Name"]=T})end
+ end
+ end
+ return x end
+ 
+local  function s6(x)
+local W=o:FindFirstChild("Remotes")and(o["Remotes"]:FindFirstChild("EggShop")and o["Remotes"]["EggShop"]:FindFirstChild("Transaction"))
+local S=o:FindFirstChild("Remotes")and o["Remotes"]:FindFirstChild("RollEgg")if not W or not S or not x["Slot"]or not x["Name"] then
+ return false end
+ 
+local T=pcall(function()W:InvokeServer("BuyEgg",x["Slot"])end
+)if T  then
+ pcall(function()S:FireServer(x["Name"])end
+)task["wait"](.1)pcall(function()S:FireServer(x["Name"],"ClaimRolledPet")end
+)return true end
+ return false end
+ 
+local  function E6()
+local x={"None"}
+local W={}
+local  function S(S)if not S  then
+ return end
+ for S,T in pairs(S:GetChildren())do
+ if T:IsA("Tool")and T:GetAttribute("InventoryCategory")=="Seeds" then
+ 
+local S=T:GetAttribute("trueName")if S and not W[S] then
+ W[S]=true table["insert"](x,S)end
+ end
+ end
+ end
+ S(i["Character"])S(i:FindFirstChild("Backpack"))return x end
+ 
+local  function a6(x)
+local W=i["Character"]
+local S=W and W:FindFirstChild("Humanoid")if not W or not S  then
+ return nil end
+ 
+local T=W:FindFirstChildWhichIsA("Tool")if T and(T:GetAttribute("InventoryCategory")=="Seeds"and T:GetAttribute("trueName")==x) then
+ return T end
+ if T  then
+ S:UnequipTools()task["wait"](.1)end
+ if i:FindFirstChild("Backpack") then
+ for W,T in pairs(i["Backpack"]:GetChildren())do
+ if T:IsA("Tool")and(T:GetAttribute("InventoryCategory")=="Seeds"and T:GetAttribute("trueName")==x) then
+ S:EquipTool(T)task["wait"](.3)return T end
+ end
+ end
+ return nil end
+ 
+local  function g6()
+local x={}
+local W=(game:GetService("ReplicatedStorage")):FindFirstChild("Shared")
+local S=W and W:FindFirstChild("Registry")
+local T=S and S:FindFirstChild("Mutations")if T  then
+ for W,S in ipairs(T:GetChildren())do
+ table["insert"](x,S["Name"])end
+ end
+ if#x==0  then
+ x={"Alien";"Autumn";"Cosmic";"Exclusive!","Farm";"Frozen";"Honeycomb","Normal";"Radioactive";"Rainbow";"Void","Wet"}end
+ table["sort"](x)return x end
+ 
+local X6=g6()
+local  function I6()
+local x=Y["Config"]["FloorFertilizeConfig"]if not x  then
+ return nil end
+ if next(x["TargetFertilizerTypes"])==nil  then
+ return nil end
+ 
+local W=x["TargetFertilizerTypes"]
+local  function S(x)if not x  then
+ return nil end
+ for x,S in ipairs(x:GetChildren())do
+ for x,T in ipairs(d)do
+ if string["find"](S["Name"],T,1,true) then
+ if W[T] then
+ return S end
+ end
+ end
+ end
+ return nil end
+ return S(i["Character"])or S(i["Backpack"])end
+ 
+local  function e6(x)if not x or x=="" then
+ return true end
+ 
+local W=string["lower"](x)return W=="normal"or W=="none"end
+ 
+local  function r6(x)if not x or x=="" then
+ return nil end
+ 
+local  function W(W)if not W  then
+ return nil end
+ for W,S in ipairs(W:GetChildren())do
+ if string["find"](S["Name"],x,1,true) then
+ return S end
+ end
+ return nil end
+ return W(i["Character"])or W(i["Backpack"])end
+ 
+local  function D6(x)if not x or x=="" then
+ return 0 end
+ 
+local W=0 
+local  function S(S)if not S  then
+ return end
+ for S,T in ipairs(S:GetChildren())do
+ if T:IsA("Tool")and string["find"](T["Name"],x,1,true) then
+ 
+local x=string["match"](T["Name"],"%(x(%d+)%)")if x  then
+ W=W+tonumber(x)
+else
+ 
+local x=T:GetAttribute("Amount")or T:GetAttribute("Quantity")or T:GetAttribute("Uses")if x and typeof(x)=="number" then
+ W=W+x 
+else
+ 
+local x=T:FindFirstChild("Value")or T:FindFirstChild("Quantity")or T:FindFirstChild("Uses")if x and((x:IsA("IntValue")or x:IsA("NumberValue"))) then
+ W=W+x["Value"]
+else
+ W=W+1 end
+ end
+ end
+ end
+ end
+ end
+ S(i["Character"])S(i["Backpack"])return W end
+ 
+local  function h6(x,W)if not x or next(x)==nil  then
+ return false end
+ if x[W] then
+ return true end
+ 
+local S=string["lower"](W)for x,W in pairs(x)do
+ if W  then
+ 
+local W=string["match"](x,"%] (.*)")or x if string["lower"](W)==S  then
+ return true end
+ end
+ end
+ return false end
+ 
+local  function U6()
+local x=Y["Config"]["TargetManageFloor"]
+local W=Y["Config"]["FloorSprayConfig"]if not W  then
+ return end
+ 
+local T=W["TargetSprayType"]if not T or T=="" then
+ S:Notify({["Title"]="Spray Error",["Content"]="Please select a spray type first!";["Duration"]=3})return end
+ 
+local t=W["TargetPlantNames"]if next(t)==nil  then
+ S:Notify({["Title"]="Spray Error";["Content"]="Please select target plants first!",["Duration"]=3})return end
+ 
+local H=J(x)if not H  then
+ S:Notify({["Title"]="Spray Error";["Content"]="Farm plot not found for this floor!";["Duration"]=3})return end
+ 
+local C=o:FindFirstChild("Remotes")and o["Remotes"]:FindFirstChild("UseSpray")if not C  then
+ S:Notify({["Title"]="Spray Error",["Content"]="UseSpray remote not found!",["Duration"]=3})return end
+ 
+local M=r6(T)if not M  then
+ S:Notify({["Title"]="Spray Error",["Content"]="Spray tool '"..(T.."' not found in inventory!");["Duration"]=3})return end
+ 
+local G=D6(T)
+local L={}
+local K=w(H)for x,W in ipairs(K)do
+ 
+local S=W:GetAttribute("PlantName")if S and S~="" then
+ if h6(t,S) then
+ 
+local x=W:GetAttribute("PlantMutation")or "None"if e6(x) then
+ table["insert"](L,{["dirt"]=W;["name"]=S;["mutation"]=x})end
+ end
+ end
+ end
+ 
+local Q=#L S:Notify({["Title"]="Spray Status",["Content"]=string["format"]("Found: %d matching plants.\nOwned Spray: %d.",Q,G);["Duration"]=4})if Q==0 or G<=0  then
+ return end
+ 
+local b=i["Character"]and i["Character"]:FindFirstChild("Humanoid")if b  then
+ b:EquipTool(M)task["wait"](.25)
+local x=math["min"](G,Q)for x=1,x,1 do
+ 
+local W=L[x]pcall(function()C:FireServer(W["dirt"])end
+)task["wait"](1)end
+ task["wait"](.25)b:UnequipTools()if G<Q  then
+ S:Notify({["Title"]="Spray Completed",["Content"]=string["format"]("Sprayed %d plants.\n%d plants left unsprayed due to insufficient spray.",G,Q-G),["Duration"]=5})
+else
+ S:Notify({["Title"]="Spray Completed",["Content"]=string["format"]("Sprayed all %d plants successfully!",Q);["Duration"]=5})end
+ 
+else
+ S:Notify({["Title"]="Spray Error",["Content"]="Character humanoid not found!",["Duration"]=3})end
+ end
+ 
+local  function B6()
+local x=Y["Config"]["TargetManageFloor"]
+local W=Y["Config"]["FloorSprayConfig"]if not W  then
+ return end
+ 
+local T=W["TargetAcidPlantNames"]if next(T)==nil  then
+ S:Notify({["Title"]="Spray Error",["Content"]="Please select target plants first!",["Duration"]=3})return end
+ 
+local t=W["TargetAcidMutations"]if next(t)==nil  then
+ S:Notify({["Title"]="Spray Error",["Content"]="Please select target mutations first!";["Duration"]=3})return end
+ 
+local H=J(x)if not H  then
+ S:Notify({["Title"]="Spray Error",["Content"]="Farm plot not found for this floor!",["Duration"]=3})return end
+ 
+local C=o:FindFirstChild("Remotes")and o["Remotes"]:FindFirstChild("UseSpray")if not C  then
+ S:Notify({["Title"]="Spray Error";["Content"]="UseSpray remote not found!",["Duration"]=3})return end
+ 
+local M=r6("Acid Spray")if not M  then
+ S:Notify({["Title"]="Spray Error";["Content"]="Acid Spray tool not found in inventory!",["Duration"]=3})return end
+ 
+local G=D6("Acid Spray")
+local L={}
+local K=w(H)for x,W in ipairs(K)do
+ 
+local S=W:GetAttribute("PlantName")if S and S~="" then
+ if h6(T,S) then
+ 
+local x=W:GetAttribute("PlantMutation")or "None"if not e6(x) then
+ 
+local T=false for W,S in pairs(t)do
+ if S and string["lower"](W)==string["lower"](x) then
+ T=true break end
+ end
+ if T  then
+ table["insert"](L,{["dirt"]=W;["name"]=S;["mutation"]=x})end
+ end
+ end
+ end
+ end
+ 
+local Q=#L S:Notify({["Title"]="Clear Mutation Status";["Content"]=string["format"]("Found: %d mutated plants.\nOwned Acid Spray: %d.",Q,G);["Duration"]=4})if Q==0 or G<=0  then
+ return end
+ 
+local b=i["Character"]and i["Character"]:FindFirstChild("Humanoid")if b  then
+ b:EquipTool(M)task["wait"](.25)
+local x=math["min"](G,Q)for x=1,x,1 do
+ 
+local W=L[x]pcall(function()C:FireServer(W["dirt"])end
+)task["wait"](1)end
+ task["wait"](.25)b:UnequipTools()if G<Q  then
+ S:Notify({["Title"]="Clear Mutation Completed";["Content"]=string["format"]("Sprayed %d plants.\n%d plants left unsprayed due to insufficient Acid Spray.",G,Q-G),["Duration"]=5})
+else
+ S:Notify({["Title"]="Clear Mutation Completed",["Content"]=string["format"]("Sprayed all %d plants successfully!",Q);["Duration"]=5})end
+ 
+else
+ S:Notify({["Title"]="Spray Error";["Content"]="Character humanoid not found!",["Duration"]=3})end
+ end
+ 
+local  function f6(x)if not x  then
+ return "Unknown"end
+ 
+local W=""if typeof(x)=="Instance" then
+ W=x:GetAttribute("trueName")or x["Name"]
+elseif typeof(x)=="string" then
+ W=x 
+else
+ W=tostring(x)end
+ 
+local S=string["match"](W,"%[(.-)%]")if S and S~="" then
+ return S end
+ 
+local T=string["match"](W,"%]%s*(.*)")or W T=string["gsub"](T,"^%s*(.-)%s*$","%1")if e[T] then
+ return e[T]end
+ 
+local t=string["lower"](T)for x,W in pairs(e)do
+ if string["lower"](x)==t  then
+ return W end
+ end
+ return "Unknown"end
+ 
+local  function A6()
+local x=P()if not x  then
+ return{}end
+ 
+local W=x:FindFirstChild("SeedRoller")if not W  then
+ return{}end
+ 
+local S={}for x=1,6,1 do
+ 
+local T=W:FindFirstChild("Stand"..x)if T  then
+ S[x]=(T:GetPivot())["Position"]end
+ end
+ return S end
+ 
+local p6=15 
+local  function j6(x,W)
+local S,T=nil,math["huge"]for W,t in pairs(W)do
+ 
+local H=((Vector3["new"](x["X"],0,x["Z"])-Vector3["new"](t["X"],0,t["Z"])))["Magnitude"]if H<T  then
+ T=H S=W end
+ end
+ return S,T end
+ 
+local  function Z6()
+local x={}
+local W=A6()if next(W)==nil  then
+ return x end
+ for S,T in ipairs(workspace:GetChildren())do
+ if T:IsA("Model") then
+ 
+local S,t=j6((T:GetPivot())["Position"],W)if S and t<p6  then
+ if T:FindFirstChild("BuySeed",true) then
+ 
+local W=0 
+local t=T:FindFirstChild("SeedGui",true)if t  then
+ for x,S in pairs(t:GetDescendants())do
+ if((S:IsA("TextLabel")or S:IsA("TextButton")))and string["find"](S["Text"],"%$") then
+ W=j(S["Text"])break end
+ end
+ end
+ x[T["Name"]]={["standIdx"]=S;["price"]=W}end
+ end
+ end
+ end
+ return x end
+ 
+local  function y6(x)if Y["Config"]["AutoRollAndBuyAll"] then
+ return true end
+ if Y["Config"]["AutoRollAndBuySelected"] then
+ if next(Y["Config"]["TargetGachaSeeds"])==nil  then
+ return false end
+ return Y["Config"]["TargetGachaSeeds"][x]==true end
+ if Y["Config"]["AutoRollAndBuyByRarity"] then
+ if next(Y["Config"]["TargetGachaRarities"])==nil  then
+ return false end
+ 
+local W=e[x]return W~=nil and Y["Config"]["TargetGachaRarities"][W]==true end
+ return false end
+ 
+local  function n6()if Y["Flags"]["isSeedGachaLoopRunning"] then
+ return end
+ if not Y["Config"]["AutoRollAndBuyAll"]and(not Y["Config"]["AutoRollAndBuySelected"]and not Y["Config"]["AutoRollAndBuyByRarity"]) then
+ return end
+ Y["Flags"]["isSeedGachaLoopRunning"]=true task["spawn"](function()while Y["Config"]["AutoRollAndBuyAll"]or Y["Config"]["AutoRollAndBuySelected"]or Y["Config"]["AutoRollAndBuyByRarity"]do
+ 
+local x=Z6()
+local W=false for x,S in pairs(x)do
+ if not((Y["Config"]["AutoRollAndBuyAll"]or Y["Config"]["AutoRollAndBuySelected"]or Y["Config"]["AutoRollAndBuyByRarity"])) then
+ break end
+ if y6(x) then
+ if y(S["price"],"Seed",x) then
+ pcall(function()o["Remotes"]["BuySeed"]:FireServer(S["standIdx"])end
+)W=true task["wait"](.5)end
+ end
+ end
+ if not W and((Y["Config"]["AutoRollAndBuyAll"]or Y["Config"]["AutoRollAndBuySelected"]or Y["Config"]["AutoRollAndBuyByRarity"])) then
+ pcall(function()o["Remotes"]["RollSeeds"]:FireServer()end
+)task["wait"](3.5)end
+ task["wait"](.5)end
+ Y["Flags"]["isSeedGachaLoopRunning"]=false end
+)end
+ 
+local m6=tick()T("Building UI...")H["TabShop"]=H["SectionGeneral"]:Tab({["Title"]="Gacha $ Shop",["Icon"]="chevron-right"})H["TabPets"]=H["SectionGeneral"]:Tab({["Title"]="Pets",["Icon"]="chevron-right"})H["TabFloor"]=H["SectionGeneral"]:Tab({["Title"]="Floor Manager",["Icon"]="chevron-right"})H["SectionCompost"]=t:Section({["Title"]="Composters",["Icon"]="layers";["Opened"]=false})H["TabCompost2"]=H["SectionCompost"]:Tab({["Title"]="Floor 2 Compost";["Icon"]="chevron-right"})H["TabCompost3"]=H["SectionCompost"]:Tab({["Title"]="Floor 3 Compost";["Icon"]="chevron-right"})H["SectionActivity"]=t:Section({["Title"]="Rewards & Events",["Icon"]="gift",["Opened"]=false})H["TabEvents"]=H["SectionActivity"]:Tab({["Title"]="Events",["Icon"]="chevron-right"})H["TabRewards"]=H["SectionActivity"]:Tab({["Title"]="Rewards",["Icon"]="chevron-right"})H["TabConfig"]=t:Tab({["Title"]="Utilities & Config";["Icon"]="settings"})T("Created UI tabs in %.3f seconds",tick()-m6)H["TabFarming"]:Section({["Title"]="AUTO FARMING"})Y["UIRefs"]["ToggleAutoSellCrates"]=H["TabFarming"]:Toggle({["Title"]="Auto Sell Crates",["Value"]=Y["Config"]["AutoSellCrates"]or false;["Callback"]=function(x)Y["Config"]["AutoSellCrates"]=x if x and not Y["Flags"]["isSellCratesLoopRunning"] then
+ Y["Flags"]["isSellCratesLoopRunning"]=true task["spawn"](function()while Y["Config"]["AutoSellCrates"]do
+ pcall(function()if o:FindFirstChild("Remotes")and o["Remotes"]:FindFirstChild("SellCrates") then
+ o["Remotes"]["SellCrates"]:FireServer()end
+ end
+)task["wait"](2)end
+ Y["Flags"]["isSellCratesLoopRunning"]=false end
+)end
+ end
+})Y["UIRefs"]["ToggleAutoUnlockFarmPlots"]=H["TabFarming"]:Toggle({["Title"]="Auto Unlock Farm Plots",["Value"]=Y["Config"]["AutoUnlockFarmPlots"]or false,["Callback"]=function(x)Y["Config"]["AutoUnlockFarmPlots"]=x if x and not Y["Flags"]["isUnlockFarmPlotsLoopRunning"] then
+ Y["Flags"]["isUnlockFarmPlotsLoopRunning"]=true task["spawn"](function()while Y["Config"]["AutoUnlockFarmPlots"]do
+ 
+local x=P()if x  then
+ for x,W in ipairs(x:GetDescendants())do
+ if not Y["Config"]["AutoUnlockFarmPlots"] then
+ break end
+ if W["Name"]=="Dirt" then
+ pcall(function()o["Remotes"]["UnlockPlot"]:FireServer(W)end
+)task["wait"](2)end
+ end
+ end
+ task["wait"](2)end
+ Y["Flags"]["isUnlockFarmPlotsLoopRunning"]=false end
+)end
+ end
+})Y["UIRefs"]["ToggleAutoExpandFarmPlot"]=H["TabFarming"]:Toggle({["Title"]="Auto Expand Farm Plot",["Value"]=Y["Config"]["AutoExpandFarmPlot"]or false,["Callback"]=function(x)Y["Config"]["AutoExpandFarmPlot"]=x if x and not Y["Flags"]["isExpandFarmPlotLoopRunning"] then
+ Y["Flags"]["isExpandFarmPlotLoopRunning"]=true task["spawn"](function()while Y["Config"]["AutoExpandFarmPlot"]do
+ pcall(function()
+local x=workspace:FindFirstChild("Map")and workspace["Map"]:FindFirstChild("Plots")
+local W=o:FindFirstChild("Remotes")and o["Remotes"]:FindFirstChild("UpgradeFarm")if x and W  then
+ for x,S in pairs(x:GetChildren())do
+ if not Y["Config"]["AutoExpandFarmPlot"] then
+ break end
+ 
+local T=S:FindFirstChild("ExpandSign")
+local t=T and T:FindFirstChild("Screen")
+local H=t and t:FindFirstChild("SurfaceGui")
+local o=H and H:FindFirstChild("Expand")
+local C=o and o:FindFirstChild("Btn")
+local M=C and C:FindFirstChild("Txt")if M and((M:IsA("TextLabel")or M:IsA("TextButton"))) then
+ 
+local x=j(M["Text"])if y(x,"Plot Expansion") then
+ W:InvokeServer()end
+ end
+ end
+ end
+ end
+)task["wait"](2)end
+ Y["Flags"]["isExpandFarmPlotLoopRunning"]=false end
+)end
+ end
+})
+local  function F6()return o:FindFirstChild("Remotes")and(o["Remotes"]:FindFirstChild("Composter")and o["Remotes"]["Composter"]:FindFirstChild("InsertSeed"))end
+ 
+local  function u6(x)
+local W=string["match"](x["Name"],"%(x(%d+)%)")return W and tonumber(W)or 1 end
+ 
+local  function P6(x,W,S)
+local T=x:GetAttribute("seedKey")if T  then
+ return T end
+ 
+local t=x:GetAttribute("Level")or 1 return tostring(W)..("_"..(tostring(t)..("_"..tostring(S))))end
+ 
+local N6={[2]={["CompostMachineFrameName"]="CompostMachine",["PullLeverServerId"]=2};[3]={["CompostMachineFrameName"]="CompostMachineTier2";["PullLeverServerId"]=3}}
+local  function k6(x)
+local W=i["Character"]
+local S=i:FindFirstChild("Backpack")
+local T={W;S}
+local t=Y["Config"]["F"..(x.."_TargetCompostSeeds")]
+local H=Y["Config"]["F"..(x.."_TargetCompostRarities")]
+local o=Y["Config"]["F"..(x.."_AutoCompostByRarity")]
+local C=Y["Config"]["F"..(x.."_AutoCompostSelected")]for x,W in ipairs(T)do
+ if W  then
+ for x,W in ipairs(W:GetChildren())do
+ if W:IsA("Tool") then
+ 
+local x=W:GetAttribute("Plant")or W:GetAttribute("trueName")if x  then
+ 
+local S=W:GetAttribute("Mutation")or "Normal"
+local T=true if C  then
+ if next(t)==nil or t[x]~=true  then
+ T=false end
+ 
+elseif o  then
+ if next(H)==nil  then
+ T=false 
+else
+ 
+local W=e[x]if not W or H[W]~=true  then
+ T=false end
+ end
+ end
+ if T  then
+ return W,x,S end
+ end
+ end
+ end
+ end
+ end
+ return nil end
+ 
+local  function l6(x)
+local W=F6()if not W  then
+ return false end
+ 
+local S,T,t=k6(x)if not S  then
+ return false end
+ 
+local H=u6(S)
+local o=H 
+local C=Y["Config"]["F"..(x.."_MaxCompostInsertAmount")]if C and C>0  then
+ o=math["min"](H,C)end
+ if o<=0  then
+ return false end
+ 
+local M=P6(S,T,t)
+local G=pcall(function()W:InvokeServer(x,M,o)end
+)return G end
+ 
+local  function c6(x,W)
+local t="F"..(x.."_")
+local H="Composter"W:Section({["Title"]=H})
+local C 
+local M 
+local G 
+local L G=W:Dropdown({["Title"]="Select Seeds";["Values"]=Y["CachedIndexSeedEntries"],["Value"]=Q(Y["Config"][t.."TargetCompostSeeds"]or{}),["Multi"]=true;["AllowNone"]=true;["Callback"]=function(x)Y["Config"][t.."TargetCompostSeeds"]={}if type(x)=="table" then
+ for x,W in pairs(x)do
+ 
+local S=string["match"](W,"%] (.*)")or W Y["Config"][t.."TargetCompostSeeds"][S]=true end
+ 
+elseif x and x~="" then
+ 
+local W=string["match"](x,"%] (.*)")or x Y["Config"][t.."TargetCompostSeeds"][W]=true end
+ end
+})
+local  function K(x)if x~="selected" then
+ Y["Config"][t.."AutoCompostSelected"]=false pcall(function()C:Set(false)end
+)end
+ if x~="rarity" then
+ Y["Config"][t.."AutoCompostByRarity"]=false pcall(function()M:Set(false)end
+)end
+ end
+ 
+local  function b()if x==2 and Y["Flags"]["isF2CompostLoopRunning"] then
+ return end
+ if x==3 and Y["Flags"]["isF3CompostLoopRunning"] then
+ return end
+ if not Y["Config"][t.."AutoCompostSelected"]and not Y["Config"][t.."AutoCompostByRarity"] then
+ return end
+ if x==2  then
+ Y["Flags"]["isF2CompostLoopRunning"]=true 
+else
+ Y["Flags"]["isF3CompostLoopRunning"]=true end
+ task["spawn"](function()while Y["Config"][t.."AutoCompostSelected"]or Y["Config"][t.."AutoCompostByRarity"]do
+ l6(x)task["wait"](Y["Config"][t.."CompostInsertDelay"]or 2)end
+ if x==2  then
+ Y["Flags"]["isF2CompostLoopRunning"]=false 
+else
+ Y["Flags"]["isF3CompostLoopRunning"]=false end
+ end
+)end
+ C=W:Toggle({["Title"]="Auto Compost Selected";["Desc"]="Automatically insert selected seeds into the composter",["Value"]=Y["Config"][t.."AutoCompostSelected"]or false;["Callback"]=function(x)Y["Config"][t.."AutoCompostSelected"]=x if x  then
+ K("selected")end
+ b()end
+})L=W:Dropdown({["Title"]="Select Rarities",["Values"]=I,["Value"]=Q(Y["Config"][t.."TargetCompostRarities"]or{}),["Multi"]=true;["AllowNone"]=true;["Callback"]=function(x)Y["Config"][t.."TargetCompostRarities"]={}if type(x)=="table" then
+ for x,W in pairs(x)do
+ Y["Config"][t.."TargetCompostRarities"][W]=true end
+ 
+elseif x and x~="" then
+ Y["Config"][t.."TargetCompostRarities"][x]=true end
+ end
+})M=W:Toggle({["Title"]="Auto Compost By Rarity",["Desc"]="Automatically insert seeds matching selected rarities",["Value"]=Y["Config"][t.."AutoCompostByRarity"]or false,["Callback"]=function(x)Y["Config"][t.."AutoCompostByRarity"]=x if x  then
+ K("rarity")end
+ b()end
+})
+local d=W:Input({["Title"]="Insert Delay",["Desc"]="Delay in seconds between seed inserts",["Placeholder"]="60";["Value"]=tostring(Y["Config"][t.."CompostInsertDelay"]or 60);["Numeric"]=true;["Finished"]=true;["Callback"]=function(x)
+local W=tonumber(x)if not W or W<1  then
+ Y["Config"][t.."CompostInsertDelay"]=60 pcall(function()InputCompostInsertDelay:Set("60")end
+)return end
+ W=math["floor"](W)Y["Config"][t.."CompostInsertDelay"]=W end
+})
+local V=W:Input({["Title"]="Max Seeds Per Insert",["Desc"]="Maximum amount of seeds to insert (0 = ALL)",["Placeholder"]="0";["Value"]=tostring(Y["Config"][t.."MaxCompostInsertAmount"]or 0),["Numeric"]=true,["Finished"]=true;["Callback"]=function(x)
+local W=tonumber(x)if not W or W<0 or W%1~=0  then
+ Y["Config"][t.."MaxCompostInsertAmount"]=0 pcall(function()InputCompostMaxInsertAmount:Set("0")end
+)return end
+ Y["Config"][t.."MaxCompostInsertAmount"]=math["floor"](W)end
+})W:Divider()
+local s=W:Button({["Title"]="Manual Insert";["Desc"]="Manually insert seeds once immediately",["Callback"]=function()
+local W="0"pcall(function()W=tostring(V["Value"])end
+)
+local T=tonumber(W)if not T or T<0 or T%1~=0  then
+ Y["Config"][t.."MaxCompostInsertAmount"]=0 
+else
+ Y["Config"][t.."MaxCompostInsertAmount"]=math["floor"](T)end
+ 
+local H=l6(x)if H  then
+ S:Notify({["Title"]="Manual Compost",["Content"]="F"..(x.." seed insert command sent."),["Duration"]=2})
+else
+ S:Notify({["Title"]="Manual Compost",["Content"]="F"..(x.." no matching seed found.");["Duration"]=2})end
+ end
+})W:Divider()
+local E 
+local a 
+local  function g(x)if x~="interval" then
+ Y["Config"][t.."AutoPullLever"]=false pcall(function()E:Set(false)end
+)end
+ if x~="whenMax" then
+ Y["Config"][t.."AutoPullLeverWhenMax"]=false pcall(function()a:Set(false)end
+)end
+ end
+ 
+local  function X()
+local W=(x==2)and Y["Flags"]["isF2PullLeverLoopRunning"]or Y["Flags"]["isF3PullLeverLoopRunning"]if not Y["Config"][t.."AutoPullLever"]or W  then
+ return end
+ if x==2  then
+ Y["Flags"]["isF2PullLeverLoopRunning"]=true 
+else
+ Y["Flags"]["isF3PullLeverLoopRunning"]=true end
+ task["spawn"](function()while Y["Config"][t.."AutoPullLever"]do
+ 
+local W=N6[x]pcall(function()
+local x=o:FindFirstChild("Remotes")and(o["Remotes"]:FindFirstChild("Composter")and o["Remotes"]["Composter"]:FindFirstChild("PullLever"))if x and W  then
+ x:InvokeServer(W["PullLeverServerId"])end
+ end
+)task["wait"](Y["Config"][t.."PullLeverDelay"]or 60)end
+ if x==2  then
+ Y["Flags"]["isF2PullLeverLoopRunning"]=false 
+else
+ Y["Flags"]["isF3PullLeverLoopRunning"]=false end
+ end
+)end
+ 
+local  function e()
+local W=(x==2)and Y["Flags"]["isF2PullLeverWhenMaxLoopRunning"]or Y["Flags"]["isF3PullLeverWhenMaxLoopRunning"]if not Y["Config"][t.."AutoPullLeverWhenMax"]or W  then
+ return end
+ if x==2  then
+ return end
+ Y["Flags"]["isF3PullLeverWhenMaxLoopRunning"]=true task["spawn"](function()while Y["Config"][t.."AutoPullLeverWhenMax"]do
+ 
+local W=N6[x]if W  then
+ 
+local S=i:FindFirstChild("PlayerGui")and i["PlayerGui"]:FindFirstChild("CompostMachine")
+local t=S and S:FindFirstChild(W["CompostMachineFrameName"])
+local H=t and(t:FindFirstChild("Main")and t["Main"]:FindFirstChild("Progress"))
+local C=H and H:FindFirstChild("Requirements")if C and(((C:IsA("TextLabel")or C:IsA("TextButton")))and string["find"](string["upper"](C["Text"]),"MAX",1,true)) then
+ 
+local S=o:FindFirstChild("Remotes")and(o["Remotes"]:FindFirstChild("Composter")and o["Remotes"]["Composter"]:FindFirstChild("PullLever"))if S  then
+ 
+local t=pcall(function()S:InvokeServer(W["PullLeverServerId"])end
+)if t  then
+ T("Composter MAX | F"..(tostring(x).." lever pulled"))end
+ end
+ end
+ end
+ task["wait"](2)end
+ Y["Flags"]["isF3PullLeverWhenMaxLoopRunning"]=false end
+)end
+ 
+local r=W:Input({["Title"]="Pull Lever Delay",["Desc"]="Delay in seconds between lever pulls (for Auto Pull Lever only)";["Placeholder"]="60";["Value"]=tostring(Y["Config"][t.."PullLeverDelay"]or 60),["Numeric"]=true;["Finished"]=true,["Callback"]=function(x)
+local W=tonumber(x)if not W or W<1  then
+ Y["Config"][t.."PullLeverDelay"]=60 pcall(function()InputPullLeverDelay:Set("60")end
+)return end
+ Y["Config"][t.."PullLeverDelay"]=math["floor"](W)end
+})E=W:Toggle({["Title"]="Auto Pull Lever";["Value"]=Y["Config"][t.."AutoPullLever"]or false;["Callback"]=function(x)Y["Config"][t.."AutoPullLever"]=x if x  then
+ g("interval")end
+ X()end
+})a=W:Toggle({["Title"]="Auto Pull Lever When MAX";["Desc"]=(x==2)and "Temporarily Disabled (Bugged on Floor 2)"or "Pull lever when machine is at MAX capacity — checks every 2 seconds";["Locked"]=(x==2),["Value"]=Y["Config"][t.."AutoPullLeverWhenMax"]or false;["Callback"]=function(W)if x==2  then
+ pcall(function()a:Set(false)end
+)return end
+ Y["Config"][t.."AutoPullLeverWhenMax"]=W if W  then
+ g("whenMax")end
+ e()end
+})if x==2  then
+ pcall(function()a:Lock()end
+)end
+ if Y["Config"][t.."AutoCompostSelected"]or Y["Config"][t.."AutoCompostByRarity"] then
+ b()end
+ if Y["Config"][t.."AutoPullLever"] then
+ X()end
+ if Y["Config"][t.."AutoPullLeverWhenMax"]and x==3  then
+ e()end
+ return{["ToggleAutoCompostSelected"]=C,["ToggleAutoCompostByRarity"]=M;["DropdownCompostSeed"]=G,["DropdownCompostRarities"]=L;["InputCompostInsertDelay"]=d,["InputCompostMaxInsertAmount"]=V,["ToggleAutoPullLever"]=E,["ToggleAutoPullLeverWhenMax"]=a,["InputPullLeverDelay"]=r,["startCompostLoopForFloor"]=b}end
+ 
+local w6=c6(2,H["TabCompost2"])
+local z6=c6(3,H["TabCompost3"])
+local  function J6()if Y["Flags"]["isAutoPlantLoopRunning"] then
+ return end
+ Y["Flags"]["isAutoPlantLoopRunning"]=true task["spawn"](function()while Y["Config"]["AutoPlantByRarity"]do
+ 
+local x=Y["Config"]["TargetManageFloor"]
+local W=J(x)if W  then
+ 
+local x={}for W,S in ipairs(W:GetChildren())do
+ 
+local T=string["match"](S["Name"],"^Plot(%d+)$")if T  then
+ 
+local W=S:FindFirstChild("Dirt")if W and W:GetAttribute("PlantLevel")==nil  then
+ table["insert"](x,W)end
+ end
+ end
+ if#x>0  then
+ 
+local  function W()
+local x=i["Character"]
+local W=i:FindFirstChild("Backpack")
+local S={x;W}
+local T={}for x,W in ipairs(S)do
+ if W  then
+ for x,W in ipairs(W:GetChildren())do
+ if W:IsA("Tool")and W:GetAttribute("InventoryCategory")=="Seeds" then
+ 
+local x=W:GetAttribute("trueName")if x  then
+ 
+local W=f6(x)
+local S=Y["Config"]["TargetAutoPlantRarities"]if W and(S and S[W]) then
+ 
+local S=X[W]or 0 table["insert"](T,{["TrueName"]=x,["Weight"]=S})end
+ end
+ end
+ end
+ end
+ end
+ if#T>0  then
+ table["sort"](T,function(x,W)return x["Weight"]>W["Weight"]end
+)return T[1]["TrueName"]end
+ return nil end
+ for x,S in ipairs(x)do
+ if not Y["Config"]["AutoPlantByRarity"] then
+ break end
+ if S:GetAttribute("PlantLevel")==nil  then
+ 
+local x=W()if x  then
+ 
+local W=a6(x)if W  then
+ pcall(function()if o:FindFirstChild("Remotes")and o["Remotes"]:FindFirstChild("PlantSeed") then
+ o["Remotes"]["PlantSeed"]:FireServer(S)end
+ end
+)task["wait"](.2)end
+ 
+else
+ break end
+ end
+ end
+ end
+ end
+ task["wait"](5)end
+ Y["Flags"]["isAutoPlantLoopRunning"]=false end
+)end
+ 
+local  function O6()
+local x=Y["Config"]["TargetManageFloor"]
+local W=J(x)if W  then
+ for x,W in ipairs(W:GetChildren())do
+ 
+local S=string["match"](W["Name"],"^Plot(%d+)$")if S  then
+ 
+local x=W:FindFirstChild("Dirt")if x and x:GetAttribute("PlantLevel")~=nil  then
+ pcall(function()if o:FindFirstChild("Remotes")and o["Remotes"]:FindFirstChild("RemovePlant") then
+ o["Remotes"]["RemovePlant"]:FireServer(x)end
+ end
+)task["wait"](.5)end
+ end
+ end
+ end
+ end
+ 
+local  function v6()if Y["Flags"]["isUpgradePlantsLoopRunning"] then
+ return end
+ Y["Flags"]["isUpgradePlantsLoopRunning"]=true task["spawn"](function()while Y["Config"]["FloorUpgradeConfig"]["AutoUpgrade"]or Y["Config"]["FloorUpgradeConfig"]["AutoAll"]do
+ 
+local x=Y["Config"]["TargetManageFloor"]
+local W=J(x)if W  then
+ 
+local x=w(W)
+local S=Y["Config"]["FloorUpgradeConfig"]for x,W in ipairs(x)do
+ if not((S["AutoUpgrade"]or S["AutoAll"])) then
+ break end
+ 
+local T=W:GetAttribute("PlantLevel")if T  then
+ 
+local x=W:GetAttribute("PlantName")
+local t=f6(x)
+local H="["..(t..("] "..x))
+local C=S["AutoAll"]or S["TargetPlantNames"][H]if C  then
+ 
+local x=S["MaxLevel"]or 10 if T<x  then
+ 
+local x=W:GetAttribute("UpgradePrice")or 0 if y(x) then
+ pcall(function()o["Remotes"]["UpgradePlant"]:InvokeServer(W)end
+)task["wait"](.1)end
+ end
+ end
+ end
+ end
+ end
+ task["wait"](.1)end
+ Y["Flags"]["isUpgradePlantsLoopRunning"]=false end
+)end
+ 
+local  function R6()if Y["Flags"]["isFertilizePlantsLoopRunning"] then
+ return end
+ Y["Flags"]["isFertilizePlantsLoopRunning"]=true task["spawn"](function()while Y["Config"]["FloorFertilizeConfig"]["AutoFertilize"]or Y["Config"]["FloorFertilizeConfig"]["AutoAll"]do
+ 
+local x=Y["Config"]["TargetManageFloor"]
+local W=I6()if W  then
+ 
+local S=J(x)
+local T=false if S  then
+ 
+local x=w(S)
+local t=Y["Config"]["FloorFertilizeConfig"]for x,S in ipairs(x)do
+ if not((Y["Config"]["FloorFertilizeConfig"]["AutoFertilize"]or Y["Config"]["FloorFertilizeConfig"]["AutoAll"])) then
+ break end
+ if S:GetAttribute("PlantLevel")~=nil and not S:GetAttribute("Fertilized") then
+ 
+local x=S:GetAttribute("PlantName")
+local H=f6(x)
+local C="["..(H..("] "..x))
+local M=t["AutoAll"]or t["TargetPlantNames"][C]if M  then
+ 
+local x=i["Character"]and i["Character"]:FindFirstChild("Humanoid")if x  then
+ x:EquipTool(W)task["wait"](.1)pcall(function()o["Remotes"]["UseFertilizer"]:FireServer(S)end
+)task["wait"](.1)x:UnequipTools()T=true break end
+ end
+ end
+ end
+ end
+ if T  then
+ task["wait"](.1)
+else
+ task["wait"](2)end
+ 
+else
+ task["wait"](2)end
+ end
+ Y["Flags"]["isFertilizePlantsLoopRunning"]=false end
+)end
+ 
+local  function q6(x)
+local W=x:Dropdown({["Title"]="* Select Floor",["Values"]={"Floor 1","Floor 2";"Floor 3"};["Value"]="Floor "..tostring(Y["Config"]["TargetManageFloor"]or 1);["Callback"]=function(x)
+local W=tonumber(string["match"](x,"%d+"))if W  then
+ Y["Config"]["TargetManageFloor"]=W end
+ end
+})x:Section({["Title"]="Plants";["Opened"]=true})
+local T=x:Paragraph({["Title"]="Plant Status",["Desc"]="Loading plant information..."})
+local H=x:Dropdown({["Title"]="Select Rarities";["Values"]=I;["Value"]=Q(Y["Config"]["TargetAutoPlantRarities"]or{});["Multi"]=true;["AllowNone"]=true;["Callback"]=function(x)Y["Config"]["TargetAutoPlantRarities"]={}if type(x)=="table" then
+ for x,W in pairs(x)do
+ Y["Config"]["TargetAutoPlantRarities"][W]=true end
+ 
+elseif x and x~="" then
+ Y["Config"]["TargetAutoPlantRarities"][x]=true end
+ end
+})
+local o=x:Toggle({["Title"]="Auto Plant",["Desc"]="Auto plant seeds matching selected rarities";["Value"]=Y["Config"]["AutoPlantByRarity"]or false;["Callback"]=function(x)Y["Config"]["AutoPlantByRarity"]=x if x  then
+ J6()end
+ end
+})x:Button({["Title"]="Remove All Plants",["Callback"]=function()t:Dialog({["Title"]="Confirm Removal",["Content"]="Are you sure you want to remove all plants on the targeted floor?";["Buttons"]={{["Title"]="Confirm",["Callback"]=function()S:Notify({["Title"]="Removing Plants",["Content"]="Removing plants on target floor...",["Duration"]=5})O6()end
+},{["Title"]="No"}}})end
+})x:Section({["Title"]="PLANT UPGRADE"})
+local C=x:Dropdown({["Title"]="Target Upgrade Plants",["Values"]=Y["CachedIndexSeedEntries"];["Value"]=Q(Y["Config"]["FloorUpgradeConfig"]["TargetPlantNames"]or{});["Multi"]=true,["AllowNone"]=true,["Callback"]=function(x)
+local W=Y["Config"]["FloorUpgradeConfig"]W["TargetPlantNames"]={}if type(x)=="table" then
+ for x,S in pairs(x)do
+ W["TargetPlantNames"][S]=true end
+ 
+elseif x and x~="" then
+ W["TargetPlantNames"][x]=true end
+ end
+})
+local M=x:Input({["Title"]="Max Upgrade Level";["Desc"]="Limit maximum level for auto upgrade",["Placeholder"]="10";["Value"]=tostring(Y["Config"]["FloorUpgradeConfig"]["MaxLevel"]or 10);["Numeric"]=true,["Finished"]=true;["Callback"]=function(x)
+local W=tonumber(x)if not W or W<1  then
+ Y["Config"]["FloorUpgradeConfig"]["MaxLevel"]=10 pcall(function()InputMaxUpgradeLevel:Set("10")end
+)return end
+ W=math["floor"](W)Y["Config"]["FloorUpgradeConfig"]["MaxLevel"]=W end
+})
+local G=x:Toggle({["Title"]="Auto Upgrade Selected",["Desc"]="Auto upgrade only selected plants",["Value"]=Y["Config"]["FloorUpgradeConfig"]["AutoUpgrade"]or false;["Callback"]=function(x)Y["Config"]["FloorUpgradeConfig"]["AutoUpgrade"]=x if x  then
+ Y["Config"]["FloorUpgradeConfig"]["AutoAll"]=false 
+local x=Y["UIRefs"]["ToggleAutoAllUpgrade"]if x  then
+ pcall(function()x:Set(false)end
+)end
+ v6()end
+ end
+})
+local i=x:Toggle({["Title"]="Auto Upgrade All";["Desc"]="Auto upgrade all plants on this floor";["Value"]=Y["Config"]["FloorUpgradeConfig"]["AutoAll"]or false,["Callback"]=function(x)Y["Config"]["FloorUpgradeConfig"]["AutoAll"]=x if x  then
+ Y["Config"]["FloorUpgradeConfig"]["AutoUpgrade"]=false 
+local x=Y["UIRefs"]["ToggleAutoUpgrade"]if x  then
+ pcall(function()x:Set(false)end
+)end
+ v6()end
+ end
+})x:Section({["Title"]="PLANT FERTILIZATION"})
+local L=x:Dropdown({["Title"]="Target Fertilize Plants",["Values"]=Y["CachedIndexSeedEntries"],["Value"]=Q(Y["Config"]["FloorFertilizeConfig"]["TargetPlantNames"]or{}),["Multi"]=true;["AllowNone"]=true;["Callback"]=function(x)
+local W=Y["Config"]["FloorFertilizeConfig"]W["TargetPlantNames"]={}if type(x)=="table" then
+ for x,S in pairs(x)do
+ W["TargetPlantNames"][S]=true end
+ 
+elseif x and x~="" then
+ W["TargetPlantNames"][x]=true end
+ end
+})
+local K=x:Dropdown({["Title"]="Fertilizer Type";["Values"]=d;["Value"]=Q(Y["Config"]["FloorFertilizeConfig"]["TargetFertilizerTypes"]or{});["Multi"]=true,["AllowNone"]=true,["Callback"]=function(x)
+local W=Y["Config"]["FloorFertilizeConfig"]W["TargetFertilizerTypes"]={}if type(x)=="table" then
+ for x,S in pairs(x)do
+ W["TargetFertilizerTypes"][S]=true end
+ end
+ end
+})
+local b=x:Toggle({["Title"]="Auto Fertilize Selected",["Desc"]="Auto fertilize only selected plants",["Value"]=Y["Config"]["FloorFertilizeConfig"]["AutoFertilize"]or false;["Callback"]=function(x)Y["Config"]["FloorFertilizeConfig"]["AutoFertilize"]=x if x  then
+ Y["Config"]["FloorFertilizeConfig"]["AutoAll"]=false 
+local x=Y["UIRefs"]["ToggleAutoAllFertilize"]if x  then
+ pcall(function()x:Set(false)end
+)end
+ R6()end
+ end
+})
+local V=x:Toggle({["Title"]="Auto Fertilize All",["Desc"]="Auto fertilize all plants on this floor";["Value"]=Y["Config"]["FloorFertilizeConfig"]["AutoAll"]or false,["Callback"]=function(x)Y["Config"]["FloorFertilizeConfig"]["AutoAll"]=x if x  then
+ Y["Config"]["FloorFertilizeConfig"]["AutoFertilize"]=false 
+local x=Y["UIRefs"]["ToggleAutoFertilize"]if x  then
+ pcall(function()x:Set(false)end
+)end
+ R6()end
+ end
+})x:Section({["Title"]="PLANT SPRAY"})
+local E=x:Dropdown({["Title"]="Target Spray Plants",["Desc"]="Only sprays on unmutated plants",["Values"]=g;["Value"]=Q(Y["Config"]["FloorSprayConfig"]["TargetPlantNames"]or{});["Multi"]=true,["AllowNone"]=true;["Callback"]=function(x)
+local W=Y["Config"]["FloorSprayConfig"]W["TargetPlantNames"]={}if type(x)=="table" then
+ for x,S in pairs(x)do
+ W["TargetPlantNames"][S]=true end
+ 
+elseif x and x~="" then
+ W["TargetPlantNames"][x]=true end
+ end
+})
+local a=x:Dropdown({["Title"]="Select Spray";["Values"]=s,["Value"]=Y["Config"]["FloorSprayConfig"]["TargetSprayType"]or "";["Multi"]=false;["AllowNone"]=true,["Callback"]=function(x)
+local W=Y["Config"]["FloorSprayConfig"]if x and x~="" then
+ W["TargetSprayType"]=x 
+else
+ W["TargetSprayType"]=nil end
+ end
+})x:Button({["Title"]="Run Spray",["Callback"]=function()U6()end
+})x:Divider()
+local X=x:Dropdown({["Title"]="Target Acid Plants";["Values"]=g;["Value"]=Q(Y["Config"]["FloorSprayConfig"]["TargetAcidPlantNames"]or{}),["Multi"]=true,["AllowNone"]=true;["Callback"]=function(x)
+local W=Y["Config"]["FloorSprayConfig"]W["TargetAcidPlantNames"]={}if type(x)=="table" then
+ for x,S in pairs(x)do
+ W["TargetAcidPlantNames"][S]=true end
+ 
+elseif x and x~="" then
+ W["TargetAcidPlantNames"][x]=true end
+ end
+})
+local e=x:Dropdown({["Title"]="Clear Mutations List",["Desc"]="Only clear the selected mutations",["Values"]=X6;["Value"]=Q(Y["Config"]["FloorSprayConfig"]["TargetAcidMutations"]or{});["Multi"]=true;["AllowNone"]=true;["Callback"]=function(x)
+local W=Y["Config"]["FloorSprayConfig"]W["TargetAcidMutations"]={}if type(x)=="table" then
+ for x,S in pairs(x)do
+ W["TargetAcidMutations"][S]=true end
+ 
+elseif x and x~="" then
+ W["TargetAcidMutations"][x]=true end
+ end
+})x:Button({["Title"]="Clear Mutation";["Desc"]="Only sprays Acid Spray on mutated plants to clear mutations";["Callback"]=function()t:Dialog({["Title"]="Confirm Clear Mutation";["Content"]="Are you sure you want to clear mutations for targeted plants on the selected floor?",["Buttons"]={{["Title"]="Confirm",["Callback"]=function()B6()end
+},{["Title"]="Cancel"}}})end
+})if Y["Config"]["AutoPlantByRarity"] then
+ J6()end
+ if Y["Config"]["FloorUpgradeConfig"]["AutoUpgrade"]or Y["Config"]["FloorUpgradeConfig"]["AutoAll"] then
+ v6()end
+ if Y["Config"]["FloorFertilizeConfig"]["AutoFertilize"]or Y["Config"]["FloorFertilizeConfig"]["AutoAll"] then
+ R6()end
+ return{["DropdownTargetManageFloor"]=W,["ParagraphFloor"]=T,["DropdownFloorPlantRarities"]=H;["ToggleFloorAutoPlant"]=o,["DropdownUpgradePlant"]=C;["InputMaxUpgradeLevel"]=M;["ToggleAutoAllUpgrade"]=i;["ToggleAutoUpgrade"]=G;["DropdownFertilizePlant"]=L;["DropdownFertilizerType"]=K;["ToggleAutoAllFertilize"]=V,["ToggleAutoFertilize"]=b;["DropdownSprayPlant"]=E,["DropdownSprayType"]=a;["DropdownAcidPlant"]=X,["DropdownAcidMutation"]=e}end
+ do
+ 
+local x=q6(H["TabFloor"])Y["UIRefs"]["DropdownTargetManageFloor"]=x["DropdownTargetManageFloor"]Y["UIRefs"]["ParagraphFloor"]=x["ParagraphFloor"]Y["UIRefs"]["DropdownFloorPlantRarities"]=x["DropdownFloorPlantRarities"]Y["UIRefs"]["ToggleFloorAutoPlant"]=x["ToggleFloorAutoPlant"]Y["UIRefs"]["DropdownUpgradePlant"]=x["DropdownUpgradePlant"]Y["UIRefs"]["InputMaxUpgradeLevel"]=x["InputMaxUpgradeLevel"]Y["UIRefs"]["ToggleAutoAllUpgrade"]=x["ToggleAutoAllUpgrade"]Y["UIRefs"]["ToggleAutoUpgrade"]=x["ToggleAutoUpgrade"]Y["UIRefs"]["DropdownFertilizePlant"]=x["DropdownFertilizePlant"]Y["UIRefs"]["DropdownFertilizerType"]=x["DropdownFertilizerType"]Y["UIRefs"]["ToggleAutoAllFertilize"]=x["ToggleAutoAllFertilize"]Y["UIRefs"]["ToggleAutoFertilize"]=x["ToggleAutoFertilize"]Y["UIRefs"]["DropdownSprayPlant"]=x["DropdownSprayPlant"]Y["UIRefs"]["DropdownSprayType"]=x["DropdownSprayType"]Y["UIRefs"]["DropdownAcidPlant"]=x["DropdownAcidPlant"]Y["UIRefs"]["DropdownAcidMutation"]=x["DropdownAcidMutation"]
+local  function W(x)task["spawn"](function()while true do
+ task["wait"](1.5)
+local W=Y["Config"]["TargetManageFloor"]or 1 
+local S=""
+local T=O(W)for x,W in ipairs(T)do
+ if W["PlantName"]and W["PlantName"]~="" then
+ S=S..string["format"]("- %s | Lvl %d | %s | Fertilized: %s\n",W["PlantName"],W["PlantLevel"],W["PlantMutation"],tostring(W["Fertilized"]))end
+ end
+ if S=="" then
+ S="No plants planted."end
+ if x  then
+ pcall(function()x:SetDesc(S)end
+)end
+ end
+ end
+)end
+ W(Y["UIRefs"]["ParagraphFloor"])end
+ H["TabFarming"]:Section({["Title"]="PLOT POWERUPS"})
+local  function xB()if Y["Flags"]["isUpgradePowerupsLoopRunning"]or not Y["Config"]["AutoUpgradePowerups"] then
+ return end
+ Y["Flags"]["isUpgradePowerupsLoopRunning"]=true task["spawn"](function()while Y["Config"]["AutoUpgradePowerups"]do
+ 
+local x=Z()for W,S in pairs(Y["Config"]["TargetPowerups"])do
+ if not Y["Config"]["AutoUpgradePowerups"] then
+ break end
+ 
+local T=D[W]["Type"]if T=="plot" then
+ 
+local S=1 while true do
+ if not Y["Config"]["AutoUpgradePowerups"] then
+ break end
+ 
+local T=t6(W,S)if T==nil  then
+ break end
+ if T=="MAX" then
+ break end
+ if y(T) then
+ if not Y["Config"]["AutoUpgradePowerups"] then
+ break end
+ n(W,S)if not Y["Config"]["AutoUpgradePowerups"] then
+ break end
+ task["wait"](.5)if not Y["Config"]["SkipMoneyCheck"] then
+ x=Z()end
+ break 
+else
+ break end
+ end
+ 
+elseif T=="seedluck" then
+ 
+local S=t6(W,1)if S and(S~="MAX"and y(S)) then
+ if not Y["Config"]["AutoUpgradePowerups"] then
+ break end
+ m()task["wait"](.5)if not Y["Config"]["SkipMoneyCheck"] then
+ x=Z()end
+ end
+ 
+elseif T=="seedrolls" then
+ 
+local S=t6(W,1)if S and(S~="MAX"and y(S)) then
+ if not Y["Config"]["AutoUpgradePowerups"] then
+ break end
+ F()task["wait"](.5)if not Y["Config"]["SkipMoneyCheck"] then
+ x=Z()end
+ end
+ end
+ end
+ if not Y["Config"]["AutoUpgradePowerups"] then
+ break end
+ task["wait"](2)end
+ Y["Flags"]["isUpgradePowerupsLoopRunning"]=false end
+)end
+ Y["UIRefs"]["DropdownPowerupsToUpgrade"]=H["TabFarming"]:Dropdown({["Title"]="Select Powerups",["Values"]=h,["Value"]=Q(Y["Config"]["TargetPowerups"]or{}),["Multi"]=true,["AllowNone"]=true,["Callback"]=function(x)Y["Config"]["TargetPowerups"]={}if type(x)=="table" then
+ for x,W in pairs(x)do
+ Y["Config"]["TargetPowerups"][W]=true end
+ 
+elseif x~="" then
+ Y["Config"]["TargetPowerups"][x]=true end
+ end
+})Y["UIRefs"]["ToggleAutoUpgradePowerups"]=H["TabFarming"]:Toggle({["Title"]="Auto Upgrade Powerups";["Value"]=Y["Config"]["AutoUpgradePowerups"]or false,["Callback"]=function(x)Y["Config"]["AutoUpgradePowerups"]=x xB()end
+})if Y["Config"]["AutoUpgradePowerups"] then
+ xB()end
+ H["TabShop"]:Section({["Title"]="SEED GACHA (ROLL & BUY)"})
+local  function WB(x)if x~="all" then
+ Y["Config"]["AutoRollAndBuyAll"]=false pcall(function()Y["UIRefs"]["ToggleAutoRollBuyAll"]:Set(false)end
+)end
+ if x~="selected" then
+ Y["Config"]["AutoRollAndBuySelected"]=false pcall(function()Y["UIRefs"]["ToggleAutoRollBuySelected"]:Set(false)end
+)end
+ if x~="rarity" then
+ Y["Config"]["AutoRollAndBuyByRarity"]=false pcall(function()Y["UIRefs"]["ToggleAutoRollBuyByRarity"]:Set(false)end
+)end
+ end
+ 
+local  function SB()if Y["Flags"]["isBuyAllGearsLoopRunning"]or not Y["Config"]["AutoBuyAllGears"] then
+ return end
+ Y["Flags"]["isBuyAllGearsLoopRunning"]=true task["spawn"](function()while Y["Config"]["AutoBuyAllGears"]do
+ task["wait"](.1)for x,W in pairs(b)do
+ if not Y["Config"]["AutoBuyAllGears"] then
+ break end
+ if C6(W)>0  then
+ pcall(function()Y6(W)end
+)task["wait"](.1)end
+ end
+ end
+ Y["Flags"]["isBuyAllGearsLoopRunning"]=false end
+)end
+ 
+local  function TB()if Y["Flags"]["isBuySelectedGearsLoopRunning"]or not Y["Config"]["AutoBuySelectedGears"] then
+ return end
+ Y["Flags"]["isBuySelectedGearsLoopRunning"]=true task["spawn"](function()while Y["Config"]["AutoBuySelectedGears"]do
+ task["wait"](.1)if#selectedGearNamesToBuy>0  then
+ for x,W in pairs(selectedGearNamesToBuy)do
+ if not Y["Config"]["AutoBuySelectedGears"] then
+ break end
+ if C6(W)>0  then
+ pcall(function()Y6(W)end
+)task["wait"](.1)end
+ end
+ end
+ end
+ Y["Flags"]["isBuySelectedGearsLoopRunning"]=false end
+)end
+ 
+local  function tB()if Y["Flags"]["isUnlockEggSlotsLoopRunning"]or not Y["Config"]["AutoUnlockEggSlots"] then
+ return end
+ Y["Flags"]["isUnlockEggSlotsLoopRunning"]=true task["spawn"](function()while Y["Config"]["AutoUnlockEggSlots"]do
+ 
+local x=o:FindFirstChild("Remotes")and(o["Remotes"]:FindFirstChild("EggShop")and o["Remotes"]["EggShop"]:FindFirstChild("Transaction"))if x  then
+ 
+local W=Z()
+local S=Q6()for S,T in ipairs(S)do
+ if not Y["Config"]["AutoUnlockEggSlots"] then
+ break end
+ 
+local t=T["EggSlotNumber"]if not Y["Config"]["SessionUnlockedEggSlots"][t]and y(T["UnlockPrice"],"Egg Slot","Slot "..tostring(t)) then
+ 
+local S=pcall(function()x:InvokeServer("UnlockSlot",t)end
+)if S  then
+ Y["Config"]["SessionUnlockedEggSlots"][t]=true task["wait"](1.5)if not Y["Config"]["SkipMoneyCheck"] then
+ W=Z()end
+ end
+ end
+ end
+ end
+ task["wait"](5)end
+ Y["Flags"]["isUnlockEggSlotsLoopRunning"]=false end
+)end
+ Y["UIRefs"]["ToggleAutoRollBuyAll"]=H["TabShop"]:Toggle({["Title"]="Auto Roll & Buy ALL Seeds";["Value"]=Y["Config"]["AutoRollAndBuyAll"]or false,["Callback"]=function(x)Y["Config"]["AutoRollAndBuyAll"]=x if x  then
+ WB("all")n6()end
+ end
+})Y["UIRefs"]["DropdownGachaSeeds"]=H["TabShop"]:Dropdown({["Title"]="Select Seeds";["Values"]=Y["CachedIndexSeedEntries"];["Value"]=Q(Y["Config"]["TargetGachaSeeds"]or{});["Multi"]=true;["AllowNone"]=true,["Callback"]=function(x)Y["Config"]["TargetGachaSeeds"]={}if type(x)=="table" then
+ for x,W in pairs(x)do
+ 
+local S=string["match"](W,"%] (.*)")or W Y["Config"]["TargetGachaSeeds"][S]=true end
+ 
+elseif x and x~="" then
+ 
+local W=string["match"](x,"%] (.*)")or x Y["Config"]["TargetGachaSeeds"][W]=true end
+ end
+})Y["UIRefs"]["ToggleAutoRollBuySelected"]=H["TabShop"]:Toggle({["Title"]="Auto Buy Selected Seeds";["Value"]=Y["Config"]["AutoRollAndBuySelected"]or false;["Callback"]=function(x)Y["Config"]["AutoRollAndBuySelected"]=x if x  then
+ WB("selected")n6()end
+ end
+})Y["UIRefs"]["DropdownGachaRarities"]=H["TabShop"]:Dropdown({["Title"]="Select Rarities",["Values"]=I;["Value"]=Q(Y["Config"]["TargetGachaRarities"]or{}),["Multi"]=true;["AllowNone"]=true,["Callback"]=function(x)Y["Config"]["TargetGachaRarities"]={}if type(x)=="table" then
+ for x,W in pairs(x)do
+ Y["Config"]["TargetGachaRarities"][W]=true end
+ 
+elseif x and x~="" then
+ Y["Config"]["TargetGachaRarities"][x]=true end
+ end
+})Y["UIRefs"]["ToggleAutoRollBuyByRarity"]=H["TabShop"]:Toggle({["Title"]="Auto Buy Selected Rarities",["Value"]=Y["Config"]["AutoRollAndBuyByRarity"]or false;["Callback"]=function(x)Y["Config"]["AutoRollAndBuyByRarity"]=x if x  then
+ WB("rarity")n6()end
+ end
+})H["TabShop"]:Section({["Title"]="GEAR SHOP"})
+local HB={}Y["UIRefs"]["ToggleBuyAllGears"]=H["TabShop"]:Toggle({["Title"]="Auto Buy All Available Gears",["Value"]=Y["Config"]["AutoBuyAllGears"]or false,["Callback"]=function(x)Y["Config"]["AutoBuyAllGears"]=x if x and Y["UIRefs"]["ToggleBuySelectedGears"] then
+ pcall(function()Y["UIRefs"]["ToggleBuySelectedGears"]:Set(false)end
+)end
+ SB()end
+})Y["UIRefs"]["ToggleBuySelectedGears"]=H["TabShop"]:Toggle({["Title"]="Auto Buy Selected Gears";["Value"]=Y["Config"]["AutoBuySelectedGears"]or false,["Callback"]=function(x)Y["Config"]["AutoBuySelectedGears"]=x if x and Y["UIRefs"]["ToggleBuyAllGears"] then
+ pcall(function()Y["UIRefs"]["ToggleBuyAllGears"]:Set(false)end
+)end
+ TB()end
+})Y["UIRefs"]["DropdownGearsToBuy"]=H["TabShop"]:Dropdown({["Title"]="Select Gears to Buy";["Values"]=b;["Value"]=HB or{};["Multi"]=true;["AllowNone"]=true,["Callback"]=function(x)HB={}if type(x)=="table" then
+ HB=x 
+elseif x and x~="" then
+ HB={x}end
+ end
+})H["TabShop"]:Section({["Title"]="EGG SHOP"})
+local  function oB()if Y["Flags"]["isEggShopBuyLoopRunning"] then
+ return end
+ if not Y["Config"]["AutoBuySelectedEggs"]and not Y["Config"]["AutoBuyAllEggs"] then
+ return end
+ Y["Flags"]["isEggShopBuyLoopRunning"]=true task["spawn"](function()while Y["Config"]["AutoBuySelectedEggs"]or Y["Config"]["AutoBuyAllEggs"]do
+ 
+local x=V6()for x,W in ipairs(x)do
+ if not Y["Config"]["AutoBuySelectedEggs"]and not Y["Config"]["AutoBuyAllEggs"] then
+ break end
+ 
+local S=Y["Config"]["AutoBuyAllEggs"]or(Y["Config"]["AutoBuySelectedEggs"]and Y["Config"]["TargetEggShopEggs"][W["Name"]]==true)if S  then
+ 
+local x=d6(W["Name"])if y(x,"Egg Shop",W["Name"]) then
+ s6(W)end
+ task["wait"](.2)end
+ end
+ task["wait"](1)end
+ Y["Flags"]["isEggShopBuyLoopRunning"]=false end
+)end
+ Y["UIRefs"]["ToggleAutoUnlockEggSlots"]=H["TabShop"]:Toggle({["Title"]="Auto Unlock Egg Slots",["Value"]=Y["Config"]["AutoUnlockEggSlots"]or false;["Callback"]=function(x)Y["Config"]["AutoUnlockEggSlots"]=x tB()end
+})Y["UIRefs"]["DropdownEggShopEggs"]=H["TabShop"]:Dropdown({["Title"]="Select Eggs to Buy";["Values"]=b6()or{};["Value"]=Q(Y["Config"]["TargetEggShopEggs"]or{}),["Multi"]=true;["AllowNone"]=true,["Callback"]=function(x)Y["Config"]["TargetEggShopEggs"]={}if type(x)=="table" then
+ for x,W in pairs(x)do
+ Y["Config"]["TargetEggShopEggs"][W]=true end
+ 
+elseif x~="" then
+ Y["Config"]["TargetEggShopEggs"][x]=true end
+ end
+})H["TabShop"]:Button({["Title"]="Refresh Egg List";["Callback"]=function()pcall(function()Y["UIRefs"]["DropdownEggShopEggs"]:Refresh(b6())end
+)S:Notify({["Title"]="Egg Shop";["Content"]="Egg list refreshed.",["Duration"]=2})end
+})Y["UIRefs"]["ToggleAutoBuySelectedEggs"]=H["TabShop"]:Toggle({["Title"]="Auto Buy Selected Eggs",["Value"]=Y["Config"]["AutoBuySelectedEggs"]or false;["Callback"]=function(x)Y["Config"]["AutoBuySelectedEggs"]=x if x and Y["UIRefs"]["ToggleAutoBuyAllEggs"] then
+ pcall(function()Y["UIRefs"]["ToggleAutoBuyAllEggs"]:Set(false)end
+)end
+ oB()end
+})Y["UIRefs"]["ToggleAutoBuyAllEggs"]=H["TabShop"]:Toggle({["Title"]="Auto Buy All Available Eggs";["Value"]=Y["Config"]["AutoBuyAllEggs"]or false,["Callback"]=function(x)Y["Config"]["AutoBuyAllEggs"]=x if x and Y["UIRefs"]["ToggleAutoBuySelectedEggs"] then
+ pcall(function()Y["UIRefs"]["ToggleAutoBuySelectedEggs"]:Set(false)end
+)end
+ oB()end
+})if Y["Config"]["AutoRollAndBuyAll"]or Y["Config"]["AutoRollAndBuySelected"]or Y["Config"]["AutoRollAndBuyByRarity"] then
+ n6()end
+ if Y["Config"]["AutoBuyAllGears"] then
+ SB()end
+ if Y["Config"]["AutoBuySelectedGears"] then
+ TB()end
+ if Y["Config"]["AutoUnlockEggSlots"] then
+ tB()end
+ if Y["Config"]["AutoBuySelectedEggs"]or Y["Config"]["AutoBuyAllEggs"] then
+ oB()end
+ H["TabShop"]:Section({["Title"]="LIVE SHOP STOCK"})
+local CB=H["TabShop"]:Paragraph({["Title"]="Current Available Items",["Desc"]="Loading shop stock..."})
+local  function MB()pcall(function()CB:SetDesc(i6())end
+)end
+ H["TabShop"]:Button({["Title"]="Refresh Stock Info",["Callback"]=function()MB()S:Notify({["Title"]="Shop Stock";["Content"]="Stock info refreshed.",["Duration"]=2})end
+})task["spawn"](function()while task["wait"](10)do
+ MB()end
+ end
+)MB()
+local GB=15 
+local  function iB()
+local x=i:FindFirstChild("PlayerGui")if not x  then
+ return false end
+ 
+local W=x:FindFirstChild("MainUI")
+local S=W and W:FindFirstChild("Menus")
+local T=S and S:FindFirstChild("SeedCollectorFrame")
+local t=T and T:FindFirstChild("Main")
+local H=t and t:FindFirstChild("Frame")
+local o=H and H:FindFirstChild("ProgressBarDaily")
+local C=o and o:FindFirstChild("Progress")if not C or not C:IsA("TextLabel") then
+ return false end
+ 
+local M=C["Text"]if not M or M=="" then
+ return false end
+ 
+local G=string["gsub"](M,",","")
+local Y,L=string["match"](G,"(%d+)%s*/%s*(%d+)")return Y and(L and tonumber(Y)>=tonumber(L))end
+ H["TabEvents"]:Section({["Title"]="WORLD EVENTS"})
+local  function YB()
+local x=i["Character"]if x  then
+ for x,W in ipairs(x:GetChildren())do
+ if W:IsA("Tool")and string["find"](string["lower"](W["Name"]),"honey token",1,true) then
+ return true end
+ end
+ end
+ 
+local W=i:FindFirstChild("Backpack")if W  then
+ for x,W in ipairs(W:GetChildren())do
+ if W:IsA("Tool")and string["find"](string["lower"](W["Name"]),"honey token",1,true) then
+ return true end
+ end
+ end
+ return false end
+ 
+local LB=nil 
+local KB=nil 
+local  function QB()if LB and LB["Parent"] then
+ return LB,KB end
+ LB=nil KB=nil 
+local x=workspace:FindFirstChild("InteractiveEvents")and(workspace["InteractiveEvents"]:FindFirstChild("QueenBee")and(workspace["InteractiveEvents"]["QueenBee"]:FindFirstChild("HoneyJarMachine")and workspace["InteractiveEvents"]["QueenBee"]["HoneyJarMachine"]:FindFirstChild("Honey Jar Machine")))
+local W=x and x:FindFirstChild("InsertPrompt")if not W  then
+ return nil,nil end
+ 
+local S=W["Parent"]if S and S:IsA("Attachment") then
+ S=S["Parent"]end
+ if not S  then
+ return nil,nil end
+ LB=W KB=S["CFrame"]+Vector3["new"](0,3,0)return LB,KB end
+ 
+local  function bB()if Y["Flags"]["isPlantRushLoopRunning"]or not Y["Config"]["AutoPlantRush"] then
+ return end
+ Y["Flags"]["isPlantRushLoopRunning"]=true task["spawn"](function()while Y["Config"]["AutoPlantRush"]do
+ 
+local x=o:FindFirstChild("Remotes")and(o["Remotes"]:FindFirstChild("PlantRush")and o["Remotes"]["PlantRush"]:FindFirstChild("Shoot"))
+local W=i["Character"]and i["Character"]:FindFirstChild("HumanoidRootPart")
+local S=workspace:FindFirstChild("InteractiveEvents")and(workspace["InteractiveEvents"]:FindFirstChild("PlantRush")and workspace["InteractiveEvents"]["PlantRush"]:FindFirstChild("Runtime"))if x and(W and S) then
+ 
+local T=W["Position"]+Vector3["new"](0,1.5,0)for W,S in ipairs(S:GetChildren())do
+ if not Y["Config"]["AutoPlantRush"] then
+ break end
+ 
+local t=S:IsA("Model")and S["PrimaryPart"]if t  then
+ 
+local W=t["Position"]pcall(function()x:FireServer(T,((W-T))["Unit"],W)end
+)task["wait"](.05)end
+ end
+ end
+ task["wait"](.1)end
+ Y["Flags"]["isPlantRushLoopRunning"]=false end
+)end
+ 
+local  function dB()if Y["Flags"]["isClaimPlantRushBossDropLoopRunning"]or not Y["Config"]["AutoClaimPlantRushBossDrop"] then
+ return end
+ Y["Flags"]["isClaimPlantRushBossDropLoopRunning"]=true task["spawn"](function()while Y["Config"]["AutoClaimPlantRushBossDrop"]do
+ pcall(function()
+local x=i["Character"]and i["Character"]:FindFirstChild("HumanoidRootPart")if x  then
+ for W,T in ipairs(workspace:GetChildren())do
+ if not Y["Config"]["AutoClaimPlantRushBossDrop"] then
+ break end
+ if string["find"](T["Name"],"PlantRushLocalDrop_",1,true) then
+ 
+local W=T:FindFirstChildWhichIsA("ProximityPrompt",true)if W  then
+ 
+local t=T:IsA("BasePart")and T or T:FindFirstChildWhichIsA("BasePart",true)if t  then
+ x["CFrame"]=t["CFrame"]task["wait"](.1)if fireproximityprompt and Y["Config"]["AutoClaimPlantRushBossDrop"] then
+ fireproximityprompt(W)task["wait"](.2)S:Notify({["Title"]="Plant Rush Boss Drop Claimed",["Content"]="Claimed: "..tostring(T["Name"]),["Duration"]=3})end
+ end
+ end
+ end
+ end
+ end
+ end
+)task["wait"](.5)end
+ Y["Flags"]["isClaimPlantRushBossDropLoopRunning"]=false end
+)end
+ 
+local  function VB()if Y["Flags"]["isCollectHoneycombLoopRunning"]or not Y["Config"]["AutoCollectQueenBeeHoneycomb"] then
+ return end
+ Y["Flags"]["isCollectHoneycombLoopRunning"]=true task["spawn"](function()while Y["Config"]["AutoCollectQueenBeeHoneycomb"]do
+ pcall(function()
+local x=i["Character"]and i["Character"]:FindFirstChild("HumanoidRootPart")
+local W=workspace:FindFirstChild("InteractiveEvents")and(workspace:FindFirstChild("QueenBee",true)and workspace["InteractiveEvents"]["QueenBee"]:FindFirstChild("RuntimeHoneycombs"))if W and x  then
+ for W,S in pairs(W:GetChildren())do
+ if not Y["Config"]["AutoCollectQueenBeeHoneycomb"] then
+ break end
+ 
+local T=S:FindFirstChildWhichIsA("ProximityPrompt",true)if T  then
+ 
+local W=S:IsA("BasePart")and S or(S:IsA("Model")and((S["PrimaryPart"]or S:FindFirstChildWhichIsA("BasePart",true))))if W  then
+ x["CFrame"]=W["CFrame"]task["wait"](.2)if fireproximityprompt and Y["Config"]["AutoCollectQueenBeeHoneycomb"] then
+ fireproximityprompt(T)task["wait"](.2)end
+ end
+ end
+ end
+ end
+ end
+)task["wait"](1)end
+ Y["Flags"]["isCollectHoneycombLoopRunning"]=false end
+)end
+ 
+local  function sB()if Y["Flags"]["isSubmitQueenBeeHoneyTokenLoopRunning"]or not Y["Config"]["AutoSubmitQueenBeeHoneyToken"] then
+ return end
+ Y["Flags"]["isSubmitQueenBeeHoneyTokenLoopRunning"]=true task["spawn"](function()while Y["Config"]["AutoSubmitQueenBeeHoneyToken"]do
+ if not YB() then
+ task["wait"](2)
+else
+ 
+local x,W=QB()if x and W  then
+ 
+local S=i["Character"]and i["Character"]:FindFirstChild("HumanoidRootPart")if S  then
+ S["CFrame"]=W task["wait"](.5)if fireproximityprompt  then
+ fireproximityprompt(x)task["wait"](.2)end
+ end
+ 
+else
+ task["wait"](2)end
+ end
+ task["wait"](1)end
+ Y["Flags"]["isSubmitQueenBeeHoneyTokenLoopRunning"]=false end
+)end
+ Y["UIRefs"]["ToggleAutoPlantRush"]=H["TabEvents"]:Toggle({["Title"]="Auto Shoot Plant Rush";["Value"]=Y["Config"]["AutoPlantRush"]or false;["Callback"]=function(x)Y["Config"]["AutoPlantRush"]=x bB()end
+})Y["UIRefs"]["ToggleAutoClaimPlantRushBossDrop"]=H["TabEvents"]:Toggle({["Title"]="Auto Claim Plant Rush Boss Drops";["Value"]=Y["Config"]["AutoClaimPlantRushBossDrop"]or false;["Callback"]=function(x)Y["Config"]["AutoClaimPlantRushBossDrop"]=x dB()end
+})Y["UIRefs"]["ToggleAutoCollectQueenBeeHoneycomb"]=H["TabEvents"]:Toggle({["Title"]="Auto Collect Queen Bee Honeycomb";["Value"]=Y["Config"]["AutoCollectQueenBeeHoneycomb"]or false,["Callback"]=function(x)Y["Config"]["AutoCollectQueenBeeHoneycomb"]=x VB()end
+})Y["UIRefs"]["ToggleAutoSubmitQueenBeeHoneyToken"]=H["TabEvents"]:Toggle({["Title"]="Auto Submit Honey Token";["Desc"]="Submit honey tokens to the Jar Machine (Honey Pot)",["Value"]=Y["Config"]["AutoSubmitQueenBeeHoneyToken"]or false;["Callback"]=function(x)Y["Config"]["AutoSubmitQueenBeeHoneyToken"]=x sB()end
+})H["TabEvents"]:Section({["Title"]="SEED COLLECTOR"})Y["UIRefs"]["DropdownSeedCollectorSubmitSeeds"]=H["TabEvents"]:Dropdown({["Title"]="Select Seeds";["Values"]=Y["CachedIndexSeedEntries"];["Value"]=Q(Y["Config"]["TargetSeedCollectorSubmitSeeds"]or{}),["Multi"]=true;["Callback"]=function(x)Y["Config"]["TargetSeedCollectorSubmitSeeds"]={}if type(x)=="table" then
+ for x,W in pairs(x)do
+ 
+local S=string["match"](W,"%] (.*)")or W Y["Config"]["TargetSeedCollectorSubmitSeeds"][S]=true end
+ 
+elseif x~="" then
+ 
+local W=string["match"](x,"%] (.*)")or x Y["Config"]["TargetSeedCollectorSubmitSeeds"][W]=true end
+ end
+})H["TabEvents"]:Button({["Title"]="Clear Seed Collector Targets",["Callback"]=function()Y["Config"]["TargetSeedCollectorSubmitSeeds"]={}pcall(function()Y["UIRefs"]["DropdownSeedCollectorSubmitSeeds"]:Select({})end
+)S:Notify({["Title"]="Seed Collector",["Content"]="Seed collector targets cleared.";["Duration"]=2})end
+})
+local  function EB(x)
+local W=workspace:FindFirstChild("SeedCollector")
+local S=W and W:FindFirstChild("Attachment")
+local T=S and S:FindFirstChild("SubmitSeed")if not T  then
+ return false end
+ 
+local t={}if x  then
+ for x,W in ipairs({i["Backpack"],i["Character"]})do
+ if W  then
+ for x,W in pairs(W:GetChildren())do
+ if W:IsA("Tool")and W:GetAttribute("InventoryCategory")=="Seeds" then
+ 
+local x=W:GetAttribute("trueName")if x  then
+ t[x]=true end
+ end
+ end
+ end
+ end
+ 
+else
+ t=Y["Config"]["TargetSeedCollectorSubmitSeeds"]end
+ 
+local H=false for x,W in pairs(t)do
+ if not Y["Config"]["AutoSubmitSeedToCollector"]and not Y["Config"]["AutoSubmitAllSeedsToCollector"] then
+ break end
+ if iB() then
+ break end
+ 
+local t=a6(x)if t  then
+ 
+local x=i["Character"]and i["Character"]:FindFirstChild("HumanoidRootPart")if x  then
+ 
+local W=((x["Position"]-S["WorldCFrame"]["Position"]))["Magnitude"]if W>GB  then
+ x["CFrame"]=S["WorldCFrame"]task["wait"](1)end
+ if fireproximityprompt  then
+ fireproximityprompt(T)task["wait"](.1)H=true if iB() then
+ break end
+ end
+ end
+ end
+ end
+ return H end
+ 
+local  function aB()if Y["Flags"]["isSeedCollectorSubmitLoopRunning"] then
+ return end
+ if not Y["Config"]["AutoSubmitSeedToCollector"]and not Y["Config"]["AutoSubmitAllSeedsToCollector"] then
+ return end
+ Y["Flags"]["isSeedCollectorSubmitLoopRunning"]=true task["spawn"](function()while Y["Config"]["AutoSubmitSeedToCollector"]or Y["Config"]["AutoSubmitAllSeedsToCollector"]do
+ if iB() then
+ task["wait"](10)
+else
+ 
+local x=EB(Y["Config"]["AutoSubmitAllSeedsToCollector"])if not x  then
+ task["wait"](2)end
+ end
+ task["wait"](1)end
+ Y["Flags"]["isSeedCollectorSubmitLoopRunning"]=false end
+)end
+ Y["UIRefs"]["ToggleAutoSubmitSeedToCollector"]=H["TabEvents"]:Toggle({["Title"]="Auto Submit Selected";["Desc"]="Automatically submit selected seeds to the collector";["Value"]=Y["Config"]["AutoSubmitSeedToCollector"]or false;["Callback"]=function(x)Y["Config"]["AutoSubmitSeedToCollector"]=x if x and Y["UIRefs"]["ToggleAutoSubmitAllSeedsToCollector"] then
+ pcall(function()Y["UIRefs"]["ToggleAutoSubmitAllSeedsToCollector"]:Set(false)end
+)end
+ aB()end
+})Y["UIRefs"]["ToggleAutoSubmitAllSeedsToCollector"]=H["TabEvents"]:Toggle({["Title"]="Auto Submit All";["Desc"]="Automatically submit all seeds, ignoring filter";["Value"]=Y["Config"]["AutoSubmitAllSeedsToCollector"]or false;["Callback"]=function(x)Y["Config"]["AutoSubmitAllSeedsToCollector"]=x if x and Y["UIRefs"]["ToggleAutoSubmitSeedToCollector"] then
+ pcall(function()Y["UIRefs"]["ToggleAutoSubmitSeedToCollector"]:Set(false)end
+)end
+ aB()end
+})H["TabRewards"]:Section({["Title"]="DAILY REWARDS"})
+local  function gB()if Y["Flags"]["isClaimDailyRewardLoopRunning"]or not Y["Config"]["AutoClaimDailyReward"] then
+ return end
+ Y["Flags"]["isClaimDailyRewardLoopRunning"]=true task["spawn"](function()while Y["Config"]["AutoClaimDailyReward"]do
+ pcall(function()if o:FindFirstChild("Remotes")and o["Remotes"]:FindFirstChild("ClaimDailyReward") then
+ o["Remotes"]["ClaimDailyReward"]:InvokeServer()end
+ end
+)task["wait"](60)end
+ Y["Flags"]["isClaimDailyRewardLoopRunning"]=false end
+)end
+ 
+local  function XB()if Y["Flags"]["isClaimPlaytimeRewardLoopRunning"]or not Y["Config"]["AutoClaimPlaytimeReward"] then
+ return end
+ Y["Flags"]["isClaimPlaytimeRewardLoopRunning"]=true task["spawn"](function()while Y["Config"]["AutoClaimPlaytimeReward"]do
+ pcall(function()
+local x=o:FindFirstChild("Remotes")and o["Remotes"]:FindFirstChild("ClaimPlaytimeReward")if x  then
+ for W=1,15,1 do
+ if not Y["Config"]["AutoClaimPlaytimeReward"] then
+ break end
+ x:InvokeServer(W)task["wait"](.2)end
+ end
+ end
+)task["wait"](10)end
+ Y["Flags"]["isClaimPlaytimeRewardLoopRunning"]=false end
+)end
+ 
+local  function IB()if Y["Flags"]["isSpinWheelLoopRunning"]or not Y["Config"]["AutoSpinWheel"] then
+ return end
+ Y["Flags"]["isSpinWheelLoopRunning"]=true task["spawn"](function()while Y["Config"]["AutoSpinWheel"]do
+ pcall(function()
+local x=o:FindFirstChild("Remotes")and(o["Remotes"]:FindFirstChild("SpinWheel")and o["Remotes"]["SpinWheel"]:FindFirstChild("RequestSpin"))if x  then
+ x:InvokeServer(false)end
+ end
+)task["wait"](5)end
+ Y["Flags"]["isSpinWheelLoopRunning"]=false end
+)end
+ Y["UIRefs"]["ToggleAutoClaimDailyReward"]=H["TabRewards"]:Toggle({["Title"]="Auto Claim Daily Reward";["Value"]=Y["Config"]["AutoClaimDailyReward"]or false,["Callback"]=function(x)Y["Config"]["AutoClaimDailyReward"]=x gB()end
+})Y["UIRefs"]["ToggleAutoClaimPlaytimeReward"]=H["TabRewards"]:Toggle({["Title"]="Auto Claim Playtime Reward",["Value"]=Y["Config"]["AutoClaimPlaytimeReward"]or false;["Callback"]=function(x)Y["Config"]["AutoClaimPlaytimeReward"]=x XB()end
+})H["TabRewards"]:Section({["Title"]="SPIN WHEEL (WIP)"})Y["UIRefs"]["ToggleAutoSpinWheel"]=H["TabRewards"]:Toggle({["Title"]="Auto Spin Wheel";["Value"]=Y["Config"]["AutoSpinWheel"]or false;["Callback"]=function(x)Y["Config"]["AutoSpinWheel"]=x if x and not Y["Flags"]["isSpinWheelLoopRunning"] then
+ Y["Flags"]["isSpinWheelLoopRunning"]=true task["spawn"](function()while Y["Config"]["AutoSpinWheel"]do
+ pcall(function()
+local x=o:FindFirstChild("Remotes")and(o["Remotes"]:FindFirstChild("SpinWheel")and o["Remotes"]["SpinWheel"]:FindFirstChild("RequestSpin"))if x  then
+ x:InvokeServer(false)end
+ end
+)task["wait"](5)end
+ Y["Flags"]["isSpinWheelLoopRunning"]=false end
+)end
+ end
+})
+local eB="Pet_"..(i["Name"].."_")
+local  function rB(x,W)if not x or not W or next(W)==nil  then
+ return false end
+ 
+local S=string["lower"](x)for x,W in pairs(W)do
+ if W  then
+ 
+local W=string["lower"](x)if string["find"](S,W,1,true) then
+ return true end
+ end
+ end
+ return false end
+ 
+local  function DB(x)if not x  then
+ return nil end
+ 
+local W=x:GetAttribute("PetKey")or x:GetAttribute("petKey")
+local S=x:GetAttribute("TrueName")or x:GetAttribute("trueName")or x:GetAttribute("PetName")or x:GetAttribute("petName")or x["Name"]
+local T=tonumber(x:GetAttribute("PetLevel"))or tonumber(x:GetAttribute("petLevel"))or tonumber(x:GetAttribute("Level"))or tonumber(x:GetAttribute("level"))or 1 
+local t=tonumber(x:GetAttribute("EarningsMultiplier"))or tonumber(x:GetAttribute("earningsMultiplier"))or tonumber(x:GetAttribute("Earnings"))or tonumber(x:GetAttribute("earnings"))or 0 
+local H=tonumber(x:GetAttribute("FloorIndex"))or tonumber(x:GetAttribute("floorIndex"))
+local o=tonumber(x:GetAttribute("SlotIndex"))or tonumber(x:GetAttribute("slotIndex"))
+local C=x:GetAttribute("PetBoosted")or x:GetAttribute("petBoosted")
+local M=tonumber(x:GetAttribute("PetBoostEndTimestamp"))or tonumber(x:GetAttribute("petBoostEndTimestamp"))
+local G=tonumber(x:GetAttribute("PetBoostMultiplier"))or tonumber(x:GetAttribute("petBoostMultiplier"))
+local i=x:GetAttribute("PetOwner")or x:GetAttribute("petOwner")
+local Y=x:GetAttribute("PetSize")or x:GetAttribute("petSize")
+local L=x:GetAttribute("RBX_ReimportId")or x:GetAttribute("rbx_reimportid")return{["instance"]=x;["petKey"]=W,["petName"]=S;["level"]=T;["earnings"]=t,["floorIndex"]=H;["slotIndex"]=o,["petBoosted"]=C;["petBoostEndTimestamp"]=M;["petBoostMultiplier"]=G;["petOwner"]=i,["petSize"]=Y;["rbxReimportId"]=L}end
+ 
+local  function hB()
+local x={}
+local W=P()if not W  then
+ return x end
+ for W,S in ipairs(W:GetChildren())do
+ if string["sub"](S["Name"],1,4)=="Pet_" then
+ 
+local W=DB(S)if W  then
+ if not W["petKey"] then
+ 
+local x=string["split"](S["Name"],"_")W["petKey"]=x[#x]end
+ table["insert"](x,W)end
+ end
+ end
+ return x end
+ 
+local  function UB()
+local x={}
+local W={}
+local  function S(S)if not S  then
+ return end
+ for S,T in ipairs(S:GetChildren())do
+ if T:IsA("Tool") then
+ 
+local S=DB(T)if S and(S["petKey"]and not W[S["petKey"]]) then
+ W[S["petKey"]]=true table["insert"](x,S)end
+ end
+ end
+ end
+ S(i["Character"])S(i:FindFirstChild("Backpack"))return x end
+ 
+local  function BB()
+local x={}
+local W={}for S,T in ipairs(hB())do
+ if T["petKey"]and not W[T["petKey"]] then
+ W[T["petKey"]]=true table["insert"](x,T)end
+ end
+ for S,T in ipairs(UB())do
+ if T["petKey"]and not W[T["petKey"]] then
+ W[T["petKey"]]=true table["insert"](x,T)end
+ end
+ return x end
+ 
+local  function fB(x)
+local W=i["Character"]if W  then
+ for W,S in ipairs(W:GetChildren())do
+ if S:IsA("Tool")and string["find"](S["Name"],x,1,true) then
+ return S end
+ end
+ end
+ 
+local S=i:FindFirstChild("Backpack")if S  then
+ for W,S in ipairs(S:GetChildren())do
+ if S:IsA("Tool")and string["find"](S["Name"],x,1,true) then
+ return S end
+ end
+ end
+ return nil end
+ 
+local  function AB()
+local x={}
+local W=o:FindFirstChild("GearStocks")and o["GearStocks"]:FindFirstChild(i["Name"])if not W  then
+ return x end
+ for W,S in ipairs(W:GetChildren())do
+ if string["find"](S["Name"],"Treat",1,true) then
+ table["insert"](x,S["Name"])end
+ end
+ table["sort"](x)return x end
+ 
+local  function pB()
+local x={}
+local W=o:FindFirstChild("Assets")and o["Assets"]:FindFirstChild("Pets")if not W  then
+ return x end
+ for W,S in ipairs(W:GetChildren())do
+ table["insert"](x,S["Name"])end
+ table["sort"](x)return x end
+ H["TabPets"]:Section({["Title"]="PET MANAGEMENT"})
+local jB=3 
+local  function ZB()
+local x=o:FindFirstChild("Remotes")and(o["Remotes"]:FindFirstChild("Pets")and o["Remotes"]["Pets"]:FindFirstChild("UnequipPet"))if not x  then
+ return false end
+ 
+local W=hB()for W,S in ipairs(W)do
+ for W=1,10,1 do
+ pcall(function()x:FireServer(S["petKey"])end
+)task["wait"](.1)end
+ end
+ return true end
+ H["TabPets"]:Button({["Title"]="Unequip All Pets";["Callback"]=function()
+local x=hB()if#x==0  then
+ S:Notify({["Title"]="Pets";["Content"]="No pets found on plot.";["Duration"]=2})return end
+ task["spawn"](function()if not ZB() then
+ S:Notify({["Title"]="Pets";["Content"]="UnequipPet remote not found.";["Duration"]=3})return end
+ S:Notify({["Title"]="Pets",["Content"]="Unequipped "..(#x.." pets."),["Duration"]=3})end
+)end
+})H["TabPets"]:Button({["Title"]="Equip 3 Best Earnings Multiplier Pets",["Callback"]=function()task["spawn"](function()
+local x=UB()if#x==0  then
+ S:Notify({["Title"]="Pets",["Content"]="No pets found in inventory.",["Duration"]=2})return end
+ 
+local W=i["Character"]and i["Character"]:FindFirstChild("Humanoid")
+local T=i["Character"]and i["Character"]:FindFirstChild("HumanoidRootPart")if not W or not T  then
+ S:Notify({["Title"]="Pets";["Content"]="Character not found.",["Duration"]=2})return end
+ 
+local t=o:FindFirstChild("Remotes")and(o["Remotes"]:FindFirstChild("Pets")and o["Remotes"]["Pets"]:FindFirstChild("EquipPet"))if not t  then
+ S:Notify({["Title"]="Pets",["Content"]="EquipPet remote not found.",["Duration"]=3})return end
+ ZB()task["wait"](.5)table["sort"](x,function(x,W)return x["earnings"]>W["earnings"]end
+)
+local H=0 for S=1,math["min"](jB,#x),1 do
+ 
+local T=x[S]
+local o=R[S]if o  then
+ 
+local x=x6(o)q(x)task["wait"](.3)end
+ W:EquipTool(T["instance"])task["wait"](.3)pcall(function()t:FireServer()end
+)H=H+1 task["wait"](.3)end
+ S:Notify({["Title"]="Pets",["Content"]="Equipped "..(H..(" best pets across "..(H.." floors."))),["Duration"]=3})end
+)end
+})H["TabPets"]:Section({["Title"]="PET FEEDING"})Y["UIRefs"]["DropdownPetTreatTypes"]=H["TabPets"]:Dropdown({["Title"]="Select Treats";["Values"]=AB()or{};["Value"]=K(Y["Config"]["TargetPetTreatNames"]or{});["Multi"]=true,["AllowNone"]=true,["Callback"]=function(x)Y["Config"]["TargetPetTreatNames"]={}if type(x)=="table" then
+ for x,W in pairs(x)do
+ Y["Config"]["TargetPetTreatNames"][W]=true end
+ 
+elseif x and x~="" then
+ Y["Config"]["TargetPetTreatNames"][x]=true end
+ end
+})H["TabPets"]:Button({["Title"]="Refresh Treat List";["Callback"]=function()pcall(function()Y["UIRefs"]["DropdownPetTreatTypes"]:Refresh(AB())end
+)pcall(function()Y["UIRefs"]["DropdownPetTreatTypes"]:Select({})end
+)Y["Config"]["TargetPetTreatNames"]={}S:Notify({["Title"]="Pets",["Content"]="Treat list refreshed.";["Duration"]=2})end
+})
+local  function yB()if not Y["Flags"]["isAutoFeedPetsLoopRunning"] then
+ Y["Flags"]["isAutoFeedPetsLoopRunning"]=true task["spawn"](function()while Y["Config"]["AutoFeedPets"]do
+ 
+local x=o:FindFirstChild("Remotes")and(o["Remotes"]:FindFirstChild("Pets")and o["Remotes"]["Pets"]:FindFirstChild("UseTreat"))
+local W=hB()
+local S=i["Character"]and i["Character"]:FindFirstChild("Humanoid")if x and(S and#W>0) then
+ 
+local T={}if next(Y["Config"]["TargetPetTreatNames"])~=nil  then
+ for x,W in pairs(Y["Config"]["TargetPetTreatNames"])do
+ T[x]=true end
+ end
+ for T,t in pairs(T)do
+ if not Y["Config"]["AutoFeedPets"] then
+ break end
+ 
+local H=fB(T)if H  then
+ S:EquipTool(H)task["wait"](.3)for W,S in ipairs(W)do
+ if not Y["Config"]["AutoFeedPets"] then
+ break end
+ 
+local t=pcall(function()x:FireServer(S["instance"])end
+)if t  then
+ lamLog("AutoFeedPets | Successfully fed pet %s with %s",tostring(S["instance"]["Name"]),T)end
+ task["wait"](.5)end
+ end
+ end
+ end
+ task["wait"](3)end
+ Y["Flags"]["isAutoFeedPetsLoopRunning"]=false end
+)end
+ end
+ Y["UIRefs"]["ToggleAutoFeedPets"]=H["TabPets"]:Toggle({["Title"]="Auto Feed Pets";["Value"]=Y["Config"]["AutoFeedPets"]or false,["Callback"]=function(x)Y["Config"]["AutoFeedPets"]=x if x  then
+ yB()end
+ end
+})if Y["Config"]["AutoFeedPets"] then
+ yB()end
+ H["TabPets"]:Section({["Title"]="PET UPGRADE"})Y["UIRefs"]["InputPetUpgradeLevel"]=H["TabPets"]:Input({["Title"]="Max Upgrade Level",["Desc"]="Limit maximum level for auto pet upgrade";["Placeholder"]="10",["Value"]=tostring(Y["Config"]["TargetPetUpgradeLevel"]or 10),["Numeric"]=true,["Finished"]=true;["Callback"]=function(x)
+local W=tonumber(x)if not W or W<1  then
+ Y["Config"]["TargetPetUpgradeLevel"]=10 pcall(function()Y["UIRefs"]["InputPetUpgradeLevel"]:Set("10")end
+)return end
+ W=math["floor"](W)Y["Config"]["TargetPetUpgradeLevel"]=W pcall(function()Y["UIRefs"]["InputPetUpgradeLevel"]:Set(tostring(W))end
+)end
+})
+local  function nB()if not Y["Flags"]["isAutoUpgradePetsLoopRunning"] then
+ Y["Flags"]["isAutoUpgradePetsLoopRunning"]=true task["spawn"](function()while Y["Config"]["AutoUpgradePets"]do
+ 
+local x=o:FindFirstChild("Remotes")and(o["Remotes"]:FindFirstChild("Pets")and o["Remotes"]["Pets"]:FindFirstChild("UpgradePet"))T("AutoUpgradePets | Remote: "..tostring(x~=nil))if x  then
+ 
+local W=hB()T("AutoUpgradePets | Found "..(#W.." active pets on plot"))for W,S in ipairs(W)do
+ if not Y["Config"]["AutoUpgradePets"] then
+ break end
+ 
+local T=Y["Config"]["TargetPetUpgradeLevel"]or 10 if S["level"]<T  then
+ pcall(function()if x:IsA("RemoteFunction") then
+ x:InvokeServer(S["petKey"])
+elseif x:IsA("RemoteEvent") then
+ x:FireServer(S["petKey"])end
+ end
+)task["wait"](.1)end
+ end
+ end
+ task["wait"](2)end
+ Y["Flags"]["isAutoUpgradePetsLoopRunning"]=false end
+)end
+ end
+ Y["UIRefs"]["ToggleAutoUpgradePets"]=H["TabPets"]:Toggle({["Title"]="Auto Upgrade Pets",["Value"]=Y["Config"]["AutoUpgradePets"]or false;["Callback"]=function(x)Y["Config"]["AutoUpgradePets"]=x if x  then
+ nB()end
+ end
+})if Y["Config"]["AutoUpgradePets"] then
+ nB()end
+ H["TabPets"]:Section({["Title"]="PET SELL"})Y["UIRefs"]["DropdownPetSellSelection"]=H["TabPets"]:Dropdown({["Title"]="Select Pets",["Values"]=pB()or{};["Value"]=K(Y["Config"]["TargetPetSellNames"]or{});["Multi"]=true;["AllowNone"]=true;["Callback"]=function(x)Y["Config"]["TargetPetSellNames"]={}if type(x)=="table" then
+ for x,W in pairs(x)do
+ Y["Config"]["TargetPetSellNames"][W]=true end
+ 
+elseif x and x~="" then
+ Y["Config"]["TargetPetSellNames"][x]=true end
+ end
+})
+local  function mB()if not Y["Flags"]["isAutoSellPetsLoopRunning"] then
+ Y["Flags"]["isAutoSellPetsLoopRunning"]=true task["spawn"](function()while Y["Config"]["AutoSellPets"]do
+ 
+local x=o:FindFirstChild("Remotes")and o["Remotes"]:FindFirstChild("SellPet")if x  then
+ 
+local W=UB()for W,S in ipairs(W)do
+ if not Y["Config"]["AutoSellPets"] then
+ break end
+ 
+local T=false if next(Y["Config"]["TargetPetSellNames"])~=nil  then
+ T=rB(S["petName"],Y["Config"]["TargetPetSellNames"])end
+ if T  then
+ 
+local W=pcall(function()x:InvokeServer(S["petKey"])end
+)if W  then
+ lamLog("AutoSellPets | Successfully sold pet %s (Level %s)",tostring(S["petName"]),tostring(S["level"]))end
+ task["wait"](.1)end
+ end
+ end
+ task["wait"](2)end
+ Y["Flags"]["isAutoSellPetsLoopRunning"]=false end
+)end
+ end
+ Y["UIRefs"]["ToggleAutoSellPets"]=H["TabPets"]:Toggle({["Title"]="Auto Sell Pets",["Value"]=Y["Config"]["AutoSellPets"]or false,["Callback"]=function(x)Y["Config"]["AutoSellPets"]=x if x  then
+ mB()end
+ end
+})if Y["Config"]["AutoSellPets"] then
+ mB()end
+ H["TabConfig"]:Section({["Title"]="PURCHASE"})Y["UIRefs"]["ToggleSkipMoneyCheck"]=H["TabConfig"]:Toggle({["Title"]="Skip Money Check",["Desc"]="Skip client-side money checks (use only if auto buy is bugged)",["Value"]=Y["Config"]["SkipMoneyCheck"]or false;["Callback"]=function(x)Y["Config"]["SkipMoneyCheck"]=x end
+})H["TabConfig"]:Section({["Title"]="LAG REDUCTION"})Y["UIRefs"]["ToggleHideOtherPlots"]=H["TabConfig"]:Toggle({["Title"]="Hide Other Plots";["Value"]=Y["Config"]["HideOtherPlots"]or false,["Callback"]=function(x)Y["Config"]["HideOtherPlots"]=x c(x)end
+})
+local FB=nil Y["UIRefs"]["ToggleMuteAndHideAlerts"]=H["TabConfig"]:Toggle({["Title"]="Mute & Hide Alerts";["Value"]=Y["Config"]["MuteAndHideAlerts"]or false;["Callback"]=function(x)Y["Config"]["MuteAndHideAlerts"]=x pcall(function()
+local W=(i:WaitForChild("PlayerGui")):FindFirstChild("MainUI")and i["PlayerGui"]["MainUI"]:FindFirstChild("AlertFrame")if W  then
+ W["Visible"]=not x end
+ end
+)pcall(function()
+local W=M:FindFirstChild("SFX")and M["SFX"]:FindFirstChild("SAAlert")if W  then
+ if x  then
+ if not FB  then
+ FB=W["Volume"]end
+ W["Volume"]=0 
+else
+ if FB  then
+ W["Volume"]=FB end
+ end
+ end
+ end
+)end
+})H["TabConfig"]:Section({["Title"]="TELEPORT"})B["UserInputService"]=game:GetService("UserInputService")B["CoreGui"]=game:GetService("CoreGui")for x,W in ipairs({"LamduckUtilitiesFloatingGui","LamduckTeleportGui";"LamduckRejoinUI";"LamduckFloatingTP"})do
+ 
+local S=B["CoreGui"]:FindFirstChild(W)if S  then
+ S:Destroy()end
+ end
+ B["TELEPORT_FLOATING_BTN_DEFAULT_POSITION"]=UDim2["new"](.8,0,.2,0)B["FloatingTeleportScreenGui"]=Instance["new"]("ScreenGui")B["FloatingTeleportScreenGui"]["Name"]="LamduckFloatingTP"B["FloatingTeleportScreenGui"]["ResetOnSpawn"]=false B["FloatingTeleportScreenGui"]["Enabled"]=Y["Config"]["ShowFloatingTeleportButton"]or false 
+local uB=pcall(function()B["FloatingTeleportScreenGui"]["Parent"]=gethui and gethui()or B["CoreGui"]end
+)if not uB  then
+ B["FloatingTeleportScreenGui"]["Parent"]=i:WaitForChild("PlayerGui")end
+ B["FloatingTeleportMainButton"]=Instance["new"]("TextButton")B["FloatingTeleportMainButton"]["Size"]=UDim2["new"](0,48,0,32)B["FloatingTeleportMainButton"]["Position"]=((Y["Config"]["TeleportButtonPosXScale"]and(Y["Config"]["TeleportButtonPosXOffset"]and(Y["Config"]["TeleportButtonPosYScale"]and Y["Config"]["TeleportButtonPosYOffset"]))))and UDim2["new"](Y["Config"]["TeleportButtonPosXScale"],Y["Config"]["TeleportButtonPosXOffset"],Y["Config"]["TeleportButtonPosYScale"],Y["Config"]["TeleportButtonPosYOffset"])or B["TELEPORT_FLOATING_BTN_DEFAULT_POSITION"]B["FloatingTeleportMainButton"]["BackgroundColor3"]=Color3["fromRGB"](40,40,40)B["FloatingTeleportMainButton"]["TextColor3"]=Color3["fromRGB"](255,255,255)B["FloatingTeleportMainButton"]["Text"]="TP"B["FloatingTeleportMainButton"]["Font"]=Enum["Font"]["GothamBold"]B["FloatingTeleportMainButton"]["TextSize"]=14 B["FloatingTeleportMainButton"]["Parent"]=B["FloatingTeleportScreenGui"]
+local PB=Instance["new"]("UICorner")PB["CornerRadius"]=UDim["new"](0,6)PB["Parent"]=B["FloatingTeleportMainButton"]B["FloatingTeleportListFrame"]=Instance["new"]("Frame")B["FloatingTeleportListFrame"]["Position"]=UDim2["new"](0,54,0,0)B["FloatingTeleportListFrame"]["Size"]=UDim2["new"](0,140,0,0)B["FloatingTeleportListFrame"]["AutomaticSize"]=Enum["AutomaticSize"]["Y"]B["FloatingTeleportListFrame"]["BackgroundTransparency"]=1 B["FloatingTeleportListFrame"]["Visible"]=false B["FloatingTeleportListFrame"]["Parent"]=B["FloatingTeleportMainButton"]
+local NB=Instance["new"]("UIListLayout")NB["Padding"]=UDim["new"](0,5)NB["SortOrder"]=Enum["SortOrder"]["LayoutOrder"]NB["Parent"]=B["FloatingTeleportListFrame"]
+local kB=false 
+local lB=nil 
+local cB=nil 
+local wB=nil B["FloatingTeleportMainButton"]["InputBegan"]:Connect(function(x)if x["UserInputType"]==Enum["UserInputType"]["MouseButton1"]or x["UserInputType"]==Enum["UserInputType"]["Touch"] then
+ kB=true cB=x["Position"]wB=B["FloatingTeleportMainButton"]["Position"]x["Changed"]:Connect(function()if x["UserInputState"]==Enum["UserInputState"]["End"] then
+ kB=false end
+ end
+)end
+ end
+)B["FloatingTeleportMainButton"]["InputChanged"]:Connect(function(x)if x["UserInputType"]==Enum["UserInputType"]["MouseMovement"]or x["UserInputType"]==Enum["UserInputType"]["Touch"] then
+ lB=x end
+ end
+)B["UserInputService"]["InputChanged"]:Connect(function(x)if x==lB and kB  then
+ 
+local W=x["Position"]-cB B["FloatingTeleportMainButton"]["Position"]=UDim2["new"](wB["X"]["Scale"],wB["X"]["Offset"]+W["X"],wB["Y"]["Scale"],wB["Y"]["Offset"]+W["Y"])end
+ end
+)for x,W in ipairs(R)do
+ 
+local S=Instance["new"]("TextButton")S["Size"]=UDim2["new"](1,0,0,32)S["BackgroundColor3"]=Color3["fromRGB"](30,30,30)S["TextColor3"]=Color3["fromRGB"](200,200,200)S["Text"]=W["Label"]S["Font"]=Enum["Font"]["GothamSemibold"]S["TextSize"]=13 S["LayoutOrder"]=x S["Parent"]=B["FloatingTeleportListFrame"]
+local T=Instance["new"]("UICorner")T["CornerRadius"]=UDim["new"](0,6)T["Parent"]=S S["MouseButton1Click"]:Connect(function()W6(W)B["FloatingTeleportListFrame"]["Visible"]=false end
+)end
+ 
+local zB=nil B["FloatingTeleportMainButton"]["InputBegan"]:Connect(function(x)if x["UserInputType"]==Enum["UserInputType"]["MouseButton1"]or x["UserInputType"]==Enum["UserInputType"]["Touch"] then
+ zB=tick()end
+ end
+)B["FloatingTeleportMainButton"]["InputEnded"]:Connect(function(x)if x["UserInputType"]==Enum["UserInputType"]["MouseButton1"]or x["UserInputType"]==Enum["UserInputType"]["Touch"] then
+ if zB and tick()-zB<.2  then
+ B["FloatingTeleportListFrame"]["Visible"]=not B["FloatingTeleportListFrame"]["Visible"]end
+ end
+ end
+)Y["UIRefs"]["ToggleFloatingTeleportButton"]=H["TabConfig"]:Toggle({["Title"]="Show Floating Teleport Button",["Value"]=Y["Config"]["ShowFloatingTeleportButton"]or false;["Callback"]=function(x)B["FloatingTeleportScreenGui"]["Enabled"]=x if not x  then
+ B["FloatingTeleportListFrame"]["Visible"]=false end
+ end
+})H["TabConfig"]:Button({["Title"]="Reset Floating TP Button Position";["Callback"]=function()B["FloatingTeleportMainButton"]["Position"]=B["TELEPORT_FLOATING_BTN_DEFAULT_POSITION"]S:Notify({["Title"]="Utilities",["Content"]="TP button position reset to default.",["Duration"]=2})end
+})H["TabConfig"]:Button({["Title"]="Teleport to My Plot";["Callback"]=S6})
+local JB="build-a-ring-farm.json"
+local  function OB()if Y["Config"]["ShowFloatingTeleportButton"] then
+ Y["Config"]["TeleportButtonPosXScale"]=B["FloatingTeleportMainButton"]["Position"]["X"]["Scale"]Y["Config"]["TeleportButtonPosXOffset"]=B["FloatingTeleportMainButton"]["Position"]["X"]["Offset"]Y["Config"]["TeleportButtonPosYScale"]=B["FloatingTeleportMainButton"]["Position"]["Y"]["Scale"]Y["Config"]["TeleportButtonPosYOffset"]=B["FloatingTeleportMainButton"]["Position"]["Y"]["Offset"]end
+ if writefile  then
+ writefile(JB,C:JSONEncode(Y["Config"]))end
+ end
+ H["TabConfig"]:Section({["Title"]="CONFIGURATION"})H["TabConfig"]:Button({["Title"]="Save Current Config",["Callback"]=function()t:Dialog({["Title"]="Confirm Save",["Content"]="Are you sure you want to save the current configuration?",["Buttons"]={{["Title"]="Confirm",["Callback"]=function()OB()S:Notify({["Title"]="Success";["Content"]="Configuration saved to device!",["Duration"]=3})end
+};{["Title"]="Cancel"}}})end
+})H["TabConfig"]:Button({["Title"]="Delete & Reset Config";["Callback"]=function()t:Dialog({["Title"]="Confirm Reset",["Content"]="Are you sure you want to delete all saved configs and rejoin?";["Buttons"]={{["Title"]="Confirm";["Callback"]=function()if isfile and(isfile(JB)and delfile) then
+ delfile(JB)end
+ S:Notify({["Title"]="Success",["Content"]="All previous configs deleted! Rejoining...";["Duration"]=3});(game:GetService("TeleportService")):TeleportToPlaceInstance(game["PlaceId"],game["JobId"],i)end
+},{["Title"]="Cancel"}}})end
+})T("UI contents built in %.3f seconds",tick()-m6)task["spawn"](function()pcall(function()if Y["Config"]["AutoSellCrates"]and(Y["UIRefs"]["ToggleAutoSellCrates"]and Y["UIRefs"]["ToggleAutoSellCrates"]["Callback"]) then
+ Y["UIRefs"]["ToggleAutoSellCrates"]["Callback"](true)end
+ if Y["Config"]["AutoUnlockFarmPlots"]and(Y["UIRefs"]["ToggleAutoUnlockFarmPlots"]and Y["UIRefs"]["ToggleAutoUnlockFarmPlots"]["Callback"]) then
+ Y["UIRefs"]["ToggleAutoUnlockFarmPlots"]["Callback"](true)end
+ if Y["Config"]["AutoExpandFarmPlot"]and(Y["UIRefs"]["ToggleAutoExpandFarmPlot"]and Y["UIRefs"]["ToggleAutoExpandFarmPlot"]["Callback"]) then
+ Y["UIRefs"]["ToggleAutoExpandFarmPlot"]["Callback"](true)end
+ if Y["Config"]["AutoPlantRush"] then
+ bB()end
+ if Y["Config"]["AutoClaimPlantRushBossDrop"] then
+ dB()end
+ if Y["Config"]["AutoCollectQueenBeeHoneycomb"] then
+ VB()end
+ if Y["Config"]["AutoSubmitQueenBeeHoneyToken"] then
+ sB()end
+ if Y["Config"]["AutoSubmitSeedToCollector"]or Y["Config"]["AutoSubmitAllSeedsToCollector"] then
+ aB()end
+ if Y["Config"]["AutoClaimDailyReward"] then
+ gB()end
+ if Y["Config"]["AutoClaimPlaytimeReward"] then
+ XB()end
+ if Y["Config"]["AutoSpinWheel"]and(Y["UIRefs"]["ToggleAutoSpinWheel"]and Y["UIRefs"]["ToggleAutoSpinWheel"]["Callback"]) then
+ Y["UIRefs"]["ToggleAutoSpinWheel"]["Callback"](true)end
+ if Y["Config"]["HideOtherPlots"]and(Y["UIRefs"]["ToggleHideOtherPlots"]and Y["UIRefs"]["ToggleHideOtherPlots"]["Callback"]) then
+ Y["UIRefs"]["ToggleHideOtherPlots"]["Callback"](true)end
+ if Y["Config"]["MuteAndHideAlerts"]and(Y["UIRefs"]["ToggleMuteAndHideAlerts"]and Y["UIRefs"]["ToggleMuteAndHideAlerts"]["Callback"]) then
+ Y["UIRefs"]["ToggleMuteAndHideAlerts"]["Callback"](true)end
+ end
+)end
+)
+local  function vB()T("My plot name: "..k())T("Player name: "..v())S:Notify({["Title"]="Info",["Content"]="Please reset config and rejoin if you face any issue!",["Duration"]=10})end
+ vB()T("Total loading completed in %.3f seconds",tick()-m6)pcall(function()H["TabFarming"]:Select()end
+)end
+)(...)
