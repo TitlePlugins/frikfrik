@@ -3,6 +3,16 @@
 
 (function(...)
 
+-- ============ BEACON ============
+warn("[frikfrik] BEACON v1 — script reached entry at "..tostring(tick()))
+pcall(function()
+    game:GetService("StarterGui"):SetCore("SendNotification",{
+        Title="frikfrik",
+        Text="Script started OK",
+        Duration=8,
+    })
+end)
+
 -- ============ PERF startup prelude ============
 local __PERF_light=game:GetService("Lighting")
 local __PERF_setting=settings()
