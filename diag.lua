@@ -1,5 +1,5 @@
 -- Diagnostic loader: fetches main script, reports HTTP, parse, run errors with detail
-local URL = "https://raw.githubusercontent.com/TitlePlugins/frikfrik/main/v4.lua?t=" .. tostring(tick())
+local URL = "https://raw.githubusercontent.com/TitlePlugins/frikfrik/main/v5.lua?t=" .. tostring(tick())
 
 local function banner(text, color)
     pcall(function()
