@@ -52,8 +52,8 @@ wh.UserID = wh.UserID or ""
 wh.Label = wh.Label or game:GetService("Players").LocalPlayer.Name
 wh.Plants = wh.Plants or {}
 wh.Rarities = wh.Rarities or {}
-if wh.NotifyMutation == nil then wh.NotifyMutation = false end
-if wh.NotifyEgg == nil then wh.NotifyEgg = false end
+wh.HatchRarities = wh.HatchRarities or {}
+if wh.PingOnHatch == nil then wh.PingOnHatch = false end
 if wh.PingOnTarget == nil then wh.PingOnTarget = false end
 wh.Cooldown = wh.Cooldown or 5
 local req = http_request or request or (syn and syn.request) or (fluxus and fluxus.request)
@@ -96,17 +96,18 @@ local function onItem(tool)
     local title, desc, color, doPing
     if hit then
         doPing = wh.PingOnTarget
-        title = "Target: " .. tostring(name)
-        desc = "Category: " .. tostring(cat or "?") .. "\nRarity: " .. tostring(rar or "?")
-        if mut then desc = desc .. "\nMutation: " .. tostring(mut) end
+        title = "Цель: " .. tostring(name)
+        desc = "Категория: " .. tostring(cat or "?") .. "\nРедкость: " .. tostring(rar or "?")
+        if mut then desc = desc .. "\nМутация: " .. tostring(mut) end
         color = 16766720
-    elseif mut and wh.NotifyMutation then
-        title = "Mutation: " .. tostring(mut)
-        desc = "Item: " .. tostring(name)
-        color = 10181046
-    elseif cat == "Eggs" and wh.NotifyEgg then
-        title = "Egg: " .. tostring(name)
-        desc = "Rarity: " .. tostring(rar or "?")
+    elseif cat == "Pets" and wh.HatchRarities[tostring(rar or "")] then
+        doPing = wh.PingOnHatch
+        title = "Вылупился питомец: " .. tostring(name)
+        desc = "Редкость: " .. tostring(rar or "?") .. "\nАккаунт: " .. wh.Label
+        local mult = tool:GetAttribute("EarningsMultiplier") or tool:GetAttribute("earningsMultiplier")
+        if mult then desc = desc .. "\nМножитель дохода: x" .. tostring(mult) end
+        local sz = tool:GetAttribute("PetSize") or tool:GetAttribute("petSize")
+        if sz then desc = desc .. "\nРазмер: " .. tostring(sz) end
         color = 3447003
     end
     if title then
@@ -135,9 +136,9 @@ tab:Section({["Title"] = "ЧТО ОТСЛЕЖИВАТЬ"})
 tab:Dropdown({["Title"] = "Целевые растения", ["Desc"] = "Если выпадет в инвентарь — пришлёт сообщение", ["Values"] = _G["CachedIndexSeedEntries"] or {}, ["Value"] = setToList(wh.Plants), ["Multi"] = true, ["Callback"] = function(v) wh.Plants = {} if type(v) == "table" then for _, name in pairs(v) do local clean = string.match(tostring(name), "%] (.*)") or tostring(name) wh.Plants[clean] = true end end end})
 tab:Dropdown({["Title"] = "Целевые редкости", ["Desc"] = "Любой предмет такой редкости — уведомление", ["Values"] = {"Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic", "Exclusive", "Secret"}, ["Value"] = setToList(wh.Rarities), ["Multi"] = true, ["Callback"] = function(v) wh.Rarities = {} if type(v) == "table" then for _, r in pairs(v) do wh.Rarities[tostring(r)] = true end end end})
 tab:Toggle({["Title"] = "Пинговать при цели", ["Desc"] = "Использует Discord ID выше", ["Value"] = wh.PingOnTarget, ["Callback"] = function(v) wh.PingOnTarget = v end})
-tab:Section({["Title"] = "ДОПОЛНИТЕЛЬНО"})
-tab:Toggle({["Title"] = "Уведомлять о мутациях", ["Desc"] = "Любая мутация — сообщение без пинга", ["Value"] = wh.NotifyMutation, ["Callback"] = function(v) wh.NotifyMutation = v end})
-tab:Toggle({["Title"] = "Уведомлять о всех яйцах", ["Desc"] = "Каждое новое яйцо — сообщение без пинга", ["Value"] = wh.NotifyEgg, ["Callback"] = function(v) wh.NotifyEgg = v end})
+tab:Section({["Title"] = "ВЫЛУПЛЕНИЕ ИЗ ЯИЦ"})
+tab:Dropdown({["Title"] = "Редкости вылупленных питомцев", ["Desc"] = "Когда из авто-закупленного яйца выпадет питомец такой редкости — пришлёт сообщение с именем питомца и характеристиками", ["Values"] = {"Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic", "Exclusive", "Secret"}, ["Value"] = setToList(wh.HatchRarities), ["Multi"] = true, ["Callback"] = function(v) wh.HatchRarities = {} if type(v) == "table" then for _, r in pairs(v) do wh.HatchRarities[tostring(r)] = true end end end})
+tab:Toggle({["Title"] = "Пинговать при вылуплении", ["Desc"] = "Пинг по Discord ID при любом совпадении редкости из списка выше", ["Value"] = wh.PingOnHatch, ["Callback"] = function(v) wh.PingOnHatch = v end})
 tab:Slider({["Title"] = "Антиспам (сек)", ["Desc"] = "Не присылать одинаковое чаще раза в N сек", ["Value"] = {["Min"] = 1, ["Max"] = 60, ["Default"] = wh.Cooldown}, ["Step"] = 1, ["Callback"] = function(v) wh.Cooldown = tonumber(v) or 5 end})
 tab:Section({["Title"] = "ПРОВЕРКА"})
 tab:Button({["Title"] = "Отправить тест", ["Desc"] = "Должно прийти сообщение в Discord (с пингом если ID указан)", ["Callback"] = function() send("Тест Build A Ring Farm", "Скрипт жив, webhook настроен.", 65280, true) pcall(function() e:Notify({["Title"] = "Тест отправлен", ["Content"] = "Проверь Discord", ["Duration"] = 4}) end) end})
